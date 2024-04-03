@@ -44,29 +44,29 @@ test("Vite / dead-code elimination for server exports", async () => {
     "app/utils.server.ts": serverOnlyModule,
     "app/.server/utils.ts": serverOnlyModule,
     "app/routes/remove-server-exports-and-dce.tsx": `
-      import fs from "node:fs";
-      import { json } from "@remix-run/node";
-      import { useLoaderData } from "@remix-run/react";
-
-      import { serverOnly as serverOnlyFile } from "../utils.server";
-      import { serverOnly as serverOnlyDir } from "../.server/utils";
-
-      export const loader = () => {
-        let contents = fs.readFileSync("server_only.txt");
-        return json({ serverOnlyFile, serverOnlyDir, contents })
-      }
-
-      export const action = () => {
-        let contents = fs.readFileSync("server_only.txt");
-        console.log({ serverOnlyFile, serverOnlyDir, contents });
-        return null;
-      }
-
-      export default function() {
-        let { data } = useLoaderData<typeof loader>();
-        return <pre>{JSON.stringify(data)}</pre>;
-      }
-    `,
+          import fs from "node:fs";
+          import { json } from "@react-router/node";
+          import { useLoaderData } from "@react-router/react";
+    
+          import { serverOnly as serverOnlyFile } from "../utils.server";
+          import { serverOnly as serverOnlyDir } from "../.server/utils";
+    
+          export const loader = () => {
+            let contents = fs.readFileSync("server_only.txt");
+            return json({ serverOnlyFile, serverOnlyDir, contents })
+          }
+    
+          export const action = () => {
+            let contents = fs.readFileSync("server_only.txt");
+            console.log({ serverOnlyFile, serverOnlyDir, contents });
+            return null;
+          }
+    
+          export default function() {
+            let { data } = useLoaderData<typeof loader>();
+            return <pre>{JSON.stringify(data)}</pre>;
+          }
+        `,
   });
   let { status } = viteBuild({ cwd });
   expect(status).toBe(0);
@@ -217,15 +217,15 @@ test.describe("Vite / non-route / server-only module referenced by client", () =
 test.describe("Vite / server-only escape hatch", async () => {
   let files: Files = async ({ port }) => ({
     "vite.config.ts": dedent`
-      import { vitePlugin as remix } from "@remix-run/dev";
-      import envOnly from "vite-env-only";
-      import tsconfigPaths from "vite-tsconfig-paths";
-
-      export default {
-        ${await viteConfig.server({ port })}
-        plugins: [remix(), envOnly(), tsconfigPaths()],
-      }
-    `,
+          import { vitePlugin as remix } from "@react-router/dev";
+          import envOnly from "vite-env-only";
+          import tsconfigPaths from "vite-tsconfig-paths";
+    
+          export default {
+            ${await viteConfig.server({ port })}
+            plugins: [remix(), envOnly(), tsconfigPaths()],
+          }
+        `,
     "app/utils.server.ts": serverOnlyModule,
     "app/.server/utils.ts": serverOnlyModule,
     "app/routes/_index.tsx": `

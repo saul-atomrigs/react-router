@@ -42,8 +42,8 @@ test.beforeAll(async () => {
         private: true,
         sideEffects: false,
         dependencies: {
-          "@remix-run/deno": "0.0.0-local-version",
-          "@remix-run/react": "0.0.0-local-version",
+          "@react-router/deno": "0.0.0-local-version",
+          "@react-router/react": "0.0.0-local-version",
           isbot: "0.0.0-local-version",
           react: "0.0.0-local-version",
           "react-dom": "0.0.0-local-version",
@@ -52,50 +52,50 @@ test.beforeAll(async () => {
           "deno-pkg": "0.0.0-local-version",
         },
         devDependencies: {
-          "@remix-run/dev": "0.0.0-local-version",
+          "@react-router/dev": "0.0.0-local-version",
         },
       }),
 
       "app/routes/_index.tsx": js`
-        import fake from "deno-pkg";
-        import { urlComponent } from "https://deno.land/x/component.ts";
-        import { urlUtil } from "https://deno.land/x/util.ts";
-        import { urlServerOnly } from "https://deno.land/x/server-only.ts";
-
-        import { npmComponent } from "npm-component";
-        import { npmUtil } from "npm-util";
-        import { npmServerOnly } from "npm-server-only";
-
-        import { useLoaderData } from "@remix-run/react";
-
-        export const loader = () => {
-          return json({
-            a: urlUtil(),
-            b: urlServerOnly(),
-            c: npmUtil(),
-            d: npmServerOnly(),
-          });
-        }
-
-        export default function Index() {
-          const data = useLoaderData();
-          return (
-            <ul>
-              <li>{fake}</li>
-
-              <li>{urlComponent}</li>
-              <li>{urlUtil()}</li>
-              <li>{data.a}</li>
-              <li>{data.b}</li>
-
-              <li>{npmComponent}</li>
-              <li>{npmUtil()}</li>
-              <li>{data.c}</li>
-              <li>{data.d}</li>
-            </ul>
-          )
-        }
-      `,
+              import fake from "deno-pkg";
+              import { urlComponent } from "https://deno.land/x/component.ts";
+              import { urlUtil } from "https://deno.land/x/util.ts";
+              import { urlServerOnly } from "https://deno.land/x/server-only.ts";
+      
+              import { npmComponent } from "npm-component";
+              import { npmUtil } from "npm-util";
+              import { npmServerOnly } from "npm-server-only";
+      
+              import { useLoaderData } from "@react-router/react";
+      
+              export const loader = () => {
+                return json({
+                  a: urlUtil(),
+                  b: urlServerOnly(),
+                  c: npmUtil(),
+                  d: npmServerOnly(),
+                });
+              }
+      
+              export default function Index() {
+                const data = useLoaderData();
+                return (
+                  <ul>
+                    <li>{fake}</li>
+      
+                    <li>{urlComponent}</li>
+                    <li>{urlUtil()}</li>
+                    <li>{data.a}</li>
+                    <li>{data.b}</li>
+      
+                    <li>{npmComponent}</li>
+                    <li>{npmUtil()}</li>
+                    <li>{data.c}</li>
+                    <li>{data.d}</li>
+                  </ul>
+                )
+              }
+            `,
       "node_modules/npm-component/package.json": json({
         name: "npm-component",
         version: "1.0.0",

@@ -22,24 +22,24 @@ test.describe("CSS Modules", () => {
       compiler: "remix",
       files: {
         "app/root.tsx": js`
-          import { Links, Outlet } from "@remix-run/react";
-          import { cssBundleHref } from "@remix-run/css-bundle";
-          export function links() {
-            return [{ rel: "stylesheet", href: cssBundleHref }];
-          }
-          export default function Root() {
-            return (
-              <html>
-                <head>
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                </body>
-              </html>
-            )
-          }
-        `,
+                  import { Links, Outlet } from "@react-router/react";
+                  import { cssBundleHref } from "@react-router/css-bundle";
+                  export function links() {
+                    return [{ rel: "stylesheet", href: cssBundleHref }];
+                  }
+                  export default function Root() {
+                    return (
+                      <html>
+                        <head>
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                        </body>
+                      </html>
+                    )
+                  }
+                `,
         ...basicStylesFixture(),
         ...globalSelectorsFixture(),
         ...nestedGlobalSelectorsFixture(),
@@ -580,28 +580,28 @@ test.describe("CSS Modules", () => {
 
   let clientEntrySideEffectsFixture = () => ({
     "app/entry.client.tsx": js`
-      import { RemixBrowser } from "@remix-run/react";
-      import { startTransition, StrictMode } from "react";
-      import { hydrateRoot } from "react-dom/client";
-      import "./entry.client.module.css";
-      const hydrate = () => {
-        startTransition(() => {
-          hydrateRoot(
-            document,
-            <StrictMode>
-              <RemixBrowser />
-            </StrictMode>
-          );
-        });
-      };
-      if (window.requestIdleCallback) {
-        window.requestIdleCallback(hydrate);
-      } else {
-        // Safari doesn't support requestIdleCallback
-        // https://caniuse.com/requestidlecallback
-        window.setTimeout(hydrate, 1);
-      }
-    `,
+          import { RemixBrowser } from "@react-router/react";
+          import { startTransition, StrictMode } from "react";
+          import { hydrateRoot } from "react-dom/client";
+          import "./entry.client.module.css";
+          const hydrate = () => {
+            startTransition(() => {
+              hydrateRoot(
+                document,
+                <StrictMode>
+                  <RemixBrowser />
+                </StrictMode>
+              );
+            });
+          };
+          if (window.requestIdleCallback) {
+            window.requestIdleCallback(hydrate);
+          } else {
+            // Safari doesn't support requestIdleCallback
+            // https://caniuse.com/requestidlecallback
+            window.setTimeout(hydrate, 1);
+          }
+        `,
     "app/entry.client.module.css": css`
       :global(.clientEntry) {
         padding: ${TEST_PADDING_VALUE};

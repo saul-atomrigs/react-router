@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import { createFixture, js } from "./helpers/create-fixture.js";
 import type { Fixture } from "./helpers/create-fixture.js";
 
@@ -17,68 +17,68 @@ test.describe("headers export", () => {
       {
         files: {
           "app/root.tsx": js`
-            import { json } from "@remix-run/node";
-            import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export const loader = () => json({});
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export const loader = () => json({});
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader() {
-              return json(null, {
-                headers: {
-                  "${ROOT_HEADER_KEY}": "${ROOT_HEADER_VALUE}"
-                }
-              })
-            }
-
-            export function headers({ loaderHeaders }) {
-              return {
-                "${ROOT_HEADER_KEY}": loaderHeaders.get("${ROOT_HEADER_KEY}")
-              }
-            }
-
-            export default function Index() {
-              return <div>Heyo!</div>
-            }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function loader() {
+                        return json(null, {
+                          headers: {
+                            "${ROOT_HEADER_KEY}": "${ROOT_HEADER_VALUE}"
+                          }
+                        })
+                      }
+          
+                      export function headers({ loaderHeaders }) {
+                        return {
+                          "${ROOT_HEADER_KEY}": loaderHeaders.get("${ROOT_HEADER_KEY}")
+                        }
+                      }
+          
+                      export default function Index() {
+                        return <div>Heyo!</div>
+                      }
+                    `,
 
           "app/routes/action.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function action() {
-              return json(null, {
-                headers: {
-                  "${ACTION_HKEY}": "${ACTION_HVALUE}"
-                }
-              })
-            }
-
-            export function headers({ actionHeaders }) {
-              return {
-                "${ACTION_HKEY}": actionHeaders.get("${ACTION_HKEY}")
-              }
-            }
-
-            export default function Action() { return <div/> }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function action() {
+                        return json(null, {
+                          headers: {
+                            "${ACTION_HKEY}": "${ACTION_HVALUE}"
+                          }
+                        })
+                      }
+          
+                      export function headers({ actionHeaders }) {
+                        return {
+                          "${ACTION_HKEY}": actionHeaders.get("${ACTION_HKEY}")
+                        }
+                      }
+          
+                      export default function Action() { return <div/> }
+                    `,
 
           "app/routes/parent.tsx": js`
             export function headers({ actionHeaders, errorHeaders, loaderHeaders, parentHeaders }) {
@@ -159,41 +159,41 @@ test.describe("headers export", () => {
           `,
 
           "app/routes/cookie.tsx": js`
-            import { json } from "@remix-run/server-runtime";
-            import { Outlet } from "@remix-run/react";
-
-            export function loader({ request }) {
-              if (new URL(request.url).searchParams.has("parent-throw")) {
-                throw json(null, { headers: { "Set-Cookie": "parent-thrown-cookie=true" } });
-              }
-              return null
-            };
-
-            export default function Parent() {
-              return <Outlet />;
-            }
-
-            export function ErrorBoundary() {
-              return <h1>Caught!</h1>;
-            }
-          `,
+                      import { json } from "@react-router/server-runtime";
+                      import { Outlet } from "@react-router/react";
+          
+                      export function loader({ request }) {
+                        if (new URL(request.url).searchParams.has("parent-throw")) {
+                          throw json(null, { headers: { "Set-Cookie": "parent-thrown-cookie=true" } });
+                        }
+                        return null
+                      };
+          
+                      export default function Parent() {
+                        return <Outlet />;
+                      }
+          
+                      export function ErrorBoundary() {
+                        return <h1>Caught!</h1>;
+                      }
+                    `,
 
           "app/routes/cookie.child.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader({ request }) {
-              if (new URL(request.url).searchParams.has("throw")) {
-                throw json(null, { headers: { "Set-Cookie": "thrown-cookie=true" } });
-              }
-              return json(null, {
-                headers: { "Set-Cookie": "normal-cookie=true" },
-              });
-            };
-
-            export default function Child() {
-              return <p>Child</p>;
-            }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function loader({ request }) {
+                        if (new URL(request.url).searchParams.has("throw")) {
+                          throw json(null, { headers: { "Set-Cookie": "thrown-cookie=true" } });
+                        }
+                        return json(null, {
+                          headers: { "Set-Cookie": "normal-cookie=true" },
+                        });
+                      };
+          
+                      export default function Child() {
+                        return <p>Child</p>;
+                      }
+                    `,
         },
       },
       ServerMode.Test
@@ -221,45 +221,45 @@ test.describe("headers export", () => {
       {
         files: {
           "app/root.tsx": js`
-            import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader() {
-              return json(null, {
-                headers: {
-                  "${HEADER_KEY}": "${HEADER_VALUE}"
-                }
-              })
-            }
-
-            export function headers({ loaderHeaders }) {
-              return {
-                "${HEADER_KEY}": loaderHeaders.get("${HEADER_KEY}")
-              }
-            }
-
-            export default function Index() {
-              return <div>Heyo!</div>
-            }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function loader() {
+                        return json(null, {
+                          headers: {
+                            "${HEADER_KEY}": "${HEADER_VALUE}"
+                          }
+                        })
+                      }
+          
+                      export function headers({ loaderHeaders }) {
+                        return {
+                          "${HEADER_KEY}": loaderHeaders.get("${HEADER_KEY}")
+                        }
+                      }
+          
+                      export default function Index() {
+                        return <div>Heyo!</div>
+                      }
+                    `,
         },
       },
       ServerMode.Test

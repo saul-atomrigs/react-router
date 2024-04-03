@@ -14,7 +14,7 @@ const TEST_PADDING_VALUE = "20px";
 
 let extensions = ["mjs", "cjs", "js", "ts"] as const;
 
-function runTests(ext: typeof extensions[number]) {
+function runTests(ext: (typeof extensions)[number]) {
   let fixture: Fixture;
   let appFixture: AppFixture;
 
@@ -52,16 +52,16 @@ function runTests(ext: typeof extensions[number]) {
           sideEffects: false,
           type: "module",
           dependencies: {
-            "@remix-run/css-bundle": "0.0.0-local-version",
-            "@remix-run/node": "0.0.0-local-version",
-            "@remix-run/react": "0.0.0-local-version",
-            "@remix-run/serve": "0.0.0-local-version",
+            "@react-router/css-bundle": "0.0.0-local-version",
+            "@react-router/node": "0.0.0-local-version",
+            "@react-router/react": "0.0.0-local-version",
+            "@react-router/serve": "0.0.0-local-version",
             isbot: "0.0.0-local-version",
             react: "0.0.0-local-version",
             "react-dom": "0.0.0-local-version",
           },
           devDependencies: {
-            "@remix-run/dev": "0.0.0-local-version",
+            "@react-router/dev": "0.0.0-local-version",
             "@types/react": "0.0.0-local-version",
             "@types/react-dom": "0.0.0-local-version",
             typescript: "0.0.0-local-version",
@@ -83,28 +83,28 @@ function runTests(ext: typeof extensions[number]) {
         `,
 
         "app/root.tsx": js`
-          import { Links, Outlet } from "@remix-run/react";
-          import { cssBundleHref } from "@remix-run/css-bundle";
-          import tailwindHref from "./tailwind.css"
-          export function links() {
-            return [
-              { rel: "stylesheet", href: tailwindHref },
-              { rel: "stylesheet", href: cssBundleHref }
-            ];
-          }
-          export default function Root() {
-            return (
-              <html>
-                <head>
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                </body>
-              </html>
-            )
-          }
-        `,
+                  import { Links, Outlet } from "@react-router/react";
+                  import { cssBundleHref } from "@react-router/css-bundle";
+                  import tailwindHref from "./tailwind.css"
+                  export function links() {
+                    return [
+                      { rel: "stylesheet", href: tailwindHref },
+                      { rel: "stylesheet", href: cssBundleHref }
+                    ];
+                  }
+                  export default function Root() {
+                    return (
+                      <html>
+                        <head>
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                        </body>
+                      </html>
+                    )
+                  }
+                `,
         ...basicUsageFixture(),
         ...regularStylesSheetsFixture(),
         ...cssModulesFixture(),
@@ -382,26 +382,26 @@ test.describe("Tailwind disabled", () => {
         `,
 
         "app/root.tsx": js`
-          import { Links, Outlet } from "@remix-run/react";
-          import tailwindHref from "./tailwind.css"
-          export function links() {
-            return [
-              { rel: "stylesheet", href: tailwindHref },
-            ];
-          }
-          export default function Root() {
-            return (
-              <html>
-                <head>
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                </body>
-              </html>
-            )
-          }
-        `,
+                  import { Links, Outlet } from "@react-router/react";
+                  import tailwindHref from "./tailwind.css"
+                  export function links() {
+                    return [
+                      { rel: "stylesheet", href: tailwindHref },
+                    ];
+                  }
+                  export default function Root() {
+                    return (
+                      <html>
+                        <head>
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                        </body>
+                      </html>
+                    )
+                  }
+                `,
         "app/routes/tailwind-disabled-test.tsx": js`
           export default function() {
             return (

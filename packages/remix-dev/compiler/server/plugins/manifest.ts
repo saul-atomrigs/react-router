@@ -7,7 +7,7 @@ import { assetsManifestVirtualModule } from "../virtualModules";
 import { Cancel } from "../../cancel";
 
 /**
- * Creates a virtual module called `@remix-run/dev/assets-manifest` that exports
+ * Creates a virtual module called `@react-router/dev/assets-manifest` that exports
  * the assets manifest. This is used in the server entry module to access the
  * assets manifest in the server build.
  */

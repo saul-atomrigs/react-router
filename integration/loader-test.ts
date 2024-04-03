@@ -18,38 +18,38 @@ test.describe("loader", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-        import { json } from "@remix-run/node";
-        import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export const loader = () => json("${ROOT_DATA}");
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                import { json } from "@react-router/node";
+                import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export const loader = () => json("${ROOT_DATA}");
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { json } from "@remix-run/node";
-
-          export function loader() {
-            return "${INDEX_DATA}"
-          }
-
-          export default function Index() {
-            return <div/>
-          }
-        `,
+                  import { json } from "@react-router/node";
+        
+                  export function loader() {
+                    return "${INDEX_DATA}"
+                  }
+        
+                  export default function Index() {
+                    return <div/>
+                  }
+                `,
       },
     });
   });
@@ -81,24 +81,24 @@ test.describe("loader in an app", () => {
       await createFixture({
         files: {
           "app/root.tsx": js`
-            import { Outlet } from '@remix-run/react'
-
-            export default function Root() {
-              return (
-                <html>
-                  <body>
-                    ${HOME_PAGE_TEXT}
-                    <Outlet />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Outlet } from '@react-router/react'
+          
+                      export default function Root() {
+                        return (
+                          <html>
+                            <body>
+                              ${HOME_PAGE_TEXT}
+                              <Outlet />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
           "app/routes/redirect.tsx": js`
-            import { redirect } from "@remix-run/node";
-            export const loader = () => redirect("/redirect-target");
-            export default () => <div>Yo</div>
-          `,
+                      import { redirect } from "@react-router/node";
+                      export const loader = () => redirect("/redirect-target");
+                      export default () => <div>Yo</div>
+                    `,
           "app/routes/redirect-target.tsx": js`
             export default () => <div>${REDIRECT_TARGET_TEXT}</div>
           `,
@@ -109,12 +109,12 @@ test.describe("loader in an app", () => {
           `,
 
           "app/routes/fetch-target.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader() {
-              return json({ message: "${FETCH_TARGET_TEXT}" })
-            }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function loader() {
+                        return json({ message: "${FETCH_TARGET_TEXT}" })
+                      }
+                    `,
         },
       })
     );
@@ -152,38 +152,38 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/root.tsx": js`
-            import { json } from "@remix-run/node";
-            import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export const loader = () => json("${ROOT_DATA}");
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export const loader = () => json("${ROOT_DATA}");
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader() {
-              return "${INDEX_DATA}"
-            }
-
-            export default function Index() {
-              return <div/>
-            }
-          `,
+                      import { json } from "@react-router/node";
+          
+                      export function loader() {
+                        return "${INDEX_DATA}"
+                      }
+          
+                      export default function Index() {
+                        return <div/>
+                      }
+                    `,
         },
       });
     });
@@ -210,24 +210,24 @@ test.describe("single fetch", () => {
           singleFetch: true,
           files: {
             "app/root.tsx": js`
-            import { Outlet } from '@remix-run/react'
-
-            export default function Root() {
-              return (
-                <html>
-                  <body>
-                    ${HOME_PAGE_TEXT}
-                    <Outlet />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                        import { Outlet } from '@react-router/react'
+            
+                        export default function Root() {
+                          return (
+                            <html>
+                              <body>
+                                ${HOME_PAGE_TEXT}
+                                <Outlet />
+                              </body>
+                            </html>
+                          );
+                        }
+                      `,
             "app/routes/redirect.tsx": js`
-            import { redirect } from "@remix-run/node";
-            export const loader = () => redirect("/redirect-target");
-            export default () => <div>Yo</div>
-          `,
+                        import { redirect } from "@react-router/node";
+                        export const loader = () => redirect("/redirect-target");
+                        export default () => <div>Yo</div>
+                      `,
             "app/routes/redirect-target.tsx": js`
             export default () => <div>${REDIRECT_TARGET_TEXT}</div>
           `,
@@ -238,12 +238,12 @@ test.describe("single fetch", () => {
           `,
 
             "app/routes/fetch-target.tsx": js`
-            import { json } from "@remix-run/node";
-
-            export function loader() {
-              return json({ message: "${FETCH_TARGET_TEXT}" })
-            }
-          `,
+                        import { json } from "@react-router/node";
+            
+                        export function loader() {
+                          return json({ message: "${FETCH_TARGET_TEXT}" })
+                        }
+                      `,
           },
         })
       );

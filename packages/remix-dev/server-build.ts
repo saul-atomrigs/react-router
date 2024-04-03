@@ -1,7 +1,7 @@
-import type { ServerBuild } from "@remix-run/server-runtime";
+import type { ServerBuild } from "@react-router/server-runtime";
 
 throw new Error(
-  "@remix-run/dev/server-build is not meant to be used directly from node_modules." +
+  "@react-router/dev/server-build is not meant to be used directly from node_modules." +
     " It exists to provide type definitions for a virtual module provided" +
     " by the Remix compiler at build time."
 );

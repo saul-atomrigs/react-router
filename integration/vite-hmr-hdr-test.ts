@@ -60,18 +60,18 @@ test("Vite / HMR & HDR / express", async ({ page, browserName, customDev }) => {
 test("Vite / HMR & HDR / mdx", async ({ page, viteDev }) => {
   let files: Files = async ({ port }) => ({
     "vite.config.ts": `
-      import { defineConfig } from "vite";
-      import { vitePlugin as remix } from "@remix-run/dev";
-      import mdx from "@mdx-js/rollup";
-
-      export default defineConfig({
-        ${await viteConfig.server({ port })}
-        plugins: [
-          mdx(),
-          remix(),
-        ],
-      });
-    `,
+          import { defineConfig } from "vite";
+          import { vitePlugin as remix } from "@react-router/dev";
+          import mdx from "@mdx-js/rollup";
+    
+          export default defineConfig({
+            ${await viteConfig.server({ port })}
+            plugins: [
+              mdx(),
+              remix(),
+            ],
+          });
+        `,
     "app/component.tsx": `
       import {useState} from "react";
 
@@ -162,7 +162,7 @@ async function workflow({
     contents
       .replace(
         "// imports",
-        `// imports\nimport { json } from "@remix-run/node";\nimport { useLoaderData } from "@remix-run/react"`
+        `// imports\nimport { json } from "@react-router/node";\nimport { useLoaderData } from "@react-router/react"`
       )
       .replace(
         "// loader",

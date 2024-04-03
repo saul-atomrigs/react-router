@@ -18,73 +18,73 @@ test.describe("set-cookie revalidation", () => {
     fixture = await createFixture({
       files: {
         "app/session.server.ts": js`
-          import { createCookieSessionStorage } from "@remix-run/node";
-
-          export let MESSAGE_KEY = "message";
-
-          export let sessionStorage = createCookieSessionStorage({
-            cookie: {
-              httpOnly: true,
-              path: "/",
-              sameSite: "lax",
-              secrets: ["cookie-secret"],
-            }
-          })
-        `,
+                  import { createCookieSessionStorage } from "@react-router/node";
+        
+                  export let MESSAGE_KEY = "message";
+        
+                  export let sessionStorage = createCookieSessionStorage({
+                    cookie: {
+                      httpOnly: true,
+                      path: "/",
+                      sameSite: "lax",
+                      secrets: ["cookie-secret"],
+                    }
+                  })
+                `,
 
         "app/root.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            Links,
-            Meta,
-            Outlet,
-            Scripts,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          import { sessionStorage, MESSAGE_KEY } from "~/session.server";
-
-          export const loader = async ({ request }) => {
-            let session = await sessionStorage.getSession(request.headers.get("Cookie"));
-            let message = session.get(MESSAGE_KEY) || null;
-
-            return json(message, {
-              headers: {
-                "Set-Cookie": await sessionStorage.commitSession(session),
-              },
-            });
-          };
-
-          export default function Root() {
-            const message = useLoaderData();
-
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  {!!message && <p id="message">{message}</p>}
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    Links,
+                    Meta,
+                    Outlet,
+                    Scripts,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  import { sessionStorage, MESSAGE_KEY } from "~/session.server";
+        
+                  export const loader = async ({ request }) => {
+                    let session = await sessionStorage.getSession(request.headers.get("Cookie"));
+                    let message = session.get(MESSAGE_KEY) || null;
+        
+                    return json(message, {
+                      headers: {
+                        "Set-Cookie": await sessionStorage.commitSession(session),
+                      },
+                    });
+                  };
+        
+                  export default function Root() {
+                    const message = useLoaderData();
+        
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          {!!message && <p id="message">{message}</p>}
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { Link } from "@remix-run/react";
-
-          export default function Index() {
-            return (
-              <p>
-                <Link to="/protected">protected</Link>
-              </p>
-            );
-          }
-        `,
+                  import { Link } from "@react-router/react";
+        
+                  export default function Index() {
+                    return (
+                      <p>
+                        <Link to="/protected">protected</Link>
+                      </p>
+                    );
+                  }
+                `,
 
         "app/routes/login.tsx": js`
           export default function Login() {
@@ -93,26 +93,26 @@ test.describe("set-cookie revalidation", () => {
         `,
 
         "app/routes/protected.tsx": js`
-          import { redirect } from "@remix-run/node";
-
-          import { sessionStorage, MESSAGE_KEY } from "~/session.server";
-
-          export let loader = async ({ request }) => {
-            let session = await sessionStorage.getSession(request.headers.get("Cookie"));
-
-            session.flash(MESSAGE_KEY, "${BANNER_MESSAGE}");
-
-            return redirect("/login", {
-              headers: {
-                "Set-Cookie": await sessionStorage.commitSession(session),
-              },
-            });
-          };
-
-          export default function Protected() {
-            return <p>protected</p>;
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+        
+                  import { sessionStorage, MESSAGE_KEY } from "~/session.server";
+        
+                  export let loader = async ({ request }) => {
+                    let session = await sessionStorage.getSession(request.headers.get("Cookie"));
+        
+                    session.flash(MESSAGE_KEY, "${BANNER_MESSAGE}");
+        
+                    return redirect("/login", {
+                      headers: {
+                        "Set-Cookie": await sessionStorage.commitSession(session),
+                      },
+                    });
+                  };
+        
+                  export default function Protected() {
+                    return <p>protected</p>;
+                  }
+                `,
       },
     });
 
@@ -144,73 +144,73 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/session.server.ts": js`
-            import { createCookieSessionStorage } from "@remix-run/node";
-
-            export let MESSAGE_KEY = "message";
-
-            export let sessionStorage = createCookieSessionStorage({
-              cookie: {
-                httpOnly: true,
-                path: "/",
-                sameSite: "lax",
-                secrets: ["cookie-secret"],
-              }
-            })
-          `,
+                      import { createCookieSessionStorage } from "@react-router/node";
+          
+                      export let MESSAGE_KEY = "message";
+          
+                      export let sessionStorage = createCookieSessionStorage({
+                        cookie: {
+                          httpOnly: true,
+                          path: "/",
+                          sameSite: "lax",
+                          secrets: ["cookie-secret"],
+                        }
+                      })
+                    `,
 
           "app/root.tsx": js`
-            import { json } from "@remix-run/node";
-            import {
-              Links,
-              Meta,
-              Outlet,
-              Scripts,
-              useLoaderData,
-            } from "@remix-run/react";
-
-            import { sessionStorage, MESSAGE_KEY } from "~/session.server";
-
-            export const loader = async ({ request }) => {
-              let session = await sessionStorage.getSession(request.headers.get("Cookie"));
-              let message = session.get(MESSAGE_KEY) || null;
-
-              return json(message, {
-                headers: {
-                  "Set-Cookie": await sessionStorage.commitSession(session),
-                },
-              });
-            };
-
-            export default function Root() {
-              const message = useLoaderData();
-
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    {!!message && <p id="message">{message}</p>}
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import {
+                        Links,
+                        Meta,
+                        Outlet,
+                        Scripts,
+                        useLoaderData,
+                      } from "@react-router/react";
+          
+                      import { sessionStorage, MESSAGE_KEY } from "~/session.server";
+          
+                      export const loader = async ({ request }) => {
+                        let session = await sessionStorage.getSession(request.headers.get("Cookie"));
+                        let message = session.get(MESSAGE_KEY) || null;
+          
+                        return json(message, {
+                          headers: {
+                            "Set-Cookie": await sessionStorage.commitSession(session),
+                          },
+                        });
+                      };
+          
+                      export default function Root() {
+                        const message = useLoaderData();
+          
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              {!!message && <p id="message">{message}</p>}
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { Link } from "@remix-run/react";
-
-            export default function Index() {
-              return (
-                <p>
-                  <Link to="/protected">protected</Link>
-                </p>
-              );
-            }
-          `,
+                      import { Link } from "@react-router/react";
+          
+                      export default function Index() {
+                        return (
+                          <p>
+                            <Link to="/protected">protected</Link>
+                          </p>
+                        );
+                      }
+                    `,
 
           "app/routes/login.tsx": js`
             export default function Login() {
@@ -219,26 +219,26 @@ test.describe("single fetch", () => {
           `,
 
           "app/routes/protected.tsx": js`
-            import { redirect } from "@remix-run/node";
-
-            import { sessionStorage, MESSAGE_KEY } from "~/session.server";
-
-            export let loader = async ({ request }) => {
-              let session = await sessionStorage.getSession(request.headers.get("Cookie"));
-
-              session.flash(MESSAGE_KEY, "${BANNER_MESSAGE}");
-
-              return redirect("/login", {
-                headers: {
-                  "Set-Cookie": await sessionStorage.commitSession(session),
-                },
-              });
-            };
-
-            export default function Protected() {
-              return <p>protected</p>;
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+          
+                      import { sessionStorage, MESSAGE_KEY } from "~/session.server";
+          
+                      export let loader = async ({ request }) => {
+                        let session = await sessionStorage.getSession(request.headers.get("Cookie"));
+          
+                        session.flash(MESSAGE_KEY, "${BANNER_MESSAGE}");
+          
+                        return redirect("/login", {
+                          headers: {
+                            "Set-Cookie": await sessionStorage.commitSession(session),
+                          },
+                        });
+                      };
+          
+                      export default function Protected() {
+                        return <p>protected</p>;
+                      }
+                    `,
         },
       });
 

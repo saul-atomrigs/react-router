@@ -18,22 +18,22 @@ test.beforeAll(async () => {
     "vite.config.js": await viteConfig.basic({ port }),
     "server.mjs": EXPRESS_SERVER({ port, loadContext: { value: "value" } }),
     "app/routes/_index.tsx": String.raw`
-      import { json } from "@remix-run/node";
-      import { useLoaderData } from "@remix-run/react";
-
-      export const loader = ({ context }) => {
-        return json({ context })
-      }
-
-      export default function IndexRoute() {
-        let { context } = useLoaderData<typeof loader>();
-        return (
-          <div id="index">
-            <p data-context>Context: {context.value}</p>
-          </div>
-        );
-      }
-    `,
+          import { json } from "@react-router/node";
+          import { useLoaderData } from "@react-router/react";
+    
+          export const loader = ({ context }) => {
+            return json({ context })
+          }
+    
+          export default function IndexRoute() {
+            let { context } = useLoaderData<typeof loader>();
+            return (
+              <div id="index">
+                <p data-context>Context: {context.value}</p>
+              </div>
+            );
+          }
+        `,
   });
   stop = await customDev({ cwd, port });
 });

@@ -14,21 +14,21 @@ test.beforeAll(async () => {
   fixture = await createFixture({
     files: {
       "app/routes/_index.tsx": js`
-        import { json } from "@remix-run/node";
-        import { useLoaderData } from "@remix-run/react";
-        export async function loader() {
-          const resp = await fetch('https://reqres.in/api/users?page=2');
-          return (resp instanceof Response) ? 'is an instance of global Response' : 'is not an instance of global Response';
-        }
-        export default function Index() {
-          let data = useLoaderData();
-          return (
-            <div>
-              {data}
-            </div>
-          )
-        }
-      `,
+              import { json } from "@react-router/node";
+              import { useLoaderData } from "@react-router/react";
+              export async function loader() {
+                const resp = await fetch('https://reqres.in/api/users?page=2');
+                return (resp instanceof Response) ? 'is an instance of global Response' : 'is not an instance of global Response';
+              }
+              export default function Index() {
+                let data = useLoaderData();
+                return (
+                  <div>
+                    {data}
+                  </div>
+                )
+              }
+            `,
     },
   });
 

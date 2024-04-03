@@ -40,65 +40,65 @@ test.describe("ErrorBoundary (thrown responses)", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            Links,
-            Meta,
-            Outlet,
-            Scripts,
-            useLoaderData,
-            useMatches,
-          } from "@remix-run/react";
-
-          export const loader = () => json("${ROOT_DATA}");
-
-          export default function Root() {
-            const data = useLoaderData();
-
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <div id="root-data">{data}</div>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-
-          export function ErrorBoundary() {
-            let matches = useMatches();
-            let { data } = matches.find(match => match.id === "root");
-
-            return (
-              <html>
-                <head />
-                <body>
-                  <div id="root-boundary">${ROOT_BOUNDARY_TEXT}</div>
-                  <div id="root-boundary-data">{data}</div>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    Links,
+                    Meta,
+                    Outlet,
+                    Scripts,
+                    useLoaderData,
+                    useMatches,
+                  } from "@react-router/react";
+        
+                  export const loader = () => json("${ROOT_DATA}");
+        
+                  export default function Root() {
+                    const data = useLoaderData();
+        
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <div id="root-data">{data}</div>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+        
+                  export function ErrorBoundary() {
+                    let matches = useMatches();
+                    let { data } = matches.find(match => match.id === "root");
+        
+                    return (
+                      <html>
+                        <head />
+                        <body>
+                          <div id="root-boundary">${ROOT_BOUNDARY_TEXT}</div>
+                          <div id="root-boundary-data">{data}</div>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { Link } from "@remix-run/react";
-          export default function Index() {
-            return (
-              <div>
-                <Link to="${NO_BOUNDARY_LOADER}">${NO_BOUNDARY_LOADER}</Link>
-                <Link to="${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}">${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}</Link>
-                <Link to="${HAS_BOUNDARY_NESTED_LOADER}">${HAS_BOUNDARY_NESTED_LOADER}</Link>
-              </div>
-            );
-          }
-        `,
+                  import { Link } from "@react-router/react";
+                  export default function Index() {
+                    return (
+                      <div>
+                        <Link to="${NO_BOUNDARY_LOADER}">${NO_BOUNDARY_LOADER}</Link>
+                        <Link to="${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}">${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}</Link>
+                        <Link to="${HAS_BOUNDARY_NESTED_LOADER}">${HAS_BOUNDARY_NESTED_LOADER}</Link>
+                      </div>
+                    );
+                  }
+                `,
 
         [`app/routes${NO_BOUNDARY_LOADER_FILE}.jsx`]: js`
           export function loader() {
@@ -110,25 +110,25 @@ test.describe("ErrorBoundary (thrown responses)", () => {
         `,
 
         [`app/routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}.jsx`]: js`
-          import { useMatches } from "@remix-run/react";
-          export function loader() {
-            return "${LAYOUT_DATA}";
-          }
-          export default function Layout() {
-            return <div/>;
-          }
-          export function ErrorBoundary() {
-            let matches = useMatches();
-            let { data } = matches.find(match => match.id === "routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}");
-
-            return (
-              <div>
-                <div id="layout-boundary">${LAYOUT_BOUNDARY_TEXT}</div>
-                <div id="layout-boundary-data">{data}</div>
-              </div>
-            );
-          }
-        `,
+                  import { useMatches } from "@react-router/react";
+                  export function loader() {
+                    return "${LAYOUT_DATA}";
+                  }
+                  export default function Layout() {
+                    return <div/>;
+                  }
+                  export function ErrorBoundary() {
+                    let matches = useMatches();
+                    let { data } = matches.find(match => match.id === "routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}");
+        
+                    return (
+                      <div>
+                        <div id="layout-boundary">${LAYOUT_BOUNDARY_TEXT}</div>
+                        <div id="layout-boundary-data">{data}</div>
+                      </div>
+                    );
+                  }
+                `,
 
         [`app/routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}._index.jsx`]: js`
           export function loader() {
@@ -140,20 +140,20 @@ test.describe("ErrorBoundary (thrown responses)", () => {
         `,
 
         [`app/routes${HAS_BOUNDARY_NESTED_LOADER_FILE}.jsx`]: js`
-          import { Outlet, useLoaderData } from "@remix-run/react";
-          export function loader() {
-            return "${LAYOUT_DATA}";
-          }
-          export default function Layout() {
-            let data = useLoaderData();
-            return (
-              <div>
-                <div id="layout-data">{data}</div>
-                <Outlet/>
-              </div>
-            );
-          }
-        `,
+                  import { Outlet, useLoaderData } from "@react-router/react";
+                  export function loader() {
+                    return "${LAYOUT_DATA}";
+                  }
+                  export default function Layout() {
+                    let data = useLoaderData();
+                    return (
+                      <div>
+                        <div id="layout-data">{data}</div>
+                        <Outlet/>
+                      </div>
+                    );
+                  }
+                `,
 
         [`app/routes${HAS_BOUNDARY_NESTED_LOADER_FILE}._index.jsx`]: js`
           export function loader() {
@@ -259,65 +259,65 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/root.tsx": js`
-            import { json } from "@remix-run/node";
-            import {
-              Links,
-              Meta,
-              Outlet,
-              Scripts,
-              useLoaderData,
-              useMatches,
-            } from "@remix-run/react";
-
-            export const loader = () => json("${ROOT_DATA}");
-
-            export default function Root() {
-              const data = useLoaderData();
-
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <div id="root-data">{data}</div>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export function ErrorBoundary() {
-              let matches = useMatches();
-              let { data } = matches.find(match => match.id === "root");
-
-              return (
-                <html>
-                  <head />
-                  <body>
-                    <div id="root-boundary">${ROOT_BOUNDARY_TEXT}</div>
-                    <div id="root-boundary-data">{data}</div>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import {
+                        Links,
+                        Meta,
+                        Outlet,
+                        Scripts,
+                        useLoaderData,
+                        useMatches,
+                      } from "@react-router/react";
+          
+                      export const loader = () => json("${ROOT_DATA}");
+          
+                      export default function Root() {
+                        const data = useLoaderData();
+          
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <div id="root-data">{data}</div>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export function ErrorBoundary() {
+                        let matches = useMatches();
+                        let { data } = matches.find(match => match.id === "root");
+          
+                        return (
+                          <html>
+                            <head />
+                            <body>
+                              <div id="root-boundary">${ROOT_BOUNDARY_TEXT}</div>
+                              <div id="root-boundary-data">{data}</div>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { Link } from "@remix-run/react";
-            export default function Index() {
-              return (
-                <div>
-                  <Link to="${NO_BOUNDARY_LOADER}">${NO_BOUNDARY_LOADER}</Link>
-                  <Link to="${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}">${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}</Link>
-                  <Link to="${HAS_BOUNDARY_NESTED_LOADER}">${HAS_BOUNDARY_NESTED_LOADER}</Link>
-                </div>
-              );
-            }
-          `,
+                      import { Link } from "@react-router/react";
+                      export default function Index() {
+                        return (
+                          <div>
+                            <Link to="${NO_BOUNDARY_LOADER}">${NO_BOUNDARY_LOADER}</Link>
+                            <Link to="${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}">${HAS_BOUNDARY_LAYOUT_NESTED_LOADER}</Link>
+                            <Link to="${HAS_BOUNDARY_NESTED_LOADER}">${HAS_BOUNDARY_NESTED_LOADER}</Link>
+                          </div>
+                        );
+                      }
+                    `,
 
           [`app/routes${NO_BOUNDARY_LOADER_FILE}.jsx`]: js`
             export function loader() {
@@ -329,25 +329,25 @@ test.describe("single fetch", () => {
           `,
 
           [`app/routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}.jsx`]: js`
-            import { useMatches } from "@remix-run/react";
-            export function loader() {
-              return "${LAYOUT_DATA}";
-            }
-            export default function Layout() {
-              return <div/>;
-            }
-            export function ErrorBoundary() {
-              let matches = useMatches();
-              let { data } = matches.find(match => match.id === "routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}");
-
-              return (
-                <div>
-                  <div id="layout-boundary">${LAYOUT_BOUNDARY_TEXT}</div>
-                  <div id="layout-boundary-data">{data}</div>
-                </div>
-              );
-            }
-          `,
+                      import { useMatches } from "@react-router/react";
+                      export function loader() {
+                        return "${LAYOUT_DATA}";
+                      }
+                      export default function Layout() {
+                        return <div/>;
+                      }
+                      export function ErrorBoundary() {
+                        let matches = useMatches();
+                        let { data } = matches.find(match => match.id === "routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}");
+          
+                        return (
+                          <div>
+                            <div id="layout-boundary">${LAYOUT_BOUNDARY_TEXT}</div>
+                            <div id="layout-boundary-data">{data}</div>
+                          </div>
+                        );
+                      }
+                    `,
 
           [`app/routes${HAS_BOUNDARY_LAYOUT_NESTED_LOADER_FILE}._index.jsx`]: js`
             export function loader() {
@@ -359,20 +359,20 @@ test.describe("single fetch", () => {
           `,
 
           [`app/routes${HAS_BOUNDARY_NESTED_LOADER_FILE}.jsx`]: js`
-            import { Outlet, useLoaderData } from "@remix-run/react";
-            export function loader() {
-              return "${LAYOUT_DATA}";
-            }
-            export default function Layout() {
-              let data = useLoaderData();
-              return (
-                <div>
-                  <div id="layout-data">{data}</div>
-                  <Outlet/>
-                </div>
-              );
-            }
-          `,
+                      import { Outlet, useLoaderData } from "@react-router/react";
+                      export function loader() {
+                        return "${LAYOUT_DATA}";
+                      }
+                      export default function Layout() {
+                        let data = useLoaderData();
+                        return (
+                          <div>
+                            <div id="layout-data">{data}</div>
+                            <Outlet/>
+                          </div>
+                        );
+                      }
+                    `,
 
           [`app/routes${HAS_BOUNDARY_NESTED_LOADER_FILE}._index.jsx`]: js`
             export function loader() {

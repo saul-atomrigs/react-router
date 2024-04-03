@@ -23,33 +23,33 @@ test.describe("useFetcher", () => {
     fixture = await createFixture({
       files: {
         "app/routes/resource-route-action-only.ts": js`
-          import { json } from "@remix-run/node";
-          export function action() {
-            return json("${CHEESESTEAK}");
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  export function action() {
+                    return json("${CHEESESTEAK}");
+                  }
+                `,
 
         "app/routes/fetcher-action-only-call.tsx": js`
-          import { useFetcher } from "@remix-run/react";
-
-          export default function FetcherActionOnlyCall() {
-            let fetcher = useFetcher();
-
-            let executeFetcher = () => {
-              fetcher.submit(new URLSearchParams(), {
-                method: 'post',
-                action: '/resource-route-action-only',
-              });
-            };
-
-            return (
-              <>
-                <button id="fetcher-submit" onClick={executeFetcher}>Click Me</button>
-                {fetcher.data && <pre>{fetcher.data}</pre>}
-              </>
-            );
-          }
-        `,
+                  import { useFetcher } from "@react-router/react";
+        
+                  export default function FetcherActionOnlyCall() {
+                    let fetcher = useFetcher();
+        
+                    let executeFetcher = () => {
+                      fetcher.submit(new URLSearchParams(), {
+                        method: 'post',
+                        action: '/resource-route-action-only',
+                      });
+                    };
+        
+                    return (
+                      <>
+                        <button id="fetcher-submit" onClick={executeFetcher}>Click Me</button>
+                        {fetcher.data && <pre>{fetcher.data}</pre>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/resource-route.tsx": js`
           export function loader() {
@@ -61,166 +61,166 @@ test.describe("useFetcher", () => {
         `,
 
         "app/routes/_index.tsx": js`
-          import { useFetcher } from "@remix-run/react";
-          export default function Index() {
-            let fetcher = useFetcher();
-            return (
-              <>
-                <fetcher.Form action="/resource-route">
-                  <button type="submit" formMethod="get">get</button>
-                  <button type="submit" formMethod="post">post</button>
-                </fetcher.Form>
-                <button id="fetcher-load" type="button" onClick={() => {
-                  fetcher.load('/resource-route');
-                }}>
-                  load
-                </button>
-                <button id="fetcher-submit" type="button" onClick={() => {
-                  fetcher.submit(new URLSearchParams(), {
-                    method: 'post',
-                    action: '/resource-route'
-                  });
-                }}>
-                  submit
-                </button>
-                <pre>{fetcher.data}</pre>
-              </>
-            );
-          }
-        `,
+                  import { useFetcher } from "@react-router/react";
+                  export default function Index() {
+                    let fetcher = useFetcher();
+                    return (
+                      <>
+                        <fetcher.Form action="/resource-route">
+                          <button type="submit" formMethod="get">get</button>
+                          <button type="submit" formMethod="post">post</button>
+                        </fetcher.Form>
+                        <button id="fetcher-load" type="button" onClick={() => {
+                          fetcher.load('/resource-route');
+                        }}>
+                          load
+                        </button>
+                        <button id="fetcher-submit" type="button" onClick={() => {
+                          fetcher.submit(new URLSearchParams(), {
+                            method: 'post',
+                            action: '/resource-route'
+                          });
+                        }}>
+                          submit
+                        </button>
+                        <pre>{fetcher.data}</pre>
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/parent.tsx": js`
-          import { Outlet } from "@remix-run/react";
-
-          export function action() {
-            return "${PARENT_LAYOUT_ACTION}";
-          };
-
-          export function loader() {
-            return "${PARENT_LAYOUT_LOADER}";
-          };
-
-          export default function Parent() {
-            return <Outlet />;
-          }
-        `,
+                  import { Outlet } from "@react-router/react";
+        
+                  export function action() {
+                    return "${PARENT_LAYOUT_ACTION}";
+                  };
+        
+                  export function loader() {
+                    return "${PARENT_LAYOUT_LOADER}";
+                  };
+        
+                  export default function Parent() {
+                    return <Outlet />;
+                  }
+                `,
 
         "app/routes/parent._index.tsx": js`
-          import { useFetcher } from "@remix-run/react";
-
-          export function action() {
-            return "${PARENT_INDEX_ACTION}";
-          };
-
-          export function loader() {
-            return "${PARENT_INDEX_LOADER}";
-          };
-
-          export default function ParentIndex() {
-            let fetcher = useFetcher();
-
-            return (
-              <>
-                <pre>{fetcher.data}</pre>
-                <button id="load-parent" onClick={() => fetcher.load('/parent')}>
-                  Load parent
-                </button>
-                <button id="load-index" onClick={() => fetcher.load('/parent?index')}>
-                  Load index
-                </button>
-                <button id="submit-empty" onClick={() => fetcher.submit({})}>
-                  Submit empty
-                </button>
-                <button id="submit-parent-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent' })}>
-                  Submit parent
-                </button>
-                <button id="submit-index-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent?index' })}>
-                  Submit index
-                </button>
-                <button id="submit-parent-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent' })}>
-                  Submit parent
-                </button>
-                <button id="submit-index-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent?index' })}>
-                  Submit index
-                </button>
-              </>
-            );
-          }
-        `,
+                  import { useFetcher } from "@react-router/react";
+        
+                  export function action() {
+                    return "${PARENT_INDEX_ACTION}";
+                  };
+        
+                  export function loader() {
+                    return "${PARENT_INDEX_LOADER}";
+                  };
+        
+                  export default function ParentIndex() {
+                    let fetcher = useFetcher();
+        
+                    return (
+                      <>
+                        <pre>{fetcher.data}</pre>
+                        <button id="load-parent" onClick={() => fetcher.load('/parent')}>
+                          Load parent
+                        </button>
+                        <button id="load-index" onClick={() => fetcher.load('/parent?index')}>
+                          Load index
+                        </button>
+                        <button id="submit-empty" onClick={() => fetcher.submit({})}>
+                          Submit empty
+                        </button>
+                        <button id="submit-parent-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent' })}>
+                          Submit parent
+                        </button>
+                        <button id="submit-index-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent?index' })}>
+                          Submit index
+                        </button>
+                        <button id="submit-parent-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent' })}>
+                          Submit parent
+                        </button>
+                        <button id="submit-index-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent?index' })}>
+                          Submit index
+                        </button>
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/fetcher-echo.tsx": js`
-          import { json } from "@remix-run/node";
-          import { useFetcher } from "@remix-run/react";
-
-          export async function action({ request }) {
-            await new Promise(r => setTimeout(r, 1000));
-            let contentType = request.headers.get('Content-Type');
-            let value;
-            if (contentType.includes('application/json')) {
-              let json = await request.json();
-              value = json === null ? json : json.value;
-            } else if (contentType.includes('text/plain')) {
-              value = await request.text();
-            } else {
-              value = (await request.formData()).get('value');
-            }
-            return json({ data: "ACTION (" + contentType + ") " + value })
-          }
-
-          export async function loader({ request }) {
-            await new Promise(r => setTimeout(r, 1000));
-            let value = new URL(request.url).searchParams.get('value');
-            return json({ data: "LOADER " + value })
-          }
-
-          export default function Index() {
-            let fetcherValues = [];
-            if (typeof window !== 'undefined') {
-              if (!window.fetcherValues) {
-                window.fetcherValues = [];
-              }
-              fetcherValues = window.fetcherValues
-            }
-
-            let fetcher = useFetcher();
-
-            let currentValue = fetcher.state + '/' + fetcher.data?.data;
-            if (fetcherValues[fetcherValues.length - 1] !== currentValue) {
-              fetcherValues.push(currentValue)
-            }
-
-            return (
-              <>
-                <input id="fetcher-input" name="value" />
-                <button id="fetcher-load" onClick={() => {
-                  let value = document.getElementById('fetcher-input').value;
-                  fetcher.load('/fetcher-echo?value=' + value)
-                }}>Load</button>
-                <button id="fetcher-submit" onClick={() => {
-                  let value = document.getElementById('fetcher-input').value;
-                  fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo' })
-                }}>Submit</button>
-                <button id="fetcher-submit-json" onClick={() => {
-                  let value = document.getElementById('fetcher-input').value;
-                  fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
-                }}>Submit JSON</button>
-                <button id="fetcher-submit-json-null" onClick={() => {
-                  fetcher.submit(null, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
-                }}>Submit Null JSON</button>
-                <button id="fetcher-submit-text" onClick={() => {
-                  let value = document.getElementById('fetcher-input').value;
-                  fetcher.submit(value, { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
-                }}>Submit Text</button>
-                <button id="fetcher-submit-text-empty" onClick={() => {
-                  fetcher.submit("", { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
-                }}>Submit Empty Text</button>
-
-                {fetcher.state === 'idle' ? <p id="fetcher-idle">IDLE</p> : null}
-                <pre>{JSON.stringify(fetcherValues)}</pre>
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { useFetcher } from "@react-router/react";
+        
+                  export async function action({ request }) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    let contentType = request.headers.get('Content-Type');
+                    let value;
+                    if (contentType.includes('application/json')) {
+                      let json = await request.json();
+                      value = json === null ? json : json.value;
+                    } else if (contentType.includes('text/plain')) {
+                      value = await request.text();
+                    } else {
+                      value = (await request.formData()).get('value');
+                    }
+                    return json({ data: "ACTION (" + contentType + ") " + value })
+                  }
+        
+                  export async function loader({ request }) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    let value = new URL(request.url).searchParams.get('value');
+                    return json({ data: "LOADER " + value })
+                  }
+        
+                  export default function Index() {
+                    let fetcherValues = [];
+                    if (typeof window !== 'undefined') {
+                      if (!window.fetcherValues) {
+                        window.fetcherValues = [];
+                      }
+                      fetcherValues = window.fetcherValues
+                    }
+        
+                    let fetcher = useFetcher();
+        
+                    let currentValue = fetcher.state + '/' + fetcher.data?.data;
+                    if (fetcherValues[fetcherValues.length - 1] !== currentValue) {
+                      fetcherValues.push(currentValue)
+                    }
+        
+                    return (
+                      <>
+                        <input id="fetcher-input" name="value" />
+                        <button id="fetcher-load" onClick={() => {
+                          let value = document.getElementById('fetcher-input').value;
+                          fetcher.load('/fetcher-echo?value=' + value)
+                        }}>Load</button>
+                        <button id="fetcher-submit" onClick={() => {
+                          let value = document.getElementById('fetcher-input').value;
+                          fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo' })
+                        }}>Submit</button>
+                        <button id="fetcher-submit-json" onClick={() => {
+                          let value = document.getElementById('fetcher-input').value;
+                          fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
+                        }}>Submit JSON</button>
+                        <button id="fetcher-submit-json-null" onClick={() => {
+                          fetcher.submit(null, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
+                        }}>Submit Null JSON</button>
+                        <button id="fetcher-submit-text" onClick={() => {
+                          let value = document.getElementById('fetcher-input').value;
+                          fetcher.submit(value, { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
+                        }}>Submit Text</button>
+                        <button id="fetcher-submit-text-empty" onClick={() => {
+                          fetcher.submit("", { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
+                        }}>Submit Empty Text</button>
+        
+                        {fetcher.state === 'idle' ? <p id="fetcher-idle">IDLE</p> : null}
+                        <pre>{JSON.stringify(fetcherValues)}</pre>
+                      </>
+                    );
+                  }
+                `,
       },
     });
 
@@ -435,56 +435,56 @@ test.describe("fetcher aborts and adjacent forms", () => {
     fixture = await createFixture({
       files: {
         "app/routes/_index.tsx": js`
-          import * as React from "react";
-          import {
-            Form,
-            useFetcher,
-            useLoaderData,
-            useNavigation
-          } from "@remix-run/react";
-
-          export async function loader({ request }) {
-            // 1 second timeout on data
-            await new Promise((r) => setTimeout(r, 1000));
-            return { foo: 'bar' };
-          }
-
-          export default function Index() {
-            const [open, setOpen] = React.useState(true);
-            const { data } = useLoaderData();
-            const navigation = useNavigation();
-
-            return (
-              <div>
-                  {navigation.state === 'idle' && <div id="idle">Idle</div>}
-                  <Form id="main-form">
-                    <input id="submit-form" type="submit" />
-                  </Form>
-
-                  <button id="open" onClick={() => setOpen(true)}>Show async form</button>
-                  {open && <Child onClose={() => setOpen(false)} />}
-              </div>
-            );
-          }
-
-          function Child({ onClose }) {
-            const fetcher = useFetcher();
-
-            return (
-              <fetcher.Form method="get" action="/api">
-                <button id="submit-fetcher" type="submit">Trigger fetcher (shows a message)</button>
-                <button
-                  type="submit"
-                  form="main-form"
-                  id="submit-and-close"
-                  onClick={() => setTimeout(onClose, 250)}
-                >
-                  Submit main form and close async form
-                </button>
-              </fetcher.Form>
-            );
-          }
-        `,
+                  import * as React from "react";
+                  import {
+                    Form,
+                    useFetcher,
+                    useLoaderData,
+                    useNavigation
+                  } from "@react-router/react";
+        
+                  export async function loader({ request }) {
+                    // 1 second timeout on data
+                    await new Promise((r) => setTimeout(r, 1000));
+                    return { foo: 'bar' };
+                  }
+        
+                  export default function Index() {
+                    const [open, setOpen] = React.useState(true);
+                    const { data } = useLoaderData();
+                    const navigation = useNavigation();
+        
+                    return (
+                      <div>
+                          {navigation.state === 'idle' && <div id="idle">Idle</div>}
+                          <Form id="main-form">
+                            <input id="submit-form" type="submit" />
+                          </Form>
+        
+                          <button id="open" onClick={() => setOpen(true)}>Show async form</button>
+                          {open && <Child onClose={() => setOpen(false)} />}
+                      </div>
+                    );
+                  }
+        
+                  function Child({ onClose }) {
+                    const fetcher = useFetcher();
+        
+                    return (
+                      <fetcher.Form method="get" action="/api">
+                        <button id="submit-fetcher" type="submit">Trigger fetcher (shows a message)</button>
+                        <button
+                          type="submit"
+                          form="main-form"
+                          id="submit-and-close"
+                          onClick={() => setTimeout(onClose, 250)}
+                        >
+                          Submit main form and close async form
+                        </button>
+                      </fetcher.Form>
+                    );
+                  }
+                `,
 
         "app/routes/api.tsx": js`
           export async function loader() {
@@ -547,33 +547,33 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/routes/resource-route-action-only.ts": js`
-            import { json } from "@remix-run/node";
-            export function action() {
-              return new Response("${CHEESESTEAK}");
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      export function action() {
+                        return new Response("${CHEESESTEAK}");
+                      }
+                    `,
 
           "app/routes/fetcher-action-only-call.tsx": js`
-            import { useFetcher } from "@remix-run/react";
-
-            export default function FetcherActionOnlyCall() {
-              let fetcher = useFetcher();
-
-              let executeFetcher = () => {
-                fetcher.submit(new URLSearchParams(), {
-                  method: 'post',
-                  action: '/resource-route-action-only',
-                });
-              };
-
-              return (
-                <>
-                  <button id="fetcher-submit" onClick={executeFetcher}>Click Me</button>
-                  {fetcher.data && <pre>{fetcher.data}</pre>}
-                </>
-              );
-            }
-          `,
+                      import { useFetcher } from "@react-router/react";
+          
+                      export default function FetcherActionOnlyCall() {
+                        let fetcher = useFetcher();
+          
+                        let executeFetcher = () => {
+                          fetcher.submit(new URLSearchParams(), {
+                            method: 'post',
+                            action: '/resource-route-action-only',
+                          });
+                        };
+          
+                        return (
+                          <>
+                            <button id="fetcher-submit" onClick={executeFetcher}>Click Me</button>
+                            {fetcher.data && <pre>{fetcher.data}</pre>}
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/resource-route.tsx": js`
             export function loader() {
@@ -585,166 +585,166 @@ test.describe("single fetch", () => {
           `,
 
           "app/routes/_index.tsx": js`
-            import { useFetcher } from "@remix-run/react";
-            export default function Index() {
-              let fetcher = useFetcher();
-              return (
-                <>
-                  <fetcher.Form action="/resource-route">
-                    <button type="submit" formMethod="get">get</button>
-                    <button type="submit" formMethod="post">post</button>
-                  </fetcher.Form>
-                  <button id="fetcher-load" type="button" onClick={() => {
-                    fetcher.load('/resource-route');
-                  }}>
-                    load
-                  </button>
-                  <button id="fetcher-submit" type="button" onClick={() => {
-                    fetcher.submit(new URLSearchParams(), {
-                      method: 'post',
-                      action: '/resource-route'
-                    });
-                  }}>
-                    submit
-                  </button>
-                  <pre>{fetcher.data}</pre>
-                </>
-              );
-            }
-          `,
+                      import { useFetcher } from "@react-router/react";
+                      export default function Index() {
+                        let fetcher = useFetcher();
+                        return (
+                          <>
+                            <fetcher.Form action="/resource-route">
+                              <button type="submit" formMethod="get">get</button>
+                              <button type="submit" formMethod="post">post</button>
+                            </fetcher.Form>
+                            <button id="fetcher-load" type="button" onClick={() => {
+                              fetcher.load('/resource-route');
+                            }}>
+                              load
+                            </button>
+                            <button id="fetcher-submit" type="button" onClick={() => {
+                              fetcher.submit(new URLSearchParams(), {
+                                method: 'post',
+                                action: '/resource-route'
+                              });
+                            }}>
+                              submit
+                            </button>
+                            <pre>{fetcher.data}</pre>
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/parent.tsx": js`
-            import { Outlet } from "@remix-run/react";
-
-            export function action() {
-              return new Response("${PARENT_LAYOUT_ACTION}");
-            };
-
-            export function loader() {
-              return new Response("${PARENT_LAYOUT_LOADER}");
-            };
-
-            export default function Parent() {
-              return <Outlet />;
-            }
-          `,
+                      import { Outlet } from "@react-router/react";
+          
+                      export function action() {
+                        return new Response("${PARENT_LAYOUT_ACTION}");
+                      };
+          
+                      export function loader() {
+                        return new Response("${PARENT_LAYOUT_LOADER}");
+                      };
+          
+                      export default function Parent() {
+                        return <Outlet />;
+                      }
+                    `,
 
           "app/routes/parent._index.tsx": js`
-            import { useFetcher } from "@remix-run/react";
-
-            export function action() {
-              return new Response("${PARENT_INDEX_ACTION}");
-            };
-
-            export function loader() {
-              return new Response("${PARENT_INDEX_LOADER}");
-            };
-
-            export default function ParentIndex() {
-              let fetcher = useFetcher();
-
-              return (
-                <>
-                  <pre>{fetcher.data}</pre>
-                  <button id="load-parent" onClick={() => fetcher.load('/parent')}>
-                    Load parent
-                  </button>
-                  <button id="load-index" onClick={() => fetcher.load('/parent?index')}>
-                    Load index
-                  </button>
-                  <button id="submit-empty" onClick={() => fetcher.submit({})}>
-                    Submit empty
-                  </button>
-                  <button id="submit-parent-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent' })}>
-                    Submit parent
-                  </button>
-                  <button id="submit-index-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent?index' })}>
-                    Submit index
-                  </button>
-                  <button id="submit-parent-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent' })}>
-                    Submit parent
-                  </button>
-                  <button id="submit-index-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent?index' })}>
-                    Submit index
-                  </button>
-                </>
-              );
-            }
-          `,
+                      import { useFetcher } from "@react-router/react";
+          
+                      export function action() {
+                        return new Response("${PARENT_INDEX_ACTION}");
+                      };
+          
+                      export function loader() {
+                        return new Response("${PARENT_INDEX_LOADER}");
+                      };
+          
+                      export default function ParentIndex() {
+                        let fetcher = useFetcher();
+          
+                        return (
+                          <>
+                            <pre>{fetcher.data}</pre>
+                            <button id="load-parent" onClick={() => fetcher.load('/parent')}>
+                              Load parent
+                            </button>
+                            <button id="load-index" onClick={() => fetcher.load('/parent?index')}>
+                              Load index
+                            </button>
+                            <button id="submit-empty" onClick={() => fetcher.submit({})}>
+                              Submit empty
+                            </button>
+                            <button id="submit-parent-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent' })}>
+                              Submit parent
+                            </button>
+                            <button id="submit-index-get" onClick={() => fetcher.submit({}, { method: 'get', action: '/parent?index' })}>
+                              Submit index
+                            </button>
+                            <button id="submit-parent-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent' })}>
+                              Submit parent
+                            </button>
+                            <button id="submit-index-post" onClick={() => fetcher.submit({}, { method: 'post', action: '/parent?index' })}>
+                              Submit index
+                            </button>
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/fetcher-echo.tsx": js`
-            import { json } from "@remix-run/node";
-            import { useFetcher } from "@remix-run/react";
-
-            export async function action({ request }) {
-              await new Promise(r => setTimeout(r, 1000));
-              let contentType = request.headers.get('Content-Type');
-              let value;
-              if (contentType.includes('application/json')) {
-                let json = await request.json();
-                value = json === null ? json : json.value;
-              } else if (contentType.includes('text/plain')) {
-                value = await request.text();
-              } else {
-                value = (await request.formData()).get('value');
-              }
-              return json({ data: "ACTION (" + contentType + ") " + value })
-            }
-
-            export async function loader({ request }) {
-              await new Promise(r => setTimeout(r, 1000));
-              let value = new URL(request.url).searchParams.get('value');
-              return json({ data: "LOADER " + value })
-            }
-
-            export default function Index() {
-              let fetcherValues = [];
-              if (typeof window !== 'undefined') {
-                if (!window.fetcherValues) {
-                  window.fetcherValues = [];
-                }
-                fetcherValues = window.fetcherValues
-              }
-
-              let fetcher = useFetcher();
-
-              let currentValue = fetcher.state + '/' + fetcher.data?.data;
-              if (fetcherValues[fetcherValues.length - 1] !== currentValue) {
-                fetcherValues.push(currentValue)
-              }
-
-              return (
-                <>
-                  <input id="fetcher-input" name="value" />
-                  <button id="fetcher-load" onClick={() => {
-                    let value = document.getElementById('fetcher-input').value;
-                    fetcher.load('/fetcher-echo?value=' + value)
-                  }}>Load</button>
-                  <button id="fetcher-submit" onClick={() => {
-                    let value = document.getElementById('fetcher-input').value;
-                    fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo' })
-                  }}>Submit</button>
-                  <button id="fetcher-submit-json" onClick={() => {
-                    let value = document.getElementById('fetcher-input').value;
-                    fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
-                  }}>Submit JSON</button>
-                  <button id="fetcher-submit-json-null" onClick={() => {
-                    fetcher.submit(null, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
-                  }}>Submit Null JSON</button>
-                  <button id="fetcher-submit-text" onClick={() => {
-                    let value = document.getElementById('fetcher-input').value;
-                    fetcher.submit(value, { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
-                  }}>Submit Text</button>
-                  <button id="fetcher-submit-text-empty" onClick={() => {
-                    fetcher.submit("", { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
-                  }}>Submit Empty Text</button>
-
-                  {fetcher.state === 'idle' ? <p id="fetcher-idle">IDLE</p> : null}
-                  <pre>{JSON.stringify(fetcherValues)}</pre>
-                </>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import { useFetcher } from "@react-router/react";
+          
+                      export async function action({ request }) {
+                        await new Promise(r => setTimeout(r, 1000));
+                        let contentType = request.headers.get('Content-Type');
+                        let value;
+                        if (contentType.includes('application/json')) {
+                          let json = await request.json();
+                          value = json === null ? json : json.value;
+                        } else if (contentType.includes('text/plain')) {
+                          value = await request.text();
+                        } else {
+                          value = (await request.formData()).get('value');
+                        }
+                        return json({ data: "ACTION (" + contentType + ") " + value })
+                      }
+          
+                      export async function loader({ request }) {
+                        await new Promise(r => setTimeout(r, 1000));
+                        let value = new URL(request.url).searchParams.get('value');
+                        return json({ data: "LOADER " + value })
+                      }
+          
+                      export default function Index() {
+                        let fetcherValues = [];
+                        if (typeof window !== 'undefined') {
+                          if (!window.fetcherValues) {
+                            window.fetcherValues = [];
+                          }
+                          fetcherValues = window.fetcherValues
+                        }
+          
+                        let fetcher = useFetcher();
+          
+                        let currentValue = fetcher.state + '/' + fetcher.data?.data;
+                        if (fetcherValues[fetcherValues.length - 1] !== currentValue) {
+                          fetcherValues.push(currentValue)
+                        }
+          
+                        return (
+                          <>
+                            <input id="fetcher-input" name="value" />
+                            <button id="fetcher-load" onClick={() => {
+                              let value = document.getElementById('fetcher-input').value;
+                              fetcher.load('/fetcher-echo?value=' + value)
+                            }}>Load</button>
+                            <button id="fetcher-submit" onClick={() => {
+                              let value = document.getElementById('fetcher-input').value;
+                              fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo' })
+                            }}>Submit</button>
+                            <button id="fetcher-submit-json" onClick={() => {
+                              let value = document.getElementById('fetcher-input').value;
+                              fetcher.submit({ value }, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
+                            }}>Submit JSON</button>
+                            <button id="fetcher-submit-json-null" onClick={() => {
+                              fetcher.submit(null, { method: 'post', action: '/fetcher-echo', encType: 'application/json' })
+                            }}>Submit Null JSON</button>
+                            <button id="fetcher-submit-text" onClick={() => {
+                              let value = document.getElementById('fetcher-input').value;
+                              fetcher.submit(value, { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
+                            }}>Submit Text</button>
+                            <button id="fetcher-submit-text-empty" onClick={() => {
+                              fetcher.submit("", { method: 'post', action: '/fetcher-echo', encType: 'text/plain' })
+                            }}>Submit Empty Text</button>
+          
+                            {fetcher.state === 'idle' ? <p id="fetcher-idle">IDLE</p> : null}
+                            <pre>{JSON.stringify(fetcherValues)}</pre>
+                          </>
+                        );
+                      }
+                    `,
         },
       });
 
@@ -962,56 +962,56 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/routes/_index.tsx": js`
-            import * as React from "react";
-            import {
-              Form,
-              useFetcher,
-              useLoaderData,
-              useNavigation
-            } from "@remix-run/react";
-
-            export async function loader({ request }) {
-              // 1 second timeout on data
-              await new Promise((r) => setTimeout(r, 1000));
-              return { foo: 'bar' };
-            }
-
-            export default function Index() {
-              const [open, setOpen] = React.useState(true);
-              const { data } = useLoaderData();
-              const navigation = useNavigation();
-
-              return (
-                <div>
-                    {navigation.state === 'idle' && <div id="idle">Idle</div>}
-                    <Form id="main-form">
-                      <input id="submit-form" type="submit" />
-                    </Form>
-
-                    <button id="open" onClick={() => setOpen(true)}>Show async form</button>
-                    {open && <Child onClose={() => setOpen(false)} />}
-                </div>
-              );
-            }
-
-            function Child({ onClose }) {
-              const fetcher = useFetcher();
-
-              return (
-                <fetcher.Form method="get" action="/api">
-                  <button id="submit-fetcher" type="submit">Trigger fetcher (shows a message)</button>
-                  <button
-                    type="submit"
-                    form="main-form"
-                    id="submit-and-close"
-                    onClick={() => setTimeout(onClose, 250)}
-                  >
-                    Submit main form and close async form
-                  </button>
-                </fetcher.Form>
-              );
-            }
-          `,
+                      import * as React from "react";
+                      import {
+                        Form,
+                        useFetcher,
+                        useLoaderData,
+                        useNavigation
+                      } from "@react-router/react";
+          
+                      export async function loader({ request }) {
+                        // 1 second timeout on data
+                        await new Promise((r) => setTimeout(r, 1000));
+                        return { foo: 'bar' };
+                      }
+          
+                      export default function Index() {
+                        const [open, setOpen] = React.useState(true);
+                        const { data } = useLoaderData();
+                        const navigation = useNavigation();
+          
+                        return (
+                          <div>
+                              {navigation.state === 'idle' && <div id="idle">Idle</div>}
+                              <Form id="main-form">
+                                <input id="submit-form" type="submit" />
+                              </Form>
+          
+                              <button id="open" onClick={() => setOpen(true)}>Show async form</button>
+                              {open && <Child onClose={() => setOpen(false)} />}
+                          </div>
+                        );
+                      }
+          
+                      function Child({ onClose }) {
+                        const fetcher = useFetcher();
+          
+                        return (
+                          <fetcher.Form method="get" action="/api">
+                            <button id="submit-fetcher" type="submit">Trigger fetcher (shows a message)</button>
+                            <button
+                              type="submit"
+                              form="main-form"
+                              id="submit-and-close"
+                              onClick={() => setTimeout(onClose, 250)}
+                            >
+                              Submit main form and close async form
+                            </button>
+                          </fetcher.Form>
+                        );
+                      }
+                    `,
 
           "app/routes/api.tsx": js`
             export async function loader() {

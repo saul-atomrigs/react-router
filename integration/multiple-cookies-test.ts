@@ -16,36 +16,36 @@ test.describe("pathless layout routes", () => {
       await createFixture({
         files: {
           "app/routes/_index.tsx": js`
-            import { redirect, json } from "@remix-run/node";
-            import { Form, useActionData } from "@remix-run/react";
-
-            export let loader = async () => {
-              let headers = new Headers();
-              headers.append("Set-Cookie", "foo=bar");
-              headers.append("Set-Cookie", "bar=baz");
-              return json({}, { headers });
-            };
-
-            export let action = async () => {
-              let headers = new Headers();
-              headers.append("Set-Cookie", "another=one");
-              headers.append("Set-Cookie", "how-about=two");
-              return json({success: true}, { headers });
-            };
-
-            export default function MultipleSetCookiesPage() {
-              let actionData = useActionData();
-              return (
-                <>
-                  <p>👋</p>
-                  <Form method="post">
-                    <button type="submit">Add cookies</button>
-                  </Form>
-                  {actionData?.success && <p data-testid="action-success">Success!</p>}
-                </>
-              );
-            };
-          `,
+                      import { redirect, json } from "@react-router/node";
+                      import { Form, useActionData } from "@react-router/react";
+          
+                      export let loader = async () => {
+                        let headers = new Headers();
+                        headers.append("Set-Cookie", "foo=bar");
+                        headers.append("Set-Cookie", "bar=baz");
+                        return json({}, { headers });
+                      };
+          
+                      export let action = async () => {
+                        let headers = new Headers();
+                        headers.append("Set-Cookie", "another=one");
+                        headers.append("Set-Cookie", "how-about=two");
+                        return json({success: true}, { headers });
+                      };
+          
+                      export default function MultipleSetCookiesPage() {
+                        let actionData = useActionData();
+                        return (
+                          <>
+                            <p>👋</p>
+                            <Form method="post">
+                              <button type="submit">Add cookies</button>
+                            </Form>
+                            {actionData?.success && <p data-testid="action-success">Success!</p>}
+                          </>
+                        );
+                      };
+                    `,
         },
       })
     );

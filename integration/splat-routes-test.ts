@@ -18,23 +18,23 @@ test.describe("rendering", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
           export default function() {
@@ -55,16 +55,16 @@ test.describe("rendering", () => {
         `,
 
         "app/routes/nested.tsx": js`
-          import { Outlet } from "@remix-run/react";
-          export default function() {
-            return (
-              <div>
-                <h2>${PARENT}</h2>
-                <Outlet/>
-              </div>
-            )
-          }
-        `,
+                  import { Outlet } from "@react-router/react";
+                  export default function() {
+                    return (
+                      <div>
+                        <h2>${PARENT}</h2>
+                        <Outlet/>
+                      </div>
+                    )
+                  }
+                `,
 
         "app/routes/nested.$.tsx": js`
           export default function() {

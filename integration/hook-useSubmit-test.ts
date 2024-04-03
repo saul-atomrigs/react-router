@@ -16,78 +16,78 @@ test.describe("`useSubmit()` returned function", () => {
     fixture = await createFixture({
       files: {
         "app/routes/_index.tsx": js`
-          import { useLoaderData, useSubmit } from "@remix-run/react";
-
-          export function loader({ request }) {
-            let url = new URL(request.url);
-            return url.searchParams.toString()
-          }
-
-          export default function Index() {
-            let submit = useSubmit();
-            let handleClick = event => {
-              event.preventDefault()
-              submit(event.nativeEvent.submitter || event.currentTarget)
-            }
-            let data = useLoaderData();
-            return (
-              <form>
-                <input type="text" name="tasks" defaultValue="first" />
-                <input type="text" name="tasks" defaultValue="second" />
-
-                <button onClick={handleClick} name="tasks" value="third">
-                  Prepare Third Task
-                </button>
-
-                <pre>{data}</pre>
-              </form>
-            )
-          }
-        `,
+                  import { useLoaderData, useSubmit } from "@react-router/react";
+        
+                  export function loader({ request }) {
+                    let url = new URL(request.url);
+                    return url.searchParams.toString()
+                  }
+        
+                  export default function Index() {
+                    let submit = useSubmit();
+                    let handleClick = event => {
+                      event.preventDefault()
+                      submit(event.nativeEvent.submitter || event.currentTarget)
+                    }
+                    let data = useLoaderData();
+                    return (
+                      <form>
+                        <input type="text" name="tasks" defaultValue="first" />
+                        <input type="text" name="tasks" defaultValue="second" />
+        
+                        <button onClick={handleClick} name="tasks" value="third">
+                          Prepare Third Task
+                        </button>
+        
+                        <pre>{data}</pre>
+                      </form>
+                    )
+                  }
+                `,
         "app/routes/action.tsx": js`
-          import { json } from "@remix-run/node";
-          import { useActionData, useSubmit } from "@remix-run/react";
-
-          export async function action({ request }) {
-            let contentType = request.headers.get('Content-Type');
-            if (contentType.includes('application/json')) {
-              return json({ value: await request.json() });
-            }
-            if (contentType.includes('text/plain')) {
-              return json({ value: await request.text() });
-            }
-            let fd = await request.formData();
-            return json({ value: new URLSearchParams(fd.entries()).toString() })
-          }
-
-          export default function Component() {
-            let submit = useSubmit();
-            let data = useActionData();
-            return (
-              <>
-                <button id="submit-json" onClick={() => submit(
-                  { key: 'value' },
-                  { method: 'post', encType: 'application/json' },
-                )}>
-                  Submit JSON
-                </button>
-                <button id="submit-text" onClick={() => submit(
-                  "raw text",
-                  { method: 'post', encType: 'text/plain' },
-                )}>
-                  Submit Text
-                </button>
-                <button id="submit-formData" onClick={() => submit(
-                  { key: 'value' },
-                  { method: 'post' },
-                )}>
-                  Submit FrmData
-                </button>
-                {data ? <p id="action-data">data: {JSON.stringify(data)}</p> : null}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { useActionData, useSubmit } from "@react-router/react";
+        
+                  export async function action({ request }) {
+                    let contentType = request.headers.get('Content-Type');
+                    if (contentType.includes('application/json')) {
+                      return json({ value: await request.json() });
+                    }
+                    if (contentType.includes('text/plain')) {
+                      return json({ value: await request.text() });
+                    }
+                    let fd = await request.formData();
+                    return json({ value: new URLSearchParams(fd.entries()).toString() })
+                  }
+        
+                  export default function Component() {
+                    let submit = useSubmit();
+                    let data = useActionData();
+                    return (
+                      <>
+                        <button id="submit-json" onClick={() => submit(
+                          { key: 'value' },
+                          { method: 'post', encType: 'application/json' },
+                        )}>
+                          Submit JSON
+                        </button>
+                        <button id="submit-text" onClick={() => submit(
+                          "raw text",
+                          { method: 'post', encType: 'text/plain' },
+                        )}>
+                          Submit Text
+                        </button>
+                        <button id="submit-formData" onClick={() => submit(
+                          { key: 'value' },
+                          { method: 'post' },
+                        )}>
+                          Submit FrmData
+                        </button>
+                        {data ? <p id="action-data">data: {JSON.stringify(data)}</p> : null}
+                      </>
+                    );
+                  }
+                `,
       },
     });
 

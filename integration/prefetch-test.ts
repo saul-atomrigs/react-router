@@ -11,7 +11,7 @@ import type {
   FixtureInit,
   AppFixture,
 } from "./helpers/create-fixture.js";
-import type { RemixLinkProps } from "../build/node_modules/@remix-run/react/dist/components.js";
+import type { RemixLinkProps } from "../build/node_modules/@react-router/react/dist/components.js";
 import { PlaywrightFixture } from "./helpers/playwright-fixture.js";
 
 test.describe("multi fetch", () => {
@@ -21,45 +21,45 @@ test.describe("multi fetch", () => {
       compiler: "remix",
       files: {
         "app/root.tsx": js`
-          import {
-            Link,
-            Links,
-            Meta,
-            Outlet,
-            Scripts,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export default function Root() {
-            const styles =
-            'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
-            'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
-
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <style>{styles}</style>
-                  <h1>Root</h1>
-                  <nav id="nav">
-                    <Link to="/with-loader" prefetch="${mode}">
-                      Loader Page
-                    </Link>
-                    <br/>
-                    <Link to="/without-loader" prefetch="${mode}">
-                      Non-Loader Page
-                    </Link>
-                  </nav>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import {
+                    Link,
+                    Links,
+                    Meta,
+                    Outlet,
+                    Scripts,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export default function Root() {
+                    const styles =
+                    'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
+                    'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
+        
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <style>{styles}</style>
+                          <h1>Root</h1>
+                          <nav id="nav">
+                            <Link to="/with-loader" prefetch="${mode}">
+                              Loader Page
+                            </Link>
+                            <br/>
+                            <Link to="/without-loader" prefetch="${mode}">
+                              Non-Loader Page
+                            </Link>
+                          </nav>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
           export default function() {
@@ -285,19 +285,19 @@ test.describe("multi fetch", () => {
         compiler: "remix",
         files: {
           "app/routes/_index.tsx": js`
-            import { Link } from "@remix-run/react";
-
-            export default function Component() {
-              return (
-                <>
-                  <h1>Index Page - Scroll Down</h1>
-                  <div style={{ marginTop: "150vh" }}>
-                    <Link to="/test" prefetch="viewport">Click me!</Link>
-                  </div>
-                </>
-              );
-            }
-          `,
+                      import { Link } from "@react-router/react";
+          
+                      export default function Component() {
+                        return (
+                          <>
+                            <h1>Index Page - Scroll Down</h1>
+                            <div style={{ marginTop: "150vh" }}>
+                              <Link to="/test" prefetch="viewport">Click me!</Link>
+                            </div>
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/test.tsx": js`
             export function loader() {
@@ -360,43 +360,43 @@ test.describe("multi fetch", () => {
         compiler: "remix",
         files: {
           "app/root.tsx": js`
-              import { Links, Meta, Scripts, useFetcher } from "@remix-run/react";
-              import globalCss from "./global.css";
-
-              export function links() {
-                return [{ rel: "stylesheet", href: globalCss }];
-              }
-
-              export async function action() {
-                return null;
-              }
-
-              export async function loader() {
-                return null;
-              }
-
-              export default function Root() {
-                let fetcher = useFetcher();
-
-                return (
-                  <html lang="en">
-                    <head>
-                      <Meta />
-                      <Links />
-                    </head>
-                    <body>
-                      <button
-                        id="submit-fetcher"
-                        onClick={() => fetcher.submit({}, { method: 'post' })}>
-                          Submit Fetcher
-                      </button>
-                      <p id={"fetcher-state--" + fetcher.state}>{fetcher.state}</p>
-                      <Scripts />
-                    </body>
-                  </html>
-                );
-              }
-            `,
+                        import { Links, Meta, Scripts, useFetcher } from "@react-router/react";
+                        import globalCss from "./global.css";
+          
+                        export function links() {
+                          return [{ rel: "stylesheet", href: globalCss }];
+                        }
+          
+                        export async function action() {
+                          return null;
+                        }
+          
+                        export async function loader() {
+                          return null;
+                        }
+          
+                        export default function Root() {
+                          let fetcher = useFetcher();
+          
+                          return (
+                            <html lang="en">
+                              <head>
+                                <Meta />
+                                <Links />
+                              </head>
+                              <body>
+                                <button
+                                  id="submit-fetcher"
+                                  onClick={() => fetcher.submit({}, { method: 'post' })}>
+                                    Submit Fetcher
+                                </button>
+                                <p id={"fetcher-state--" + fetcher.state}>{fetcher.state}</p>
+                                <Scripts />
+                              </body>
+                            </html>
+                          );
+                        }
+                      `,
 
           "app/global.css": `
               body {
@@ -439,41 +439,41 @@ test.describe("multi fetch", () => {
         compiler: "remix",
         files: {
           "app/root.tsx": js`
-            import {
-              Link,
-              Links,
-              Meta,
-              Outlet,
-              Scripts,
-              useLoaderData,
-            } from "@remix-run/react";
-
-            export default function Root() {
-              const styles =
-              'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
-              'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
-
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <style>{styles}</style>
-                    <h1>Root</h1>
-                    <nav id="nav">
-                      <Link to="/with-nested-links/nested" prefetch="intent">
-                        Nested Links Page
-                      </Link>
-                    </nav>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import {
+                        Link,
+                        Links,
+                        Meta,
+                        Outlet,
+                        Scripts,
+                        useLoaderData,
+                      } from "@react-router/react";
+          
+                      export default function Root() {
+                        const styles =
+                        'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
+                        'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
+          
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <style>{styles}</style>
+                              <h1>Root</h1>
+                              <nav id="nav">
+                                <Link to="/with-nested-links/nested" prefetch="intent">
+                                  Nested Links Page
+                                </Link>
+                              </nav>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/global.css": css`
             .global-class {
@@ -496,28 +496,28 @@ test.describe("multi fetch", () => {
           `,
 
           "app/routes/with-nested-links.tsx": js`
-            import { Outlet } from "@remix-run/react";
-            import globalCss from "../global.css";
-
-            export function links() {
-              return [
-                // Same links as child route but with different key order
-                {
-                  rel: "stylesheet",
-                  href: globalCss,
-                },
-                {
-                  rel: "preload",
-                  as: "image",
-                  imageSrcSet: "image-600.jpg 600w, image-1200.jpg 1200w",
-                  imageSizes: "9999px",
-                },
-              ];
-            }
-            export default function() {
-              return <Outlet />;
-            }
-          `,
+                      import { Outlet } from "@react-router/react";
+                      import globalCss from "../global.css";
+          
+                      export function links() {
+                        return [
+                          // Same links as child route but with different key order
+                          {
+                            rel: "stylesheet",
+                            href: globalCss,
+                          },
+                          {
+                            rel: "preload",
+                            as: "image",
+                            imageSrcSet: "image-600.jpg 600w, image-1200.jpg 1200w",
+                            imageSizes: "9999px",
+                          },
+                        ];
+                      }
+                      export default function() {
+                        return <Outlet />;
+                      }
+                    `,
 
           "app/routes/with-nested-links.nested.tsx": js`
             import globalCss from '../global.css';
@@ -587,45 +587,45 @@ test.describe("single fetch", () => {
       },
       files: {
         "app/root.tsx": js`
-          import {
-            Link,
-            Links,
-            Meta,
-            Outlet,
-            Scripts,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export default function Root() {
-            const styles =
-            'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
-            'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
-
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <style>{styles}</style>
-                  <h1>Root</h1>
-                  <nav id="nav">
-                    <Link to="/with-loader" prefetch="${mode}">
-                      Loader Page
-                    </Link>
-                    <br/>
-                    <Link to="/without-loader" prefetch="${mode}">
-                      Non-Loader Page
-                    </Link>
-                  </nav>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import {
+                    Link,
+                    Links,
+                    Meta,
+                    Outlet,
+                    Scripts,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export default function Root() {
+                    const styles =
+                    'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
+                    'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
+        
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <style>{styles}</style>
+                          <h1>Root</h1>
+                          <nav id="nav">
+                            <Link to="/with-loader" prefetch="${mode}">
+                              Loader Page
+                            </Link>
+                            <br/>
+                            <Link to="/without-loader" prefetch="${mode}">
+                              Non-Loader Page
+                            </Link>
+                          </nav>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
           export default function() {
@@ -856,19 +856,19 @@ test.describe("single fetch", () => {
         },
         files: {
           "app/routes/_index.tsx": js`
-            import { Link } from "@remix-run/react";
-
-            export default function Component() {
-              return (
-                <>
-                  <h1>Index Page - Scroll Down</h1>
-                  <div style={{ marginTop: "150vh" }}>
-                    <Link to="/test" prefetch="viewport">Click me!</Link>
-                  </div>
-                </>
-              );
-            }
-          `,
+                      import { Link } from "@react-router/react";
+          
+                      export default function Component() {
+                        return (
+                          <>
+                            <h1>Index Page - Scroll Down</h1>
+                            <div style={{ marginTop: "150vh" }}>
+                              <Link to="/test" prefetch="viewport">Click me!</Link>
+                            </div>
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/test.tsx": js`
             export function loader() {
@@ -936,43 +936,43 @@ test.describe("single fetch", () => {
         },
         files: {
           "app/root.tsx": js`
-              import { Links, Meta, Scripts, useFetcher } from "@remix-run/react";
-              import globalCss from "./global.css";
-
-              export function links() {
-                return [{ rel: "stylesheet", href: globalCss }];
-              }
-
-              export async function action() {
-                return null;
-              }
-
-              export async function loader() {
-                return null;
-              }
-
-              export default function Root() {
-                let fetcher = useFetcher();
-
-                return (
-                  <html lang="en">
-                    <head>
-                      <Meta />
-                      <Links />
-                    </head>
-                    <body>
-                      <button
-                        id="submit-fetcher"
-                        onClick={() => fetcher.submit({}, { method: 'post' })}>
-                          Submit Fetcher
-                      </button>
-                      <p id={"fetcher-state--" + fetcher.state}>{fetcher.state}</p>
-                      <Scripts />
-                    </body>
-                  </html>
-                );
-              }
-            `,
+                        import { Links, Meta, Scripts, useFetcher } from "@react-router/react";
+                        import globalCss from "./global.css";
+          
+                        export function links() {
+                          return [{ rel: "stylesheet", href: globalCss }];
+                        }
+          
+                        export async function action() {
+                          return null;
+                        }
+          
+                        export async function loader() {
+                          return null;
+                        }
+          
+                        export default function Root() {
+                          let fetcher = useFetcher();
+          
+                          return (
+                            <html lang="en">
+                              <head>
+                                <Meta />
+                                <Links />
+                              </head>
+                              <body>
+                                <button
+                                  id="submit-fetcher"
+                                  onClick={() => fetcher.submit({}, { method: 'post' })}>
+                                    Submit Fetcher
+                                </button>
+                                <p id={"fetcher-state--" + fetcher.state}>{fetcher.state}</p>
+                                <Scripts />
+                              </body>
+                            </html>
+                          );
+                        }
+                      `,
 
           "app/global.css": `
               body {
@@ -1020,41 +1020,41 @@ test.describe("single fetch", () => {
         },
         files: {
           "app/root.tsx": js`
-            import {
-              Link,
-              Links,
-              Meta,
-              Outlet,
-              Scripts,
-              useLoaderData,
-            } from "@remix-run/react";
-
-            export default function Root() {
-              const styles =
-              'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
-              'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
-
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <style>{styles}</style>
-                    <h1>Root</h1>
-                    <nav id="nav">
-                      <Link to="/with-nested-links/nested" prefetch="intent">
-                        Nested Links Page
-                      </Link>
-                    </nav>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import {
+                        Link,
+                        Links,
+                        Meta,
+                        Outlet,
+                        Scripts,
+                        useLoaderData,
+                      } from "@react-router/react";
+          
+                      export default function Root() {
+                        const styles =
+                        'a:hover { color: red; } a:hover:after { content: " (hovered)"; }' +
+                        'a:focus { color: green; } a:focus:after { content: " (focused)"; }';
+          
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <style>{styles}</style>
+                              <h1>Root</h1>
+                              <nav id="nav">
+                                <Link to="/with-nested-links/nested" prefetch="intent">
+                                  Nested Links Page
+                                </Link>
+                              </nav>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/global.css": css`
             .global-class {
@@ -1077,28 +1077,28 @@ test.describe("single fetch", () => {
           `,
 
           "app/routes/with-nested-links.tsx": js`
-            import { Outlet } from "@remix-run/react";
-            import globalCss from "../global.css";
-
-            export function links() {
-              return [
-                // Same links as child route but with different key order
-                {
-                  rel: "stylesheet",
-                  href: globalCss,
-                },
-                {
-                  rel: "preload",
-                  as: "image",
-                  imageSrcSet: "image-600.jpg 600w, image-1200.jpg 1200w",
-                  imageSizes: "9999px",
-                },
-              ];
-            }
-            export default function() {
-              return <Outlet />;
-            }
-          `,
+                      import { Outlet } from "@react-router/react";
+                      import globalCss from "../global.css";
+          
+                      export function links() {
+                        return [
+                          // Same links as child route but with different key order
+                          {
+                            rel: "stylesheet",
+                            href: globalCss,
+                          },
+                          {
+                            rel: "preload",
+                            as: "image",
+                            imageSrcSet: "image-600.jpg 600w, image-1200.jpg 1200w",
+                            imageSizes: "9999px",
+                          },
+                        ];
+                      }
+                      export default function() {
+                        return <Outlet />;
+                      }
+                    `,
 
           "app/routes/with-nested-links.nested.tsx": js`
             import globalCss from '../global.css';

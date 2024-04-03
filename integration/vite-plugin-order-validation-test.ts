@@ -10,16 +10,16 @@ test.describe(() => {
   test.beforeAll(async () => {
     cwd = await createProject({
       "vite.config.ts": dedent`
-        import { vitePlugin as remix } from "@remix-run/dev";
-        import mdx from "@mdx-js/rollup";
-
-        export default {
-          plugins: [
-            remix(),
-            mdx(),
-          ],
-        }
-      `,
+              import { vitePlugin as remix } from "@react-router/dev";
+              import mdx from "@mdx-js/rollup";
+      
+              export default {
+                plugins: [
+                  remix(),
+                  mdx(),
+                ],
+              }
+            `,
     });
 
     buildResult = viteBuild({ cwd });

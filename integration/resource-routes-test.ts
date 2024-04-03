@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import {
   createAppFixture,
   createFixture,
@@ -22,68 +22,68 @@ test.describe("loader in an app", async () => {
     fixture = await createFixture({
       files: {
         "app/routes/_index.tsx": js`
-          import { Form, Link } from "@remix-run/react";
-
-          export default () => (
-            <>
-              <Link to="/redirect">Redirect</Link>
-              <Link to="/some-404-path">404 route</Link>
-              <Form action="/redirect-to" method="post">
-                <input name="destination" defaultValue="/redirect-destination" />
-                <button type="submit">Redirect</button>
-              </Form>
-              <Form action="/no-action" method="post">
-                <button type="submit">Submit to no action route</button>
-              </Form>
-            </>
-          )
-        `,
+                  import { Form, Link } from "@react-router/react";
+        
+                  export default () => (
+                    <>
+                      <Link to="/redirect">Redirect</Link>
+                      <Link to="/some-404-path">404 route</Link>
+                      <Form action="/redirect-to" method="post">
+                        <input name="destination" defaultValue="/redirect-destination" />
+                        <button type="submit">Redirect</button>
+                      </Form>
+                      <Form action="/no-action" method="post">
+                        <button type="submit">Submit to no action route</button>
+                      </Form>
+                    </>
+                  )
+                `,
         "app/routes/redirected.tsx": js`
           export default () => <div data-testid="redirected">You were redirected</div>;
         `,
         "app/routes/redirect.tsx": js`
-          import { redirect } from "@remix-run/node";
-
-          export let loader = () => redirect("/redirected");
-        `,
+                  import { redirect } from "@react-router/node";
+        
+                  export let loader = () => redirect("/redirected");
+                `,
         "app/routes/redirect-to.tsx": js`
-          import { redirect } from "@remix-run/node";
-
-          export let action = async ({ request }) => {
-            let formData = await request.formData();
-            return redirect(formData.get('destination'));
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+        
+                  export let action = async ({ request }) => {
+                    let formData = await request.formData();
+                    return redirect(formData.get('destination'));
+                  }
+                `,
         "app/routes/redirect-destination.tsx": js`
           export default () => <div data-testid="redirect-destination">You made it!</div>
         `,
         "app/routes/defer.tsx": js`
-          import { defer } from "@remix-run/node";
-
-          export let loader = () => defer({ data: 'whatever' });
-        `,
+                  import { defer } from "@react-router/node";
+        
+                  export let loader = () => defer({ data: 'whatever' });
+                `,
         "app/routes/data[.]json.tsx": js`
-          import { json } from "@remix-run/node";
-          export let loader = () => json({hello: "world"});
-        `,
+                  import { json } from "@react-router/node";
+                  export let loader = () => json({hello: "world"});
+                `,
         "app/assets/icon.svg": SVG_CONTENTS,
         "app/routes/[manifest.webmanifest].tsx": js`
-          import { json } from "@remix-run/node";
-          import iconUrl from "~/assets/icon.svg";
-          export  function loader() {
-            return json(
-              {
-                icons: [
-                  {
-                    src: iconUrl,
-                    sizes: '48x48 72x72 96x96 128x128 192x192 256x256 512x512',
-                    type: 'image/svg+xml',
-                  },
-                ],
-              },
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import iconUrl from "~/assets/icon.svg";
+                  export  function loader() {
+                    return json(
+                      {
+                        icons: [
+                          {
+                            src: iconUrl,
+                            sizes: '48x48 72x72 96x96 128x128 192x192 256x256 512x512',
+                            type: 'image/svg+xml',
+                          },
+                        ],
+                      },
+                    );
+                  }
+                `,
         "app/routes/throw-error.tsx": js`
           export let loader = () => {
             throw new Error('Oh noes!')
@@ -110,24 +110,24 @@ test.describe("loader in an app", async () => {
           }
         `,
         "app/routes/no-action.tsx": js`
-          import { json } from "@remix-run/node";
-          export let loader = () => {
-            return json({ ok: true });
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  export let loader = () => {
+                    return json({ ok: true });
+                  }
+                `,
         "app/routes/$.tsx": js`
-          import { json } from "@remix-run/node";
-          import { useRouteError } from "@remix-run/react";
-          export function loader({ request }) {
-            throw json({ message: new URL(request.url).pathname + ' not found' }, {
-              status: 404
-            });
-          }
-          export function ErrorBoundary() {
-            let error = useRouteError();
-            return <pre>{error.status + ' ' + error.data.message}</pre>;
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { useRouteError } from "@react-router/react";
+                  export function loader({ request }) {
+                    throw json({ message: new URL(request.url).pathname + ' not found' }, {
+                      status: 404
+                    });
+                  }
+                  export function ErrorBoundary() {
+                    let error = useRouteError();
+                    return <pre>{error.status + ' ' + error.data.message}</pre>;
+                  }
+                `,
       },
     });
     appFixture = await createAppFixture(fixture, ServerMode.Test);
@@ -276,15 +276,15 @@ test.describe("Development server", async () => {
       {
         files: {
           "app/routes/_index.tsx": js`
-            import { Link } from "@remix-run/react";
-            export default () => <Link to="/child">Child</Link>;
-          `,
+                      import { Link } from "@react-router/react";
+                      export default () => <Link to="/child">Child</Link>;
+                    `,
           "app/routes/_main.tsx": js`
-            import { useRouteError } from "@remix-run/react";
-            export function ErrorBoundary() {
-              return <pre>{useRouteError().message}</pre>;
-            }
-          `,
+                      import { useRouteError } from "@react-router/react";
+                      export function ErrorBoundary() {
+                        return <pre>{useRouteError().message}</pre>;
+                      }
+                    `,
           "app/routes/_main.child.tsx": js`
             export default function Component() {
               throw new Error('Error from render')

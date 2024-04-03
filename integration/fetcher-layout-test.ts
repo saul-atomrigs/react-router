@@ -16,170 +16,170 @@ test.describe("multi fetch", () => {
     fixture = await createFixture({
       files: {
         "app/routes/layout-action.tsx": js`
-          import { json } from "@remix-run/node";
-          import { Outlet, useFetcher, useFormAction } from "@remix-run/react";
-
-          export let action = ({ params }) => json("layout action data");
-
-          export default function ActionLayout() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action });
-            };
-
-            return (
-              <div>
-                <h1>Layout</h1>
-                <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
-                {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { Outlet, useFetcher, useFormAction } from "@react-router/react";
+        
+                  export let action = ({ params }) => json("layout action data");
+        
+                  export default function ActionLayout() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action });
+                    };
+        
+                    return (
+                      <div>
+                        <h1>Layout</h1>
+                        <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
+                        {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/layout-action._index.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json("index data");
-
-          export let action = ({ params }) => json("index action data");
-
-          export default function ActionLayoutIndex() {
-            let data = useLoaderData();
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action })
-            };
-
-            return (
-              <>
-                <p id="child-data">{data}</p>
-                <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
-                {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json("index data");
+        
+                  export let action = ({ params }) => json("index action data");
+        
+                  export default function ActionLayoutIndex() {
+                    let data = useLoaderData();
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action })
+                    };
+        
+                    return (
+                      <>
+                        <p id="child-data">{data}</p>
+                        <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
+                        {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-action.$param.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json(params.param);
-
-          export let action = ({ params }) => json("param action data");
-
-          export default function ActionLayoutChild() {
-            let data = useLoaderData();
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action })
-            };
-
-            return (
-              <>
-                <p id="child-data">{data}</p>
-                <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
-                {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json(params.param);
+        
+                  export let action = ({ params }) => json("param action data");
+        
+                  export default function ActionLayoutChild() {
+                    let data = useLoaderData();
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action })
+                    };
+        
+                    return (
+                      <>
+                        <p id="child-data">{data}</p>
+                        <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
+                        {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader.tsx": js`
-          import { json } from "@remix-run/node";
-          import { Outlet, useFetcher, useFormAction } from "@remix-run/react";
-
-          export let loader = () => json("layout loader data");
-
-          export default function LoaderLayout() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <div>
-                <h1>Layout</h1>
-                <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
-                {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { Outlet, useFetcher, useFormAction } from "@react-router/react";
+        
+                  export let loader = () => json("layout loader data");
+        
+                  export default function LoaderLayout() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <div>
+                        <h1>Layout</h1>
+                        <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
+                        {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader._index.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json("index data");
-
-          export default function ActionLayoutIndex() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <>
-                <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
-                {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json("index data");
+        
+                  export default function ActionLayoutIndex() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <>
+                        <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
+                        {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader.$param.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json(params.param);
-
-          export default function ActionLayoutChild() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <>
-                <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
-                {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json(params.param);
+        
+                  export default function ActionLayoutChild() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <>
+                        <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
+                        {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
       },
     });
 
@@ -291,170 +291,170 @@ test.describe("single fetch", () => {
       singleFetch: true,
       files: {
         "app/routes/layout-action.tsx": js`
-          import { json } from "@remix-run/node";
-          import { Outlet, useFetcher, useFormAction } from "@remix-run/react";
-
-          export let action = ({ params }) => json("layout action data");
-
-          export default function ActionLayout() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action });
-            };
-
-            return (
-              <div>
-                <h1>Layout</h1>
-                <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
-                {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { Outlet, useFetcher, useFormAction } from "@react-router/react";
+        
+                  export let action = ({ params }) => json("layout action data");
+        
+                  export default function ActionLayout() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action });
+                    };
+        
+                    return (
+                      <div>
+                        <h1>Layout</h1>
+                        <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
+                        {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/layout-action._index.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json("index data");
-
-          export let action = ({ params }) => json("index action data");
-
-          export default function ActionLayoutIndex() {
-            let data = useLoaderData();
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action })
-            };
-
-            return (
-              <>
-                <p id="child-data">{data}</p>
-                <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
-                {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json("index data");
+        
+                  export let action = ({ params }) => json("index action data");
+        
+                  export default function ActionLayoutIndex() {
+                    let data = useLoaderData();
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action })
+                    };
+        
+                    return (
+                      <>
+                        <p id="child-data">{data}</p>
+                        <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
+                        {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-action.$param.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json(params.param);
-
-          export let action = ({ params }) => json("param action data");
-
-          export default function ActionLayoutChild() {
-            let data = useLoaderData();
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.submit({}, { method: "post", action })
-            };
-
-            return (
-              <>
-                <p id="child-data">{data}</p>
-                <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
-                {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json(params.param);
+        
+                  export let action = ({ params }) => json("param action data");
+        
+                  export default function ActionLayoutChild() {
+                    let data = useLoaderData();
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.submit({}, { method: "post", action })
+                    };
+        
+                    return (
+                      <>
+                        <p id="child-data">{data}</p>
+                        <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
+                        {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader.tsx": js`
-          import { json } from "@remix-run/node";
-          import { Outlet, useFetcher, useFormAction } from "@remix-run/react";
-
-          export let loader = () => json("layout loader data");
-
-          export default function LoaderLayout() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <div>
-                <h1>Layout</h1>
-                <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
-                {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import { Outlet, useFetcher, useFormAction } from "@react-router/react";
+        
+                  export let loader = () => json("layout loader data");
+        
+                  export default function LoaderLayout() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <div>
+                        <h1>Layout</h1>
+                        <button id="layout-fetcher" onClick={invokeFetcher}>Invoke Fetcher</button>
+                        {!!fetcher.data && <p id="layout-fetcher-data">{fetcher.data}</p>}
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader._index.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json("index data");
-
-          export default function ActionLayoutIndex() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <>
-                <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
-                {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json("index data");
+        
+                  export default function ActionLayoutIndex() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <>
+                        <button id="index-fetcher" onClick={invokeFetcher}>Invoke Index Fetcher</button>
+                        {!!fetcher.data && <p id="index-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/layout-loader.$param.tsx": js`
-          import { json } from "@remix-run/node";
-          import {
-            useFetcher,
-            useFormAction,
-            useLoaderData,
-          } from "@remix-run/react";
-
-          export let loader = ({ params }) => json(params.param);
-
-          export default function ActionLayoutChild() {
-            let fetcher = useFetcher();
-            let action = useFormAction();
-
-            let invokeFetcher = () => {
-              fetcher.load(action);
-            };
-
-            return (
-              <>
-                <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
-                {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
-              </>
-            );
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  import {
+                    useFetcher,
+                    useFormAction,
+                    useLoaderData,
+                  } from "@react-router/react";
+        
+                  export let loader = ({ params }) => json(params.param);
+        
+                  export default function ActionLayoutChild() {
+                    let fetcher = useFetcher();
+                    let action = useFormAction();
+        
+                    let invokeFetcher = () => {
+                      fetcher.load(action);
+                    };
+        
+                    return (
+                      <>
+                        <button id="param-fetcher" onClick={invokeFetcher}>Invoke Param Fetcher</button>
+                        {!!fetcher.data && <p id="param-fetcher-data">{fetcher.data}</p>}
+                      </>
+                    );
+                  }
+                `,
       },
     });
 

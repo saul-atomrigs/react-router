@@ -29,23 +29,23 @@ test.beforeAll(async () => {
       `,
 
       "app/routes/_index.tsx": js`
-        import { json } from "@remix-run/node";
-        import { useLoaderData, Link } from "@remix-run/react";
-        import sideEffectModules from "has-side-effects";
-
-        export let loader = () => json(sideEffectModules());
-
-        export default function Index() {
-          let data = useLoaderData();
-
-          return (
-            <div>
-              {data}
-              <Link to="/burgers">Other Route</Link>
-            </div>
-          )
-        }
-      `,
+              import { json } from "@react-router/node";
+              import { useLoaderData, Link } from "@react-router/react";
+              import sideEffectModules from "has-side-effects";
+      
+              export let loader = () => json(sideEffectModules());
+      
+              export default function Index() {
+                let data = useLoaderData();
+      
+                return (
+                  <div>
+                    {data}
+                    <Link to="/burgers">Other Route</Link>
+                  </div>
+                )
+              }
+            `,
     },
   });
 

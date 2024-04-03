@@ -23,21 +23,21 @@ test.describe("compiler", () => {
         // We need a custom config file here to test usage of `getDependenciesToBundle`
         // since this can't be serialized from the fixture object.
         "remix.config.js": js`
-          import { getDependenciesToBundle } from "@remix-run/dev";
-          export default {
-            serverDependenciesToBundle: [
-              "esm-only-pkg",
-              "esm-only-single-export",
-              ...getDependenciesToBundle("esm-only-exports-pkg"),
-              ...getDependenciesToBundle("esm-only-nested-exports-pkg"),
-            ],
-            browserNodeBuiltinsPolyfill: {
-              modules: {
-                path: true,
-              },
-            },
-          };
-        `,
+                  import { getDependenciesToBundle } from "@react-router/dev";
+                  export default {
+                    serverDependenciesToBundle: [
+                      "esm-only-pkg",
+                      "esm-only-single-export",
+                      ...getDependenciesToBundle("esm-only-exports-pkg"),
+                      ...getDependenciesToBundle("esm-only-nested-exports-pkg"),
+                    ],
+                    browserNodeBuiltinsPolyfill: {
+                      modules: {
+                        path: true,
+                      },
+                    },
+                  };
+                `,
         "app/fake.server.ts": js`
           export const hello = "server";
         `,
@@ -58,25 +58,25 @@ test.describe("compiler", () => {
           }
         `,
         "app/routes/built-ins.tsx": js`
-          import { useLoaderData } from "@remix-run/react";
-          import * as path from "node:path";
-
-          export let loader = () => {
-            return path.join("test", "file.txt");
-          }
-
-          export default function BuiltIns() {
-            return <div id="built-ins">{useLoaderData()}</div>
-          }
-        `,
+                  import { useLoaderData } from "@react-router/react";
+                  import * as path from "node:path";
+        
+                  export let loader = () => {
+                    return path.join("test", "file.txt");
+                  }
+        
+                  export default function BuiltIns() {
+                    return <div id="built-ins">{useLoaderData()}</div>
+                  }
+                `,
         "app/routes/built-ins-polyfill.tsx": js`
-          import { useLoaderData } from "@remix-run/react";
-          import * as path from "node:path";
-
-          export default function BuiltIns() {
-            return <div id="built-ins-polyfill">{path.join("test", "file.txt")}</div>;
-          }
-        `,
+                  import { useLoaderData } from "@react-router/react";
+                  import * as path from "node:path";
+        
+                  export default function BuiltIns() {
+                    return <div id="built-ins-polyfill">{path.join("test", "file.txt")}</div>;
+                  }
+                `,
         "app/routes/esm-only-pkg.tsx": js`
           import esmOnlyPkg from "esm-only-pkg";
 

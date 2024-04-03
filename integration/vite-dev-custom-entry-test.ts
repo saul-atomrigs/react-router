@@ -21,104 +21,104 @@ test.describe("Vite custom entry dev", () => {
           export default {};
         `,
         "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            server: {
-              port: ${devPort},
-              strictPort: true,
-            },
-            plugins: [
-              remix(),
-            ],
-          });
-        `,
+                  import { defineConfig } from "vite";
+                  import { vitePlugin as remix } from "@react-router/dev";
+        
+                  export default defineConfig({
+                    server: {
+                      port: ${devPort},
+                      strictPort: true,
+                    },
+                    plugins: [
+                      remix(),
+                    ],
+                  });
+                `,
         "app/entry.server.tsx": js`
-          import { PassThrough } from "node:stream";
-
-          import type { EntryContext } from "@remix-run/node";
-          import { createReadableStreamFromReadable } from "@remix-run/node";
-          import { RemixServer } from "@remix-run/react";
-          import { renderToPipeableStream } from "react-dom/server";
-
-          const ABORT_DELAY = 5_000;
-
-          export default function handleRequest(
-            request: Request,
-            responseStatusCode: number,
-            responseHeaders: Headers,
-            remixContext: EntryContext
-          ) {
-            return new Promise((resolve, reject) => {
-              let shellRendered = false;
-              const { pipe, abort } = renderToPipeableStream(
-                <RemixServer
-                  context={remixContext}
-                  url={request.url}
-                  abortDelay={ABORT_DELAY}
-                />,
-                {
-                  onShellReady() {
-                    shellRendered = true;
-                    const body = new PassThrough();
-                    const stream = createReadableStreamFromReadable(body);
-
-                    responseHeaders.set("Content-Type", "text/html");
-
-                    // Used to test that the request object is an instance of the global Request constructor
-                    responseHeaders.set("x-test-request-instanceof-request", String(request instanceof Request));
-
-                    resolve(
-                      new Response(stream, {
-                        headers: responseHeaders,
-                        status: responseStatusCode,
-                      })
-                    );
-
-                    pipe(body);
-                  },
-                  onShellError(error: unknown) {
-                    reject(error);
-                  },
-                  onError(error: unknown) {
-                    responseStatusCode = 500;
-                    // Log streaming rendering errors from inside the shell.  Don't log
-                    // errors encountered during initial shell rendering since they'll
-                    // reject and get logged in handleDocumentRequest.
-                    if (shellRendered) {
-                      console.error(error);
-                    }
-                  },
-                }
-              );
-
-              setTimeout(abort, ABORT_DELAY);
-            });
-          }
-        `,
+                  import { PassThrough } from "node:stream";
+        
+                  import type { EntryContext } from "@react-router/node";
+                  import { createReadableStreamFromReadable } from "@react-router/node";
+                  import { RemixServer } from "@react-router/react";
+                  import { renderToPipeableStream } from "react-dom/server";
+        
+                  const ABORT_DELAY = 5_000;
+        
+                  export default function handleRequest(
+                    request: Request,
+                    responseStatusCode: number,
+                    responseHeaders: Headers,
+                    remixContext: EntryContext
+                  ) {
+                    return new Promise((resolve, reject) => {
+                      let shellRendered = false;
+                      const { pipe, abort } = renderToPipeableStream(
+                        <RemixServer
+                          context={remixContext}
+                          url={request.url}
+                          abortDelay={ABORT_DELAY}
+                        />,
+                        {
+                          onShellReady() {
+                            shellRendered = true;
+                            const body = new PassThrough();
+                            const stream = createReadableStreamFromReadable(body);
+        
+                            responseHeaders.set("Content-Type", "text/html");
+        
+                            // Used to test that the request object is an instance of the global Request constructor
+                            responseHeaders.set("x-test-request-instanceof-request", String(request instanceof Request));
+        
+                            resolve(
+                              new Response(stream, {
+                                headers: responseHeaders,
+                                status: responseStatusCode,
+                              })
+                            );
+        
+                            pipe(body);
+                          },
+                          onShellError(error: unknown) {
+                            reject(error);
+                          },
+                          onError(error: unknown) {
+                            responseStatusCode = 500;
+                            // Log streaming rendering errors from inside the shell.  Don't log
+                            // errors encountered during initial shell rendering since they'll
+                            // reject and get logged in handleDocumentRequest.
+                            if (shellRendered) {
+                              console.error(error);
+                            }
+                          },
+                        }
+                      );
+        
+                      setTimeout(abort, ABORT_DELAY);
+                    });
+                  }
+                `,
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts, LiveReload } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <div id="content">
-                    <h1>Root</h1>
-                    <Outlet />
-                  </div>
-                  <Scripts />
-                  <LiveReload />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts, LiveReload } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <div id="content">
+                            <h1>Root</h1>
+                            <Outlet />
+                          </div>
+                          <Scripts />
+                          <LiveReload />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
         "app/routes/_index.tsx": js`
           export default function IndexRoute() {
             return <div>IndexRoute</div>
@@ -128,7 +128,7 @@ test.describe("Vite custom entry dev", () => {
     });
 
     let nodeBin = process.argv[0];
-    let remixBin = "node_modules/@remix-run/dev/dist/cli.js";
+    let remixBin = "node_modules/@react-router/dev/dist/cli.js";
     devProc = spawn(nodeBin, [remixBin, "vite:dev"], {
       cwd: projectDir,
       env: process.env,

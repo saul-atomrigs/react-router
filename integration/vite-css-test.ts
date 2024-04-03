@@ -43,39 +43,39 @@ const files = {
     });
   `,
   "app/entry.client.tsx": js`
-    import "./entry.client.css";
+      import "./entry.client.css";
+    
+      import { RemixBrowser } from "@react-router/react";
+      import { startTransition, StrictMode } from "react";
+      import { hydrateRoot } from "react-dom/client";
   
-    import { RemixBrowser } from "@remix-run/react";
-    import { startTransition, StrictMode } from "react";
-    import { hydrateRoot } from "react-dom/client";
-
-    startTransition(() => {
-      hydrateRoot(
-        document,
-        <StrictMode>
-          <RemixBrowser />
-        </StrictMode>
-      );
-    });
-  `,
+      startTransition(() => {
+        hydrateRoot(
+          document,
+          <StrictMode>
+            <RemixBrowser />
+          </StrictMode>
+        );
+      });
+    `,
   "app/root.tsx": js`
-    import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-    export default function Root() {
-      return (
-        <html lang="en">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <Outlet />
-            <Scripts />
-          </body>
-        </html>
-      );
-    }
-  `,
+      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+  
+      export default function Root() {
+        return (
+          <html lang="en">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <Outlet />
+              <Scripts />
+            </body>
+          </html>
+        );
+      }
+    `,
   "app/entry.client.css": css`
     .entry-client {
       background: pink;
@@ -151,7 +151,7 @@ const files = {
 };
 
 const VITE_CONFIG = async (port: number) => dedent`
-  import { vitePlugin as remix } from "@remix-run/dev";
+  import { vitePlugin as remix } from "@react-router/dev";
   import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
   export default {

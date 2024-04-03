@@ -10,17 +10,17 @@ test.describe("multi fetch", () => {
     fixture = await createFixture({
       files: {
         "app/routes/_index.tsx": js`
-          import { json } from "@remix-run/node";
-
-          export async function action({ request }) {
-            try {
-              await request.formData()
-            } catch {
-              return json("no pizza");
-            }
-            return json("pizza");
-          }
-        `,
+                  import { json } from "@react-router/node";
+        
+                  export async function action({ request }) {
+                    try {
+                      await request.formData()
+                    } catch {
+                      return json("no pizza");
+                    }
+                    return json("pizza");
+                  }
+                `,
       },
     });
   });
@@ -69,17 +69,17 @@ test.describe("single fetch", () => {
       singleFetch: true,
       files: {
         "app/routes/_index.tsx": js`
-          import { json } from "@remix-run/node";
-
-          export async function action({ request }) {
-            try {
-              await request.formData()
-            } catch {
-              return json("no pizza");
-            }
-            return json("pizza");
-          }
-        `,
+                  import { json } from "@react-router/node";
+        
+                  export async function action({ request }) {
+                    try {
+                      await request.formData()
+                    } catch {
+                      return json("no pizza");
+                    }
+                    return json("pizza");
+                  }
+                `,
       },
     });
   });

@@ -10,35 +10,35 @@ import {
 
 const files = {
   "app/routes/_index.tsx": String.raw`
-    import { useState, useEffect } from "react";
-    import { Link } from "@remix-run/react";
-
-    export default function IndexRoute() {
-      const [mounted, setMounted] = useState(false);
-      useEffect(() => {
-        setMounted(true);
-      }, []);
-
-      return (
-        <div>
-          <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
-          <Link to="/other">/other</Link>
-        </div>
-      );
-    }
-  `,
+      import { useState, useEffect } from "react";
+      import { Link } from "@react-router/react";
+  
+      export default function IndexRoute() {
+        const [mounted, setMounted] = useState(false);
+        useEffect(() => {
+          setMounted(true);
+        }, []);
+  
+        return (
+          <div>
+            <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
+            <Link to="/other">/other</Link>
+          </div>
+        );
+      }
+    `,
   "app/routes/other.tsx": String.raw`
-    import { useLoaderData } from "@remix-run/react";
-
-    export const loader = () => "hello";
-
-    export default function Route() {
-      const loaderData = useLoaderData();
-      return (
-        <div data-loader-data>loaderData = {JSON.stringify(loaderData)}</div>
-      );
-    }
-  `,
+      import { useLoaderData } from "@react-router/react";
+  
+      export const loader = () => "hello";
+  
+      export default function Route() {
+        const loaderData = useLoaderData();
+        return (
+          <div data-loader-data>loaderData = {JSON.stringify(loaderData)}</div>
+        );
+      }
+    `,
 };
 
 test.describe(async () => {

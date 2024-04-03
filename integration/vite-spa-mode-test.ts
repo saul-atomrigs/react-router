@@ -21,13 +21,13 @@ test.describe("SPA Mode", () => {
       test("errors on server-only exports", async () => {
         let cwd = await createProject({
           "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            plugins: [remix({ ssr: false })],
-          });
-        `,
+                    import { defineConfig } from "vite";
+                    import { vitePlugin as remix } from "@react-router/dev";
+          
+                    export default defineConfig({
+                      plugins: [remix({ ssr: false })],
+                    });
+                  `,
           "app/routes/invalid-exports.tsx": String.raw`
           // Invalid exports
           export function headers() {}
@@ -52,13 +52,13 @@ test.describe("SPA Mode", () => {
       test("errors on HydrateFallback export from non-root route", async () => {
         let cwd = await createProject({
           "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            plugins: [remix({ ssr: false })],
-          });
-        `,
+                    import { defineConfig } from "vite";
+                    import { vitePlugin as remix } from "@react-router/dev";
+          
+                    export default defineConfig({
+                      plugins: [remix({ ssr: false })],
+                    });
+                  `,
           "app/routes/invalid-exports.tsx": String.raw`
           // Invalid exports
           export function HydrateFallback() {}
@@ -81,65 +81,65 @@ test.describe("SPA Mode", () => {
       test("errors on a non-200 status from entry.server.tsx", async () => {
         let cwd = await createProject({
           "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            plugins: [remix({ ssr: false })],
-          });
-        `,
+                    import { defineConfig } from "vite";
+                    import { vitePlugin as remix } from "@react-router/dev";
+          
+                    export default defineConfig({
+                      plugins: [remix({ ssr: false })],
+                    });
+                  `,
           "app/entry.server.tsx": js`
-          import { RemixServer } from "@remix-run/react";
-          import { renderToString } from "react-dom/server";
-
-          export default function handleRequest(
-            request,
-            responseStatusCode,
-            responseHeaders,
-            remixContext
-          ) {
-            const html = renderToString(
-              <RemixServer context={remixContext} url={request.url} />
-            );
-            return new Response(html, {
-              headers: { "Content-Type": "text/html" },
-              status: 500,
-            });
-          }
-        `,
+                    import { RemixServer } from "@react-router/react";
+                    import { renderToString } from "react-dom/server";
+          
+                    export default function handleRequest(
+                      request,
+                      responseStatusCode,
+                      responseHeaders,
+                      remixContext
+                    ) {
+                      const html = renderToString(
+                        <RemixServer context={remixContext} url={request.url} />
+                      );
+                      return new Response(html, {
+                        headers: { "Content-Type": "text/html" },
+                        status: 500,
+                      });
+                    }
+                  `,
           "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-
-          export function HydrateFallback() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <h1>Loading...</h1>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                    import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                    export default function Root() {
+                      return (
+                        <html lang="en">
+                          <head>
+                            <Meta />
+                            <Links />
+                          </head>
+                          <body>
+                            <Outlet />
+                            <Scripts />
+                          </body>
+                        </html>
+                      );
+                    }
+          
+                    export function HydrateFallback() {
+                      return (
+                        <html lang="en">
+                          <head>
+                            <Meta />
+                            <Links />
+                          </head>
+                          <body>
+                            <h1>Loading...</h1>
+                            <Scripts />
+                          </body>
+                        </html>
+                      );
+                    }
+                  `,
         });
         let result = viteBuild({ cwd });
         let stderr = result.stderr.toString("utf8");
@@ -153,13 +153,13 @@ test.describe("SPA Mode", () => {
       test("errors if you do not include <Scripts> in your root <HydrateFallback>", async () => {
         let cwd = await createProject({
           "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            plugins: [remix({ ssr: false })],
-          });
-        `,
+                    import { defineConfig } from "vite";
+                    import { vitePlugin as remix } from "@react-router/dev";
+          
+                    export default defineConfig({
+                      plugins: [remix({ ssr: false })],
+                    });
+                  `,
           "app/root.tsx": String.raw`
           export function HydrateFallback() {
             return <h1>Loading</h1>
@@ -181,40 +181,40 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              plugins: [remix({ ssr: false })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        plugins: [remix({ ssr: false })],
+                      });
+                    `,
           "app/root.tsx": js`
-            import { Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head></head>
-                  <body>
-                    <h1 data-root>Root</h1>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export function HydrateFallback() {
-              return (
-                <html lang="en">
-                  <head></head>
-                  <body>
-                    <h1 data-loading>Loading SPA...</h1>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head></head>
+                            <body>
+                              <h1 data-root>Root</h1>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export function HydrateFallback() {
+                        return (
+                          <html lang="en">
+                            <head></head>
+                            <body>
+                              <h1 data-loading>Loading SPA...</h1>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
         },
       });
       let res = await fixture.requestDocument("/");
@@ -226,66 +226,66 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              plugins: [remix({
-                basename: "/base/",
-                ssr: false
-              })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        plugins: [remix({
+                          basename: "/base/",
+                          ssr: false
+                        })],
+                      });
+                    `,
           "app/root.tsx": js`
-            import { Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head></head>
-                  <body>
-                    <h1 data-root>Root</h1>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export function HydrateFallback() {
-              return (
-                <html lang="en">
-                  <head></head>
-                  <body>
-                    <h1 data-loading>Loading SPA...</h1>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head></head>
+                            <body>
+                              <h1 data-root>Root</h1>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export function HydrateFallback() {
+                        return (
+                          <html lang="en">
+                            <head></head>
+                            <body>
+                              <h1 data-loading>Loading SPA...</h1>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
           "app/routes/_index.tsx": js`
-            import * as React  from "react";
-            import { useLoaderData } from "@remix-run/react";
-
-            export async function clientLoader({ request }) {
-              return "Index Loader Data";
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              const [mounted, setMounted] = React.useState(false);
-              React.useEffect(() => setMounted(true), []);
-
-              return (
-                <>
-                  <h2 data-route>Index</h2>
-                  <p data-loader-data>{data}</p>
-                  {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
-                </>
-              );
-            }
-          `,
+                      import * as React  from "react";
+                      import { useLoaderData } from "@react-router/react";
+          
+                      export async function clientLoader({ request }) {
+                        return "Index Loader Data";
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        const [mounted, setMounted] = React.useState(false);
+                        React.useEffect(() => setMounted(true), []);
+          
+                        return (
+                          <>
+                            <h2 data-route>Index</h2>
+                            <p data-loader-data>{data}</p>
+                            {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
+                          </>
+                        );
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);
@@ -304,13 +304,13 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              plugins: [remix({ ssr: false })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        plugins: [remix({ ssr: false })],
+                      });
+                    `,
           "app/index.html": String.raw`
             <!DOCTYPE html>
             <html lang="en">
@@ -323,98 +323,98 @@ test.describe("SPA Mode", () => {
             </html>
           `,
           "app/entry.client.tsx": js`
-            import { RemixBrowser } from "@remix-run/react";
-            import { startTransition, StrictMode } from "react";
-            import { hydrateRoot } from "react-dom/client";
-
-            startTransition(() => {
-              hydrateRoot(
-                document.querySelector("#app"),
-                <StrictMode>
-                  <RemixBrowser />
-                </StrictMode>
-              );
-            });
-          `,
+                      import { RemixBrowser } from "@react-router/react";
+                      import { startTransition, StrictMode } from "react";
+                      import { hydrateRoot } from "react-dom/client";
+          
+                      startTransition(() => {
+                        hydrateRoot(
+                          document.querySelector("#app"),
+                          <StrictMode>
+                            <RemixBrowser />
+                          </StrictMode>
+                        );
+                      });
+                    `,
           "app/entry.server.tsx": js`
-            import fs from "node:fs";
-            import path from "node:path";
-
-            import type { EntryContext } from "@remix-run/node";
-            import { RemixServer } from "@remix-run/react";
-            import { renderToString } from "react-dom/server";
-
-            export default function handleRequest(
-              request: Request,
-              responseStatusCode: number,
-              responseHeaders: Headers,
-              remixContext: EntryContext
-            ) {
-              const shellHtml = fs
-                .readFileSync(
-                  path.join(process.cwd(), "app/index.html")
-                )
-                .toString();
-
-              const appHtml = renderToString(
-                <RemixServer context={remixContext} url={request.url} />
-              );
-
-              const html = shellHtml.replace(
-                "<!-- Remix SPA -->",
-                appHtml
-              );
-
-              return new Response(html, {
-                headers: { "Content-Type": "text/html" },
-                status: responseStatusCode,
-              });
-            }
-          `,
+                      import fs from "node:fs";
+                      import path from "node:path";
+          
+                      import type { EntryContext } from "@react-router/node";
+                      import { RemixServer } from "@react-router/react";
+                      import { renderToString } from "react-dom/server";
+          
+                      export default function handleRequest(
+                        request: Request,
+                        responseStatusCode: number,
+                        responseHeaders: Headers,
+                        remixContext: EntryContext
+                      ) {
+                        const shellHtml = fs
+                          .readFileSync(
+                            path.join(process.cwd(), "app/index.html")
+                          )
+                          .toString();
+          
+                        const appHtml = renderToString(
+                          <RemixServer context={remixContext} url={request.url} />
+                        );
+          
+                        const html = shellHtml.replace(
+                          "<!-- Remix SPA -->",
+                          appHtml
+                        );
+          
+                        return new Response(html, {
+                          headers: { "Content-Type": "text/html" },
+                          status: responseStatusCode,
+                        });
+                      }
+                    `,
           "app/root.tsx": js`
-            import { Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <>
-                  <h1 data-root>Root</h1>
-                  <Outlet />
-                  <Scripts />
-                </>
-              );
-            }
-
-            export function HydrateFallback() {
-              return (
-                <>
-                  <h1 data-loading>Loading SPA...</h1>
-                  <Scripts />
-                </>
-              );
-            }
-          `,
+                      import { Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <>
+                            <h1 data-root>Root</h1>
+                            <Outlet />
+                            <Scripts />
+                          </>
+                        );
+                      }
+          
+                      export function HydrateFallback() {
+                        return (
+                          <>
+                            <h1 data-loading>Loading SPA...</h1>
+                            <Scripts />
+                          </>
+                        );
+                      }
+                    `,
           "app/routes/_index.tsx": js`
-            import * as React  from "react";
-            import { useLoaderData } from "@remix-run/react";
-
-            export async function clientLoader({ request }) {
-              return "Index Loader Data";
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              const [mounted, setMounted] = React.useState(false);
-              React.useEffect(() => setMounted(true), []);
-
-              return (
-                <>
-                  <h2 data-route>Index</h2>
-                  <p data-loader-data>{data}</p>
-                  {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
-                </>
-              );
-            }
-          `,
+                      import * as React  from "react";
+                      import { useLoaderData } from "@react-router/react";
+          
+                      export async function clientLoader({ request }) {
+                        return "Index Loader Data";
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        const [mounted, setMounted] = React.useState(false);
+                        React.useEffect(() => setMounted(true), []);
+          
+                        return (
+                          <>
+                            <h2 data-route>Index</h2>
+                            <p data-loader-data>{data}</p>
+                            {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
+                          </>
+                        );
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);
@@ -436,61 +436,61 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              plugins: [remix({
-                // We don't want to pick up the app/routes/_index.tsx file from
-                // the template and instead want to use only the src/root.tsx
-                // file below
-                appDirectory: "src",
-                ssr: false,
-              })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        plugins: [remix({
+                          // We don't want to pick up the app/routes/_index.tsx file from
+                          // the template and instead want to use only the src/root.tsx
+                          // file below
+                          appDirectory: "src",
+                          ssr: false,
+                        })],
+                      });
+                    `,
           "src/root.tsx": js`
-            import {
-              Meta,
-              Links,
-              Outlet,
-              Routes,
-              Route,
-              Scripts,
-              ScrollRestoration,
-            } from "@remix-run/react";
-
-            export function Layout({ children }: { children: React.ReactNode }) {
-              return (
-                <html>
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    {children}
-                    <ScrollRestoration />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export default function Root() {
-              return (
-                <>
-                  <h1 data-root>Root</h1>
-                  <Routes>
-                    <Route path="/" element={<h2 data-index>Index</h2>} />
-                  </Routes>
-                </>
-              );
-            }
-
-            export function HydrateFallback() {
-              return <h1 data-loading>Loading SPA...</h1>;
-            }
-          `,
+                      import {
+                        Meta,
+                        Links,
+                        Outlet,
+                        Routes,
+                        Route,
+                        Scripts,
+                        ScrollRestoration,
+                      } from "@react-router/react";
+          
+                      export function Layout({ children }: { children: React.ReactNode }) {
+                        return (
+                          <html>
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              {children}
+                              <ScrollRestoration />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export default function Root() {
+                        return (
+                          <>
+                            <h1 data-root>Root</h1>
+                            <Routes>
+                              <Route path="/" element={<h2 data-index>Index</h2>} />
+                            </Routes>
+                          </>
+                        );
+                      }
+          
+                      export function HydrateFallback() {
+                        return <h1 data-loading>Loading SPA...</h1>;
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);
@@ -519,57 +519,57 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              plugins: [remix({
-                // We don't want to pick up the app/routes/_index.tsx file from
-                // the template and instead want to use only the src/root.tsx
-                // file below
-                appDirectory: "src",
-                ssr: false,
-              })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        plugins: [remix({
+                          // We don't want to pick up the app/routes/_index.tsx file from
+                          // the template and instead want to use only the src/root.tsx
+                          // file below
+                          appDirectory: "src",
+                          ssr: false,
+                        })],
+                      });
+                    `,
           "src/root.tsx": js`
-            import {
-              Meta,
-              Links,
-              Outlet,
-              Routes,
-              Route,
-              Scripts,
-              ScrollRestoration,
-            } from "@remix-run/react";
-
-            export function Layout({ children }: { children: React.ReactNode }) {
-              return (
-                <html>
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    {children}
-                    <ScrollRestoration />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export default function Root() {
-              return (
-                <>
-                  <h1 data-root>Root</h1>
-                  <Routes>
-                    <Route path="/" element={<h2 data-index>Index</h2>} />
-                  </Routes>
-                </>
-              );
-            }
-          `,
+                      import {
+                        Meta,
+                        Links,
+                        Outlet,
+                        Routes,
+                        Route,
+                        Scripts,
+                        ScrollRestoration,
+                      } from "@react-router/react";
+          
+                      export function Layout({ children }: { children: React.ReactNode }) {
+                        return (
+                          <html>
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              {children}
+                              <ScrollRestoration />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export default function Root() {
+                        return (
+                          <>
+                            <h1 data-root>Root</h1>
+                            <Routes>
+                              <Route path="/" element={<h2 data-index>Index</h2>} />
+                            </Routes>
+                          </>
+                        );
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);
@@ -589,14 +589,14 @@ test.describe("SPA Mode", () => {
         spaMode: true,
         files: {
           "vite.config.ts": js`
-            import { defineConfig } from "vite";
-            import { vitePlugin as remix } from "@remix-run/dev";
-
-            export default defineConfig({
-              build: { manifest: true },
-              plugins: [remix({ ssr: false })],
-            });
-          `,
+                      import { defineConfig } from "vite";
+                      import { vitePlugin as remix } from "@react-router/dev";
+          
+                      export default defineConfig({
+                        build: { manifest: true },
+                        plugins: [remix({ ssr: false })],
+                      });
+                    `,
           "public/styles-root.css": css`
             body {
               background-color: rgba(255, 0, 0, 0.25);
@@ -608,172 +608,172 @@ test.describe("SPA Mode", () => {
             }
           `,
           "app/root.tsx": js`
-            import * as React from "react";
-            import { Form, Link, Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export function meta({ data }) {
-              return [{
-                title: "Root Title"
-              }];
-            }
-
-            export function links() {
-              return [{
-                rel: "stylesheet",
-                href: "styles-root.css"
-              }];
-            }
-
-            export default function Root() {
-              let id = React.useId();
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                      <h1 data-root>Root</h1>
-                      <pre data-use-id>{id}</pre>
-                      <nav>
-                        <Link to="/about">/about</Link>
-                        <br/>
-
-                        <Form method="post" action="/about">
-                          <button type="submit">
-                            Submit /about
-                          </button>
-                        </Form>
-                        <br/>
-
-                        <Link to="/error">/error</Link>
-                        <br/>
-
-                        <Form method="post" action="/error">
-                          <button type="submit">
-                            Submit /error
-                          </button>
-                        </Form>
-                        <br/>
-                       </nav>
-                      <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-
-            export function HydrateFallback() {
-              const id = React.useId();
-              const [hydrated, setHydrated] = React.useState(false);
-              React.useEffect(() => setHydrated(true), []);
-
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <h1 data-loading>Loading SPA...</h1>
-                    <pre data-use-id>{id}</pre>
-                    {hydrated ? <h3 data-hydrated>Hydrated</h3> : null}
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import * as React from "react";
+                      import { Form, Link, Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export function meta({ data }) {
+                        return [{
+                          title: "Root Title"
+                        }];
+                      }
+          
+                      export function links() {
+                        return [{
+                          rel: "stylesheet",
+                          href: "styles-root.css"
+                        }];
+                      }
+          
+                      export default function Root() {
+                        let id = React.useId();
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                                <h1 data-root>Root</h1>
+                                <pre data-use-id>{id}</pre>
+                                <nav>
+                                  <Link to="/about">/about</Link>
+                                  <br/>
+          
+                                  <Form method="post" action="/about">
+                                    <button type="submit">
+                                      Submit /about
+                                    </button>
+                                  </Form>
+                                  <br/>
+          
+                                  <Link to="/error">/error</Link>
+                                  <br/>
+          
+                                  <Form method="post" action="/error">
+                                    <button type="submit">
+                                      Submit /error
+                                    </button>
+                                  </Form>
+                                  <br/>
+                                 </nav>
+                                <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+          
+                      export function HydrateFallback() {
+                        const id = React.useId();
+                        const [hydrated, setHydrated] = React.useState(false);
+                        React.useEffect(() => setHydrated(true), []);
+          
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <h1 data-loading>Loading SPA...</h1>
+                              <pre data-use-id>{id}</pre>
+                              {hydrated ? <h3 data-hydrated>Hydrated</h3> : null}
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
           "app/routes/_index.tsx": js`
-            import * as React  from "react";
-            import { useLoaderData } from "@remix-run/react";
-
-            export function meta({ data }) {
-              return [{
-                title: "Index Title: " + data
-              }];
-            }
-
-            export function links() {
-              return [{
-                rel: "stylesheet",
-                href: "styles-index.css"
-              }];
-            }
-
-            export async function clientLoader({ request }) {
-              if (new URL(request.url).searchParams.has('slow')) {
-                await new Promise(r => setTimeout(r, 500));
-              }
-              return "Index Loader Data";
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              const [mounted, setMounted] = React.useState(false);
-              React.useEffect(() => setMounted(true), []);
-
-              return (
-                <>
-                  <h2 data-route>Index</h2>
-                  <p data-loader-data>{data}</p>
-                  {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
-                </>
-              );
-            }
-          `,
+                      import * as React  from "react";
+                      import { useLoaderData } from "@react-router/react";
+          
+                      export function meta({ data }) {
+                        return [{
+                          title: "Index Title: " + data
+                        }];
+                      }
+          
+                      export function links() {
+                        return [{
+                          rel: "stylesheet",
+                          href: "styles-index.css"
+                        }];
+                      }
+          
+                      export async function clientLoader({ request }) {
+                        if (new URL(request.url).searchParams.has('slow')) {
+                          await new Promise(r => setTimeout(r, 500));
+                        }
+                        return "Index Loader Data";
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        const [mounted, setMounted] = React.useState(false);
+                        React.useEffect(() => setMounted(true), []);
+          
+                        return (
+                          <>
+                            <h2 data-route>Index</h2>
+                            <p data-loader-data>{data}</p>
+                            {!mounted ? <h3>Unmounted</h3> : <h3 data-mounted>Mounted</h3>}
+                          </>
+                        );
+                      }
+                    `,
           "app/routes/about.tsx": js`
-            import { useActionData, useLoaderData } from "@remix-run/react";
-
-            export function meta({ data }) {
-              return [{
-                title: "About Title: " + data
-              }];
-            }
-
-            export function clientLoader() {
-              return "About Loader Data";
-            }
-
-            export function clientAction() {
-              return "About Action Data";
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              let actionData = useActionData();
-
-              return (
-                <>
-                  <h2 data-route>About</h2>
-                  <p data-loader-data>{data}</p>
-                  <p data-action-data>{actionData}</p>
-                </>
-              );
-            }
-          `,
+                      import { useActionData, useLoaderData } from "@react-router/react";
+          
+                      export function meta({ data }) {
+                        return [{
+                          title: "About Title: " + data
+                        }];
+                      }
+          
+                      export function clientLoader() {
+                        return "About Loader Data";
+                      }
+          
+                      export function clientAction() {
+                        return "About Action Data";
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        let actionData = useActionData();
+          
+                        return (
+                          <>
+                            <h2 data-route>About</h2>
+                            <p data-loader-data>{data}</p>
+                            <p data-action-data>{actionData}</p>
+                          </>
+                        );
+                      }
+                    `,
           "app/routes/error.tsx": js`
-            import { useRouteError } from "@remix-run/react";
-
-            export async function clientLoader({ serverLoader }) {
-              await serverLoader();
-              return null;
-            }
-
-            export async function clientAction({ serverAction }) {
-              await serverAction();
-              return null;
-            }
-
-            export default function Component() {
-              return <h2>Error</h2>;
-            }
-
-            export function ErrorBoundary() {
-              let error = useRouteError();
-              return <pre data-error>{error.data}</pre>
-            }
-          `,
+                      import { useRouteError } from "@react-router/react";
+          
+                      export async function clientLoader({ serverLoader }) {
+                        await serverLoader();
+                        return null;
+                      }
+          
+                      export async function clientAction({ serverAction }) {
+                        await serverAction();
+                        return null;
+                      }
+          
+                      export default function Component() {
+                        return <h2>Error</h2>;
+                      }
+          
+                      export function ErrorBoundary() {
+                        let error = useRouteError();
+                        return <pre data-error>{error.data}</pre>
+                      }
+                    `,
         },
       });
 

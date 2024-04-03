@@ -15,24 +15,24 @@ test.beforeAll(async () => {
   fixture = await createFixture({
     files: {
       "app/routes/_index.tsx": js`
-        import { redirect } from "@remix-run/node";
-        import { Form } from "@remix-run/react";
-
-        export function action() {
-          return redirect("/test");
-        };
-
-        export default function Component() {
-          return (
-            <>
-              <h1>Index Page - Scroll Down</h1>
-              <Form method="post" style={{ marginTop: "150vh" }}>
-                <button type="submit">Submit</button>
-              </Form>
-            </>
-          );
-        }
-      `,
+              import { redirect } from "@react-router/node";
+              import { Form } from "@react-router/react";
+      
+              export function action() {
+                return redirect("/test");
+              };
+      
+              export default function Component() {
+                return (
+                  <>
+                    <h1>Index Page - Scroll Down</h1>
+                    <Form method="post" style={{ marginTop: "150vh" }}>
+                      <button type="submit">Submit</button>
+                    </Form>
+                  </>
+                );
+              }
+            `,
 
       "app/routes/test.tsx": js`
         export default function Component() {
@@ -46,21 +46,21 @@ test.beforeAll(async () => {
       `,
 
       "app/routes/hash.tsx": js`
-        import { Link } from "@remix-run/react";
-
-        export default function Component() {
-          return (
-            <>
-              <h1>Hash Scrolling</h1>
-              <Link to="#hello-world">hash link to hello-world</Link>
-              <Link to="#hello 🌎">hash link to hello 🌎</Link>
-              <div style={{ height: '3000px' }}>Spacer Div</div>
-              <p id="hello-world">hello-world scroll target</p>
-              <p id="hello 🌎">hello 🌎 scroll target</p>
-            </>
-          );
-        }
-      `,
+              import { Link } from "@react-router/react";
+      
+              export default function Component() {
+                return (
+                  <>
+                    <h1>Hash Scrolling</h1>
+                    <Link to="#hello-world">hash link to hello-world</Link>
+                    <Link to="#hello 🌎">hash link to hello 🌎</Link>
+                    <div style={{ height: '3000px' }}>Spacer Div</div>
+                    <p id="hello-world">hello-world scroll target</p>
+                    <p id="hello 🌎">hello 🌎 scroll target</p>
+                  </>
+                );
+              }
+            `,
     },
   });
 

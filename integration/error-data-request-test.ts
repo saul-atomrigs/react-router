@@ -21,31 +21,31 @@ test.describe("ErrorBoundary", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-        export default function Root() {
-          return (
-            <html lang="en">
-              <head>
-                <Meta />
-                <Links />
-              </head>
-              <body>
-                <Outlet />
-                <Scripts />
-              </body>
-            </html>
-          );
-        }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                export default function Root() {
+                  return (
+                    <html lang="en">
+                      <head>
+                        <Meta />
+                        <Links />
+                      </head>
+                      <body>
+                        <Outlet />
+                        <Scripts />
+                      </body>
+                    </html>
+                  );
+                }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { Link, Form } from "@remix-run/react";
-
-          export default function () {
-            return <h1>Index</h1>
-          }
-        `,
+                  import { Link, Form } from "@react-router/react";
+        
+                  export default function () {
+                    return <h1>Index</h1>
+                  }
+                `,
 
         [`app/routes/loader-throw-error.jsx`]: js`
           export async function loader() {
@@ -58,16 +58,16 @@ test.describe("ErrorBoundary", () => {
         `,
 
         [`app/routes/loader-return-json.jsx`]: js`
-          import { json } from "@remix-run/server-runtime";
-
-          export async function loader() {
-            return json({ ok: true });
-          }
-
-          export default function () {
-              return <h1>Hello</h1>
-          }
-        `,
+                  import { json } from "@react-router/server-runtime";
+        
+                  export async function loader() {
+                    return json({ ok: true });
+                  }
+        
+                  export default function () {
+                      return <h1>Hello</h1>
+                  }
+                `,
 
         [`app/routes/action-throw-error.jsx`]: js`
           export async function action() {
@@ -80,16 +80,16 @@ test.describe("ErrorBoundary", () => {
         `,
 
         [`app/routes/action-return-json.jsx`]: js`
-          import { json } from "@remix-run/server-runtime";
-
-          export async function action() {
-            return json({ ok: true });
-          }
-
-          export default function () {
-            return <h1>Hi!</h1>
-          }
-        `,
+                  import { json } from "@react-router/server-runtime";
+        
+                  export async function action() {
+                    return json({ ok: true });
+                  }
+        
+                  export default function () {
+                    return <h1>Hi!</h1>
+                  }
+                `,
       },
     });
     appFixture = await createAppFixture(fixture);
@@ -192,31 +192,31 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/root.tsx": js`
-            import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/_index.tsx": js`
-            import { Link, Form } from "@remix-run/react";
-
-            export default function () {
-              return <h1>Index</h1>
-            }
-          `,
+                      import { Link, Form } from "@react-router/react";
+          
+                      export default function () {
+                        return <h1>Index</h1>
+                      }
+                    `,
 
           [`app/routes/loader-throw-error.jsx`]: js`
             export async function loader() {
@@ -229,16 +229,16 @@ test.describe("single fetch", () => {
           `,
 
           [`app/routes/loader-return-json.jsx`]: js`
-            import { json } from "@remix-run/server-runtime";
-
-            export async function loader() {
-              return json({ ok: true });
-            }
-
-            export default function () {
-                return <h1>Hello</h1>
-            }
-          `,
+                      import { json } from "@react-router/server-runtime";
+          
+                      export async function loader() {
+                        return json({ ok: true });
+                      }
+          
+                      export default function () {
+                          return <h1>Hello</h1>
+                      }
+                    `,
 
           [`app/routes/action-throw-error.jsx`]: js`
             export async function action() {
@@ -251,16 +251,16 @@ test.describe("single fetch", () => {
           `,
 
           [`app/routes/action-return-json.jsx`]: js`
-            import { json } from "@remix-run/server-runtime";
-
-            export async function action() {
-              return json({ ok: true });
-            }
-
-            export default function () {
-              return <h1>Hi!</h1>
-            }
-          `,
+                      import { json } from "@react-router/server-runtime";
+          
+                      export async function action() {
+                        return json({ ok: true });
+                      }
+          
+                      export default function () {
+                        return <h1>Hi!</h1>
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);

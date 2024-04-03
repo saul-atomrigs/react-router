@@ -14,42 +14,42 @@ test.beforeAll(async () => {
       `,
 
       "app/routes/_index.tsx": js`
-        import { pizza } from "@mylib";
-        import { json } from "@remix-run/node";
-        import { useLoaderData, Link } from "@remix-run/react";
-
-        export function loader() {
-          return json(pizza);
-        }
-
-        export default function Index() {
-          let data = useLoaderData();
-          return (
-            <div>
-              {data}
-            </div>
-          )
-        }
-      `,
+              import { pizza } from "@mylib";
+              import { json } from "@react-router/node";
+              import { useLoaderData, Link } from "@react-router/react";
+      
+              export function loader() {
+                return json(pizza);
+              }
+      
+              export default function Index() {
+                let data = useLoaderData();
+                return (
+                  <div>
+                    {data}
+                  </div>
+                )
+              }
+            `,
 
       "app/routes/tilde-alias.tsx": js`
-        import { pizza } from "~/components/my-lib";
-        import { json } from "@remix-run/node";
-        import { useLoaderData, Link } from "@remix-run/react";
-
-        export function loader() {
-          return json(pizza);
-        }
-
-        export default function Index() {
-          let data = useLoaderData();
-          return (
-            <div>
-              {data}
-            </div>
-          )
-        }
-      `,
+              import { pizza } from "~/components/my-lib";
+              import { json } from "@react-router/node";
+              import { useLoaderData, Link } from "@react-router/react";
+      
+              export function loader() {
+                return json(pizza);
+              }
+      
+              export default function Index() {
+                let data = useLoaderData();
+                return (
+                  <div>
+                    {data}
+                  </div>
+                )
+              }
+            `,
 
       "app/components/component.tsx": js`
         export function PizzaComponent() {

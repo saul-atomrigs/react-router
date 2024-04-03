@@ -28,26 +28,26 @@ const ROUTE_FILE_COMMENT = "// THIS IS A ROUTE FILE";
 function createRoute(path: string) {
   return {
     [`app/routes/${path}`]: `
-      ${ROUTE_FILE_COMMENT}
-      import { Outlet } from "@remix-run/react";
-      import { useState, useEffect } from "react";
-
-      export default function Route() {
-        const [mounted, setMounted] = useState(false);
-        useEffect(() => {
-          setMounted(true);
-        }, []);
-        return (
-          <>
-            <div data-route-file="${path}">
-              Route: ${path}
-              {mounted ? <span data-mounted> (Mounted)</span> : null}
-            </div>
-            <Outlet />
-          </>
-        );
-      }
-    `,
+          ${ROUTE_FILE_COMMENT}
+          import { Outlet } from "@react-router/react";
+          import { useState, useEffect } from "react";
+    
+          export default function Route() {
+            const [mounted, setMounted] = useState(false);
+            useEffect(() => {
+              setMounted(true);
+            }, []);
+            return (
+              <>
+                <div data-route-file="${path}">
+                  Route: ${path}
+                  {mounted ? <span data-mounted> (Mounted)</span> : null}
+                </div>
+                <Outlet />
+              </>
+            );
+          }
+        `,
   };
 }
 
@@ -74,24 +74,24 @@ const TEST_ROUTES = [
 
 const files = {
   "app/root.tsx": `
-    ${ROUTE_FILE_COMMENT}
-    import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-    export default function Root() {
-      return (
-        <html lang="en">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <Outlet />
-            <Scripts />
-          </body>
-        </html>
-      );
-    }
-  `,
+      ${ROUTE_FILE_COMMENT}
+      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+  
+      export default function Root() {
+        return (
+          <html lang="en">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <Outlet />
+              <Scripts />
+            </body>
+          </html>
+        );
+      }
+    `,
   ...Object.assign({}, ...TEST_ROUTES.map(createRoute)),
 };
 
@@ -119,46 +119,46 @@ test.describe(() => {
     port = await getPort();
     cwd = await createProject({
       "vite.config.ts": dedent`
-        import { vitePlugin as remix } from "@remix-run/dev";
-
-        export default {
-          ${await viteConfig.server({ port })}
-          build: { manifest: true },
-          plugins: [remix({
-            manifest: true,
-            serverBundles: async ({ branch }) => {
-              // Smoke test to ensure we can read the route files via 'route.file'
-              await Promise.all(branch.map(async (route) => {
-                const fs = await import("node:fs/promises");
-                const routeFileContents = await fs.readFile(route.file, "utf8");
-                if (!routeFileContents.includes(${JSON.stringify(
-                  ROUTE_FILE_COMMENT
-                )})) {
-                  throw new Error("Couldn't file route file test comment");
-                }
-              }));
-
-              if (branch.some((route) => route.id === "routes/_index")) {
-                return "root";
+              import { vitePlugin as remix } from "@react-router/dev";
+      
+              export default {
+                ${await viteConfig.server({ port })}
+                build: { manifest: true },
+                plugins: [remix({
+                  manifest: true,
+                  serverBundles: async ({ branch }) => {
+                    // Smoke test to ensure we can read the route files via 'route.file'
+                    await Promise.all(branch.map(async (route) => {
+                      const fs = await import("node:fs/promises");
+                      const routeFileContents = await fs.readFile(route.file, "utf8");
+                      if (!routeFileContents.includes(${JSON.stringify(
+                        ROUTE_FILE_COMMENT
+                      )})) {
+                        throw new Error("Couldn't file route file test comment");
+                      }
+                    }));
+      
+                    if (branch.some((route) => route.id === "routes/_index")) {
+                      return "root";
+                    }
+      
+                    if (branch.some((route) => route.id === "routes/bundle-a")) {
+                      return "bundle-a";
+                    }
+      
+                    if (branch.some((route) => route.id === "routes/bundle-b")) {
+                      return "bundle-b";
+                    }
+      
+                    if (branch.some((route) => route.id === "routes/_pathless.bundle-c")) {
+                      return "bundle-c";
+                    }
+      
+                    throw new Error("No bundle defined for route " + branch[branch.length - 1].id);
+                  }
+                })]
               }
-
-              if (branch.some((route) => route.id === "routes/bundle-a")) {
-                return "bundle-a";
-              }
-
-              if (branch.some((route) => route.id === "routes/bundle-b")) {
-                return "bundle-b";
-              }
-
-              if (branch.some((route) => route.id === "routes/_pathless.bundle-c")) {
-                return "bundle-c";
-              }
-
-              throw new Error("No bundle defined for route " + branch[branch.length - 1].id);
-            }
-          })]
-        }
-      `,
+            `,
       ...files,
     });
   });

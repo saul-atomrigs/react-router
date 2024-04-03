@@ -16,43 +16,43 @@ import { js } from "./helpers/create-fixture.js";
 
 const files = {
   "app/routes/_index.tsx": String.raw`
-    import { useState, useEffect } from "react";
-    import { Link } from "@remix-run/react"
-
-    export default function IndexRoute() {
-      const [mounted, setMounted] = useState(false);
-      useEffect(() => {
-        setMounted(true);
-      }, []);
-
-      return (
-        <div id="index">
-          <h2 data-title>Index</h2>
-          <input />
-          <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
-          <p data-hmr>HMR updated: 0</p>
-          <Link to="/other">other</Link>
-        </div>
-      );
-    }
-  `,
+      import { useState, useEffect } from "react";
+      import { Link } from "@react-router/react"
+  
+      export default function IndexRoute() {
+        const [mounted, setMounted] = useState(false);
+        useEffect(() => {
+          setMounted(true);
+        }, []);
+  
+        return (
+          <div id="index">
+            <h2 data-title>Index</h2>
+            <input />
+            <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
+            <p data-hmr>HMR updated: 0</p>
+            <Link to="/other">other</Link>
+          </div>
+        );
+      }
+    `,
   "app/routes/other.tsx": String.raw`
-    import { useLoaderData } from "@remix-run/react";
-
-    export const loader = () => {
-      return "other-loader";
-    };
-
-    export default function OtherRoute() {
-      const loaderData = useLoaderData()
-
-      return (
-        <div id="other">
-          <p>{loaderData}</p>
-        </div>
-      );
-    }
-  `,
+      import { useLoaderData } from "@react-router/react";
+  
+      export const loader = () => {
+        return "other-loader";
+      };
+  
+      export default function OtherRoute() {
+        const loaderData = useLoaderData()
+  
+        return (
+          <div id="other">
+            <p>{loaderData}</p>
+          </div>
+        );
+      }
+    `,
 };
 
 async function viteConfigFile({
@@ -65,20 +65,20 @@ async function viteConfigFile({
   basename?: string;
 }) {
   return js`
-    import { vitePlugin as remix } from "@remix-run/dev";
-
-    export default {
-      ${base !== "/" ? 'base: "' + base + '",' : ""}
-      ${await viteConfig.server({ port })}
-      plugins: [
-        ${
-          basename !== "/"
-            ? 'remix({ basename: "' + basename + '" }),'
-            : "remix(),"
-        }
-      ]
-    }
-  `;
+      import { vitePlugin as remix } from "@react-router/dev";
+  
+      export default {
+        ${base !== "/" ? 'base: "' + base + '",' : ""}
+        ${await viteConfig.server({ port })}
+        plugins: [
+          ${
+            basename !== "/"
+              ? 'remix({ basename: "' + basename + '" }),'
+              : "remix(),"
+          }
+        ]
+      }
+    `;
 }
 
 const customServerFile = ({
@@ -94,40 +94,40 @@ const customServerFile = ({
   basename = basename ?? base;
 
   return String.raw`
-    import { createRequestHandler } from "@remix-run/express";
-    import { installGlobals } from "@remix-run/node";
-    import express from "express";
-    installGlobals();
-
-    const viteDevServer =
-      process.env.NODE_ENV === "production"
-        ? undefined
-        : await import("vite").then(({ createServer }) =>
-            createServer({
-              server: {
-                middlewareMode: true,
-              },
-            })
-          );
-
-    const app = express();
-    app.use("${base}", viteDevServer?.middlewares || express.static("build/client"));
-    app.all(
-      "${basename}*",
-      createRequestHandler({
-        build: viteDevServer
-          ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
-          : await import("./build/server/index.js"),
-      })
-    );
-    app.get("*", (_req, res) => {
-      res.setHeader("content-type", "text/html")
-      res.end('Remix app is at <a href="${basename}">${basename}</a>');
-    });
-
-    const port = ${port};
-    app.listen(port, () => console.log('http://localhost:' + port));
-  `;
+      import { createRequestHandler } from "@react-router/express";
+      import { installGlobals } from "@react-router/node";
+      import express from "express";
+      installGlobals();
+  
+      const viteDevServer =
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : await import("vite").then(({ createServer }) =>
+              createServer({
+                server: {
+                  middlewareMode: true,
+                },
+              })
+            );
+  
+      const app = express();
+      app.use("${base}", viteDevServer?.middlewares || express.static("build/client"));
+      app.all(
+        "${basename}*",
+        createRequestHandler({
+          build: viteDevServer
+            ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
+            : await import("./build/server/index.js"),
+        })
+      );
+      app.get("*", (_req, res) => {
+        res.setHeader("content-type", "text/html")
+        res.end('Remix app is at <a href="${basename}">${basename}</a>');
+      });
+  
+      const port = ${port};
+      app.listen(port, () => console.log('http://localhost:' + port));
+    `;
 };
 
 test.describe("Vite base / Remix basename / Vite dev", () => {
@@ -413,20 +413,20 @@ test.describe("Vite base / Remix basename / express build", async () => {
       }),
       // Slim server that only serves basename (route) requests from the remix handler
       "server.mjs": String.raw`
-        import { createRequestHandler } from "@remix-run/express";
-        import { installGlobals } from "@remix-run/node";
-        import express from "express";
-        installGlobals();
-
-        const app = express();
-        app.all(
-          "/app/*",
-          createRequestHandler({ build: await import("./build/server/index.js") })
-        );
-
-        const port = ${port};
-        app.listen(port, () => console.log('http://localhost:' + port));
-      `,
+              import { createRequestHandler } from "@react-router/express";
+              import { installGlobals } from "@react-router/node";
+              import express from "express";
+              installGlobals();
+      
+              const app = express();
+              app.all(
+                "/app/*",
+                createRequestHandler({ build: await import("./build/server/index.js") })
+              );
+      
+              const port = ${port};
+              app.listen(port, () => console.log('http://localhost:' + port));
+            `,
       ...files,
     });
 

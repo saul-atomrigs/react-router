@@ -111,7 +111,7 @@ declare global {
       // This is only needed within the Remix repo because the symlink to the
       // `packages/remix-react` folder doesn't match the regex below
       let remixReactPath = require.resolve(
-        "@remix-run/react/dist/esm/browser.js",
+        "@react-router/react/dist/esm/browser.js",
         { paths: [config.rootDirectory] }
       );
 

@@ -6,43 +6,43 @@ import {
   js,
 } from "./helpers/create-fixture.js";
 import { PlaywrightFixture } from "./helpers/playwright-fixture.js";
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 
 const ISO_DATE = "2024-03-12T12:00:00.000Z";
 
 const files = {
   "app/root.tsx": js`
-    import { Form, Link, Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-    export function loader() {
-      return {
-        message: "ROOT",
-      };
-    }
-
-    export default function Root() {
-      return (
-        <html lang="en">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <Link to="/">Home</Link><br/>
-            <Link to="/data">Data</Link><br/>
-            <Link to="/a/b/c">/a/b/c</Link><br/>
-            <Form method="post" action="/data">
-              <button type="submit" name="key" value="value">
-                Submit
-              </button>
-            </Form>
-            <Outlet />
-            <Scripts />
-          </body>
-        </html>
-      );
-    }
-  `,
+      import { Form, Link, Links, Meta, Outlet, Scripts } from "@react-router/react";
+  
+      export function loader() {
+        return {
+          message: "ROOT",
+        };
+      }
+  
+      export default function Root() {
+        return (
+          <html lang="en">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <Link to="/">Home</Link><br/>
+              <Link to="/data">Data</Link><br/>
+              <Link to="/a/b/c">/a/b/c</Link><br/>
+              <Form method="post" action="/data">
+                <button type="submit" name="key" value="value">
+                  Submit
+                </button>
+              </Form>
+              <Outlet />
+              <Scripts />
+            </body>
+          </html>
+        );
+      }
+    `,
 
   "app/routes/_index.tsx": js`
     export default function Index() {
@@ -51,38 +51,38 @@ const files = {
   `,
 
   "app/routes/data.tsx": js`
-    import { useActionData, useLoaderData } from "@remix-run/react";
-
-    export async function action({ request }) {
-      let formData = await request.formData();
-      return {
-        key: formData.get('key'),
-      };
-    }
-
-    export function loader({ request }) {
-      if (new URL(request.url).searchParams.has("error")) {
-        throw new Error("Loader Error");
+      import { useActionData, useLoaderData } from "@react-router/react";
+  
+      export async function action({ request }) {
+        let formData = await request.formData();
+        return {
+          key: formData.get('key'),
+        };
       }
-      return {
-        message: "DATA",
-        date: new Date("${ISO_DATE}"),
-      };
-    }
-
-    export default function Index() {
-      let data = useLoaderData();
-      let actionData = useActionData();
-      return (
-        <>
-          <h1 id="heading">Data</h1>
-          <p id="message">{data.message}</p>
-          <p id="date">{data.date.toISOString()}</p>
-          {actionData ? <p id="action-data">{actionData.key}</p> : null}
-        </>
-      )
-    }
-  `,
+  
+      export function loader({ request }) {
+        if (new URL(request.url).searchParams.has("error")) {
+          throw new Error("Loader Error");
+        }
+        return {
+          message: "DATA",
+          date: new Date("${ISO_DATE}"),
+        };
+      }
+  
+      export default function Index() {
+        let data = useLoaderData();
+        let actionData = useActionData();
+        return (
+          <>
+            <h1 id="heading">Data</h1>
+            <p id="message">{data.message}</p>
+            <p id="date">{data.date.toISOString()}</p>
+            {actionData ? <p id="action-data">{actionData.key}</p> : null}
+          </>
+        )
+      }
+    `,
 };
 
 test.describe("single-fetch", () => {
@@ -231,37 +231,37 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/no-revalidate.tsx": js`
-          import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
-
-          export async function action({ request }) {
-            let fd = await request.formData();
-            return { shouldRevalidate: fd.get('revalidate') === "yes" }
-          }
-
-          let count = 0;
-          export function loader() {
-            return { count: ++count };
-          }
-
-          export default function Comp() {
-            let navigation = useNavigation();
-            let data = useLoaderData();
-            let actionData = useActionData();
-            return (
-              <Form method="post">
-                <button type="submit" name="revalidate" value="yes">Submit w/Revalidation</button>
-                <button type="submit" name="revalidate" value="no">Submit w/o Revalidation</button>
-                <p id="data">{data.count}</p>
-                {navigation.state === "idle" ? <p id="idle">idle</p> : null}
-                {actionData ? <p id="action-data">yes</p> : null}
-              </Form>
-            );
-          }
-
-          export function shouldRevalidate({ actionResult }) {
-            return actionResult.shouldRevalidate === true;
-          }
-        `,
+                  import { Form, useActionData, useLoaderData, useNavigation } from '@react-router/react';
+        
+                  export async function action({ request }) {
+                    let fd = await request.formData();
+                    return { shouldRevalidate: fd.get('revalidate') === "yes" }
+                  }
+        
+                  let count = 0;
+                  export function loader() {
+                    return { count: ++count };
+                  }
+        
+                  export default function Comp() {
+                    let navigation = useNavigation();
+                    let data = useLoaderData();
+                    let actionData = useActionData();
+                    return (
+                      <Form method="post">
+                        <button type="submit" name="revalidate" value="yes">Submit w/Revalidation</button>
+                        <button type="submit" name="revalidate" value="no">Submit w/o Revalidation</button>
+                        <p id="data">{data.count}</p>
+                        {navigation.state === "idle" ? <p id="idle">idle</p> : null}
+                        {actionData ? <p id="action-data">yes</p> : null}
+                      </Form>
+                    );
+                  }
+        
+                  export function shouldRevalidate({ actionResult }) {
+                    return actionResult.shouldRevalidate === true;
+                  }
+                `,
       },
     });
 
@@ -300,58 +300,58 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/action.tsx": js`
-          import { Form, Link, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
-
-          export async function action({ request, response }) {
-            let fd = await request.formData();
-            if (fd.get('throw') === "5xx") {
-              response.status = 500;
-              throw new Error("Thrown 500");
-            }
-            if (fd.get('throw') === "4xx") {
-              response.status = 400;
-              throw new Error("Thrown 400");
-            }
-            if (fd.get('return') === "5xx") {
-              response.status = 500;
-              return "Returned 500";
-            }
-            if (fd.get('return') === "4xx") {
-              response.status = 400;
-              return "Returned 400";
-            }
-            return null;
-          }
-
-          let count = 0;
-          export function loader() {
-            return { count: ++count };
-          }
-
-          export default function Comp() {
-            let navigation = useNavigation();
-            let data = useLoaderData();
-            return (
-              <Form method="post">
-                <button type="submit" name="throw" value="5xx">Throw 5xx</button>
-                <button type="submit" name="throw" value="4xx">Throw 4xx</button>
-                <button type="submit" name="return" value="5xx">Return 5xx</button>
-                <button type="submit" name="return" value="4xx">Return 4xx</button>
-                <p id="data">{data.count}</p>
-                {navigation.state === "idle" ? <p id="idle">idle</p> : null}
-              </Form>
-            );
-          }
-
-          export function ErrorBoundary() {
-            return (
-              <div>
-                <h1 id="error">Error</h1>
-                <Link to="/action">Back</Link>
-              </div>
-            );
-          }
-        `,
+                  import { Form, Link, useActionData, useLoaderData, useNavigation } from '@react-router/react';
+        
+                  export async function action({ request, response }) {
+                    let fd = await request.formData();
+                    if (fd.get('throw') === "5xx") {
+                      response.status = 500;
+                      throw new Error("Thrown 500");
+                    }
+                    if (fd.get('throw') === "4xx") {
+                      response.status = 400;
+                      throw new Error("Thrown 400");
+                    }
+                    if (fd.get('return') === "5xx") {
+                      response.status = 500;
+                      return "Returned 500";
+                    }
+                    if (fd.get('return') === "4xx") {
+                      response.status = 400;
+                      return "Returned 400";
+                    }
+                    return null;
+                  }
+        
+                  let count = 0;
+                  export function loader() {
+                    return { count: ++count };
+                  }
+        
+                  export default function Comp() {
+                    let navigation = useNavigation();
+                    let data = useLoaderData();
+                    return (
+                      <Form method="post">
+                        <button type="submit" name="throw" value="5xx">Throw 5xx</button>
+                        <button type="submit" name="throw" value="4xx">Throw 4xx</button>
+                        <button type="submit" name="return" value="5xx">Return 5xx</button>
+                        <button type="submit" name="return" value="4xx">Return 4xx</button>
+                        <p id="data">{data.count}</p>
+                        {navigation.state === "idle" ? <p id="idle">idle</p> : null}
+                      </Form>
+                    );
+                  }
+        
+                  export function ErrorBoundary() {
+                    return (
+                      <div>
+                        <h1 id="error">Error</h1>
+                        <Link to="/action">Back</Link>
+                      </div>
+                    );
+                  }
+                `,
       },
     });
 
@@ -921,16 +921,16 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function loader({ request, response }) {
-            response.status = 302;
-            response.headers.set('Location', '/target');
-            throw response;
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function loader({ request, response }) {
+                    response.status = 302;
+                    response.headers.set('Location', '/target');
+                    throw response;
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -962,16 +962,16 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function loader({ request, response }) {
-            response.status = 302;
-            response.headers.set('Location', '/target');
-            return null
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function loader({ request, response }) {
+                    response.status = 302;
+                    response.headers.set('Location', '/target');
+                    return null
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -999,14 +999,14 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function loader() {
-            throw redirect('/target');
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function loader() {
+                    throw redirect('/target');
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -1036,14 +1036,14 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function loader() {
-            return redirect('/target');
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function loader() {
+                    return redirect('/target');
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -1073,16 +1073,16 @@ test.describe("single-fetch", () => {
         files: {
           ...files,
           "app/routes/data.tsx": js`
-            import { redirect } from '@remix-run/node';
-            export function action({ response }) {
-              response.status = 302;
-              response.headers.set('Location', '/target');
-              throw response;
-            }
-            export default function Component() {
-              return null
-            }
-          `,
+                      import { redirect } from '@react-router/node';
+                      export function action({ response }) {
+                        response.status = 302;
+                        response.headers.set('Location', '/target');
+                        throw response;
+                      }
+                      export default function Component() {
+                        return null
+                      }
+                    `,
           "app/routes/target.tsx": js`
             export default function Component() {
               return <h1 id="target">Target</h1>
@@ -1120,16 +1120,16 @@ test.describe("single-fetch", () => {
         files: {
           ...files,
           "app/routes/data.tsx": js`
-            import { redirect } from '@remix-run/node';
-            export function action({ response }) {
-              response.status = 302;
-              response.headers.set('Location', '/target');
-              return null
-            }
-            export default function Component() {
-              return null
-            }
-          `,
+                      import { redirect } from '@react-router/node';
+                      export function action({ response }) {
+                        response.status = 302;
+                        response.headers.set('Location', '/target');
+                        return null
+                      }
+                      export default function Component() {
+                        return null
+                      }
+                    `,
           "app/routes/target.tsx": js`
             export default function Component() {
               return <h1 id="target">Target</h1>
@@ -1163,14 +1163,14 @@ test.describe("single-fetch", () => {
         files: {
           ...files,
           "app/routes/data.tsx": js`
-            import { redirect } from '@remix-run/node';
-            export function action() {
-              throw redirect('/target');
-            }
-            export default function Component() {
-              return null
-            }
-          `,
+                      import { redirect } from '@react-router/node';
+                      export function action() {
+                        throw redirect('/target');
+                      }
+                      export default function Component() {
+                        return null
+                      }
+                    `,
           "app/routes/target.tsx": js`
             export default function Component() {
               return <h1 id="target">Target</h1>
@@ -1206,14 +1206,14 @@ test.describe("single-fetch", () => {
         files: {
           ...files,
           "app/routes/data.tsx": js`
-            import { redirect } from '@remix-run/node';
-            export function action() {
-              return redirect('/target');
-            }
-            export default function Component() {
-              return null
-            }
-          `,
+                      import { redirect } from '@react-router/node';
+                      export function action() {
+                        return redirect('/target');
+                      }
+                      export default function Component() {
+                        return null
+                      }
+                    `,
           "app/routes/target.tsx": js`
             export default function Component() {
               return <h1 id="target">Target</h1>
@@ -1248,67 +1248,67 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/entry.server.tsx": js`
-          import { PassThrough } from "node:stream";
-
-          import type { EntryContext } from "@remix-run/node";
-          import { createReadableStreamFromReadable } from "@remix-run/node";
-          import { RemixServer } from "@remix-run/react";
-          import { renderToPipeableStream } from "react-dom/server";
-
-          export default function handleRequest(
-            request: Request,
-            responseStatusCode: number,
-            responseHeaders: Headers,
-            remixContext: EntryContext
-          ) {
-            return new Promise((resolve, reject) => {
-              const { pipe } = renderToPipeableStream(
-                <RemixServer context={remixContext} url={request.url} />,
-                {
-                  onShellReady() {
-                    const body = new PassThrough();
-                    const stream = createReadableStreamFromReadable(body);
-                    responseHeaders.set("Content-Type", "text/html");
-                    resolve(
-                      new Response(stream, {
-                        headers: responseHeaders,
-                        status: responseStatusCode,
-                      })
-                    );
-                    pipe(body);
-                  },
-                  onShellError(error: unknown) {
-                    reject(error);
-                  },
-                  onError(error: unknown) {
-                    responseStatusCode = 500;
-                  },
-                }
-              );
-            });
-          }
-
-          export function handleDataRequest(response, { request }) {
-            if (request.url.endsWith("/data.data")) {
-              return new Response(null, {
-                status: 302,
-                headers: {
-                  Location: "/target",
-                },
-              });
-            }
-            return response;
-          }
-        `,
+                  import { PassThrough } from "node:stream";
+        
+                  import type { EntryContext } from "@react-router/node";
+                  import { createReadableStreamFromReadable } from "@react-router/node";
+                  import { RemixServer } from "@react-router/react";
+                  import { renderToPipeableStream } from "react-dom/server";
+        
+                  export default function handleRequest(
+                    request: Request,
+                    responseStatusCode: number,
+                    responseHeaders: Headers,
+                    remixContext: EntryContext
+                  ) {
+                    return new Promise((resolve, reject) => {
+                      const { pipe } = renderToPipeableStream(
+                        <RemixServer context={remixContext} url={request.url} />,
+                        {
+                          onShellReady() {
+                            const body = new PassThrough();
+                            const stream = createReadableStreamFromReadable(body);
+                            responseHeaders.set("Content-Type", "text/html");
+                            resolve(
+                              new Response(stream, {
+                                headers: responseHeaders,
+                                status: responseStatusCode,
+                              })
+                            );
+                            pipe(body);
+                          },
+                          onShellError(error: unknown) {
+                            reject(error);
+                          },
+                          onError(error: unknown) {
+                            responseStatusCode = 500;
+                          },
+                        }
+                      );
+                    });
+                  }
+        
+                  export function handleDataRequest(response, { request }) {
+                    if (request.url.endsWith("/data.data")) {
+                      return new Response(null, {
+                        status: 302,
+                        headers: {
+                          Location: "/target",
+                        },
+                      });
+                    }
+                    return response;
+                  }
+                `,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function loader() {
-            return redirect('/target');
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function loader() {
+                    return redirect('/target');
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -1332,67 +1332,67 @@ test.describe("single-fetch", () => {
       files: {
         ...files,
         "app/entry.server.tsx": js`
-          import { PassThrough } from "node:stream";
-
-          import type { EntryContext } from "@remix-run/node";
-          import { createReadableStreamFromReadable } from "@remix-run/node";
-          import { RemixServer } from "@remix-run/react";
-          import { renderToPipeableStream } from "react-dom/server";
-
-          export default function handleRequest(
-            request: Request,
-            responseStatusCode: number,
-            responseHeaders: Headers,
-            remixContext: EntryContext
-          ) {
-            return new Promise((resolve, reject) => {
-              const { pipe } = renderToPipeableStream(
-                <RemixServer context={remixContext} url={request.url} />,
-                {
-                  onShellReady() {
-                    const body = new PassThrough();
-                    const stream = createReadableStreamFromReadable(body);
-                    responseHeaders.set("Content-Type", "text/html");
-                    resolve(
-                      new Response(stream, {
-                        headers: responseHeaders,
-                        status: responseStatusCode,
-                      })
-                    );
-                    pipe(body);
-                  },
-                  onShellError(error: unknown) {
-                    reject(error);
-                  },
-                  onError(error: unknown) {
-                    responseStatusCode = 500;
-                  },
-                }
-              );
-            });
-          }
-
-          export function handleDataRequest(response, { request }) {
-            if (request.url.endsWith("/data.data")) {
-              return new Response(null, {
-                status: 302,
-                headers: {
-                  Location: "/target",
-                },
-              });
-            }
-            return response;
-          }
-        `,
+                  import { PassThrough } from "node:stream";
+        
+                  import type { EntryContext } from "@react-router/node";
+                  import { createReadableStreamFromReadable } from "@react-router/node";
+                  import { RemixServer } from "@react-router/react";
+                  import { renderToPipeableStream } from "react-dom/server";
+        
+                  export default function handleRequest(
+                    request: Request,
+                    responseStatusCode: number,
+                    responseHeaders: Headers,
+                    remixContext: EntryContext
+                  ) {
+                    return new Promise((resolve, reject) => {
+                      const { pipe } = renderToPipeableStream(
+                        <RemixServer context={remixContext} url={request.url} />,
+                        {
+                          onShellReady() {
+                            const body = new PassThrough();
+                            const stream = createReadableStreamFromReadable(body);
+                            responseHeaders.set("Content-Type", "text/html");
+                            resolve(
+                              new Response(stream, {
+                                headers: responseHeaders,
+                                status: responseStatusCode,
+                              })
+                            );
+                            pipe(body);
+                          },
+                          onShellError(error: unknown) {
+                            reject(error);
+                          },
+                          onError(error: unknown) {
+                            responseStatusCode = 500;
+                          },
+                        }
+                      );
+                    });
+                  }
+        
+                  export function handleDataRequest(response, { request }) {
+                    if (request.url.endsWith("/data.data")) {
+                      return new Response(null, {
+                        status: 302,
+                        headers: {
+                          Location: "/target",
+                        },
+                      });
+                    }
+                    return response;
+                  }
+                `,
         "app/routes/data.tsx": js`
-          import { redirect } from '@remix-run/node';
-          export function action() {
-            return redirect('/target');
-          }
-          export default function Component() {
-            return null
-          }
-        `,
+                  import { redirect } from '@react-router/node';
+                  export function action() {
+                    return redirect('/target');
+                  }
+                  export default function Component() {
+                    return null
+                  }
+                `,
         "app/routes/target.tsx": js`
           export default function Component() {
             return <h1 id="target">Target</h1>
@@ -1416,58 +1416,58 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1500,63 +1500,63 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1596,68 +1596,68 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (B client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (B client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1699,73 +1699,73 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (A client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (A client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (B client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (B client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1810,69 +1810,69 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/_index.tsx": js`
-              import {  Link } from "@remix-run/react";
-
-              export default function Index() {
-                return (
-                  <nav>
-                    <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
-                  </nav>
-                );
-              }
-            `,
+                          import {  Link } from "@react-router/react";
+            
+                          export default function Index() {
+                            return (
+                              <nav>
+                                <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
+                              </nav>
+                            );
+                          }
+                        `,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1896,74 +1896,74 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/_index.tsx": js`
-              import {  Link } from "@remix-run/react";
-
-              export default function Index() {
-                return (
-                  <nav>
-                    <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
-                  </nav>
-                );
-              }
-            `,
+                          import {  Link } from "@react-router/react";
+            
+                          export default function Index() {
+                            return (
+                              <nav>
+                                <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
+                              </nav>
+                            );
+                          }
+                        `,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -1988,79 +1988,79 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/_index.tsx": js`
-              import {  Link } from "@remix-run/react";
-
-              export default function Index() {
-                return (
-                  <nav>
-                    <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
-                  </nav>
-                );
-              }
-            `,
+                          import {  Link } from "@react-router/react";
+            
+                          export default function Index() {
+                            return (
+                              <nav>
+                                <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
+                              </nav>
+                            );
+                          }
+                        `,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (B client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (B client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development
@@ -2085,84 +2085,84 @@ test.describe("single-fetch", () => {
           files: {
             ...files,
             "app/routes/_index.tsx": js`
-              import {  Link } from "@remix-run/react";
-
-              export default function Index() {
-                return (
-                  <nav>
-                    <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
-                  </nav>
-                );
-              }
-            `,
+                          import {  Link } from "@react-router/react";
+            
+                          export default function Index() {
+                            return (
+                              <nav>
+                                <Link to="/a/b/c" prefetch="render">/a/b/c</Link>
+                              </nav>
+                            );
+                          }
+                        `,
             "app/routes/a.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "A server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (A client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>A</h1>
-                    <p id="a-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "A server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (A client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>A</h1>
+                                <p id="a-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.tsx": js`
-              import { Outlet, useLoaderData } from '@remix-run/react';
-
-              export function loader() {
-                return { message: "B server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (B client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>B</h1>
-                    <p id="b-data">{data.message}</p>
-                    <Outlet/>
-                  </>
-                );
-              }
-            `,
+                          import { Outlet, useLoaderData } from '@react-router/react';
+            
+                          export function loader() {
+                            return { message: "B server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (B client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>B</h1>
+                                <p id="b-data">{data.message}</p>
+                                <Outlet/>
+                              </>
+                            );
+                          }
+                        `,
             "app/routes/a.b.c.tsx": js`
-              import { useLoaderData } from '@remix-run/react';
-
-              export function  loader() {
-                return { message: "C server loader" };
-              }
-
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return { message: data.message + " (C client loader)" };
-              }
-
-              export default function Comp() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <h1>C</h1>
-                    <p id="c-data">{data.message}</p>
-                  </>
-                );
-              }
-            `,
+                          import { useLoaderData } from '@react-router/react';
+            
+                          export function  loader() {
+                            return { message: "C server loader" };
+                          }
+            
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return { message: data.message + " (C client loader)" };
+                          }
+            
+                          export default function Comp() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <h1>C</h1>
+                                <p id="c-data">{data.message}</p>
+                              </>
+                            );
+                          }
+                        `,
           },
         },
         ServerMode.Development

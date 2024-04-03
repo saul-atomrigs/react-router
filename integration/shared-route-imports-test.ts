@@ -17,23 +17,23 @@ test.describe("v1 compiler", () => {
       compiler: "remix",
       files: {
         "app/routes/parent.tsx": js`
-          import { createContext, useContext } from "react";
-          import { Outlet } from "@remix-run/react";
-  
-          const ParentContext = createContext("❌");
-  
-          export function useParentContext() {
-            return useContext(ParentContext);
-          }
-  
-          export default function Index() {
-            return (
-              <ParentContext.Provider value="✅">
-                <Outlet />
-              </ParentContext.Provider>
-            )
-          }
-        `,
+                  import { createContext, useContext } from "react";
+                  import { Outlet } from "@react-router/react";
+          
+                  const ParentContext = createContext("❌");
+          
+                  export function useParentContext() {
+                    return useContext(ParentContext);
+                  }
+          
+                  export default function Index() {
+                    return (
+                      <ParentContext.Provider value="✅">
+                        <Outlet />
+                      </ParentContext.Provider>
+                    )
+                  }
+                `,
 
         "app/routes/parent.child.tsx": js`
           import { useParentContext } from "./parent";
@@ -44,24 +44,24 @@ test.describe("v1 compiler", () => {
         `,
 
         "app/routes/markdown-parent.mdx": `import { createContext, useContext } from 'react';
-import { Outlet } from '@remix-run/react';
-
-export const ParentContext = createContext("❌");
-
-export function useParentContext() {
-  return useContext(ParentContext);
-}
-
-export function ParentProvider() {
-  return (
-    <ParentContext.Provider value="✅">
-      <Outlet />
-    </ParentContext.Provider>
-  );
-}
-
-<ParentProvider />
-`,
+        import { Outlet } from '@react-router/react';
+        
+        export const ParentContext = createContext("❌");
+        
+        export function useParentContext() {
+          return useContext(ParentContext);
+        }
+        
+        export function ParentProvider() {
+          return (
+            <ParentContext.Provider value="✅">
+              <Outlet />
+            </ParentContext.Provider>
+          );
+        }
+        
+        <ParentProvider />
+        `,
         "app/routes/markdown-parent.child.mdx": `import { useParentContext } from "./markdown-parent.mdx";
 
 export function UseParentContext() {
@@ -105,23 +105,23 @@ test.describe("v2 compiler", () => {
       compiler: "remix",
       files: {
         "app/routes/parent.tsx": js`
-          import { createContext, useContext } from "react";
-          import { Outlet } from "@remix-run/react";
-  
-          const ParentContext = createContext("❌");
-  
-          export function useParentContext() {
-            return useContext(ParentContext);
-          }
-  
-          export default function Index() {
-            return (
-              <ParentContext.Provider value="✅">
-                <Outlet />
-              </ParentContext.Provider>
-            )
-          }
-        `,
+                  import { createContext, useContext } from "react";
+                  import { Outlet } from "@react-router/react";
+          
+                  const ParentContext = createContext("❌");
+          
+                  export function useParentContext() {
+                    return useContext(ParentContext);
+                  }
+          
+                  export default function Index() {
+                    return (
+                      <ParentContext.Provider value="✅">
+                        <Outlet />
+                      </ParentContext.Provider>
+                    )
+                  }
+                `,
 
         "app/routes/parent.child.tsx": js`
           import { useParentContext } from "./parent";
@@ -132,24 +132,24 @@ test.describe("v2 compiler", () => {
         `,
 
         "app/routes/markdown-parent.mdx": `import { createContext, useContext } from 'react';
-import { Outlet } from '@remix-run/react';
-
-export const ParentContext = createContext("❌");
-
-export function useParentContext() {
-  return useContext(ParentContext);
-}
-
-export function ParentProvider() {
-  return (
-    <ParentContext.Provider value="✅">
-      <Outlet />
-    </ParentContext.Provider>
-  );
-}
-
-<ParentProvider />
-`,
+        import { Outlet } from '@react-router/react';
+        
+        export const ParentContext = createContext("❌");
+        
+        export function useParentContext() {
+          return useContext(ParentContext);
+        }
+        
+        export function ParentProvider() {
+          return (
+            <ParentContext.Provider value="✅">
+              <Outlet />
+            </ParentContext.Provider>
+          );
+        }
+        
+        <ParentProvider />
+        `,
         "app/routes/markdown-parent.child.mdx": `import { useParentContext } from "./markdown-parent.mdx";
 
 export function UseParentContext() {

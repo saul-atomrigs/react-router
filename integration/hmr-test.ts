@@ -72,69 +72,69 @@ let files = {
   `,
 
   "app/root.tsx": js`
-      import type { LinksFunction } from "@remix-run/node";
-      import { Link, Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
-      import { cssBundleHref } from "@remix-run/css-bundle";
-
-      import Counter from "./components/counter";
-      import tailwindStyles from "./tailwind.css";
-      import stylesWithImport from "./stylesWithImport.css";
-      import "./sideEffectStylesWithImport.css";
-
-      export const links: LinksFunction = () => [
-        { rel: "stylesheet", href: tailwindStyles },
-        { rel: "stylesheet", href: stylesWithImport },
-        ...cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : [],
-      ];
-
-      // dummy loader to make sure that HDR is granular
-      export const loader = () => {
-        return null;
-      };
-
-      export default function Root() {
-        return (
-          <html lang="en" className="h-full">
-            <head>
-              <Meta />
-              <Links />
-            </head>
-            <body className="h-full">
-              <header>
-                <label htmlFor="root-input">Root Input</label>
-                <input id="root-input" />
-                <Counter id="root-counter" />
-                <nav>
-                  <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About</Link></li>
-                    <li><Link to="/mdx">MDX</Link></li>
-                  </ul>
-                </nav>
-              </header>
-              <Outlet />
-              <Scripts />
-              <LiveReload />
-            </body>
-          </html>
-        );
-      }
-    `,
+        import type { LinksFunction } from "@react-router/node";
+        import { Link, Links, LiveReload, Meta, Outlet, Scripts } from "@react-router/react";
+        import { cssBundleHref } from "@react-router/css-bundle";
+  
+        import Counter from "./components/counter";
+        import tailwindStyles from "./tailwind.css";
+        import stylesWithImport from "./stylesWithImport.css";
+        import "./sideEffectStylesWithImport.css";
+  
+        export const links: LinksFunction = () => [
+          { rel: "stylesheet", href: tailwindStyles },
+          { rel: "stylesheet", href: stylesWithImport },
+          ...cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : [],
+        ];
+  
+        // dummy loader to make sure that HDR is granular
+        export const loader = () => {
+          return null;
+        };
+  
+        export default function Root() {
+          return (
+            <html lang="en" className="h-full">
+              <head>
+                <Meta />
+                <Links />
+              </head>
+              <body className="h-full">
+                <header>
+                  <label htmlFor="root-input">Root Input</label>
+                  <input id="root-input" />
+                  <Counter id="root-counter" />
+                  <nav>
+                    <ul>
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/about">About</Link></li>
+                      <li><Link to="/mdx">MDX</Link></li>
+                    </ul>
+                  </nav>
+                </header>
+                <Outlet />
+                <Scripts />
+                <LiveReload />
+              </body>
+            </html>
+          );
+        }
+      `,
 
   "app/routes/_index.tsx": js`
-      import { useLoaderData } from "@remix-run/react";
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      export default function Index() {
-        const t = useLoaderData();
-        return (
-          <main>
-            <h1>Index Title</h1>
-          </main>
-        )
-      }
-    `,
+        import { useLoaderData } from "@react-router/react";
+        export function shouldRevalidate(args) {
+          return true;
+        }
+        export default function Index() {
+          const t = useLoaderData();
+          return (
+            <main>
+              <h1>Index Title</h1>
+            </main>
+          )
+        }
+      `,
 
   "app/routes/about.tsx": js`
       import Counter from "../components/counter";
@@ -147,18 +147,18 @@ let files = {
         )
       }
     `,
-  "app/routes/mdx.mdx": `import { useLoaderData } from '@remix-run/react'
-export const loader = () => "crazy"
-export const Component = () => {
-  const data = useLoaderData()
-  return <h1 id={data}>{data}</h1>
-}
-
-# heyo
-whatsup
-
-<Component/>
-`,
+  "app/routes/mdx.mdx": `import { useLoaderData } from '@react-router/react'
+  export const loader = () => "crazy"
+  export const Component = () => {
+    const data = useLoaderData()
+    return <h1 id={data}>{data}</h1>
+  }
+  
+  # heyo
+  whatsup
+  
+  <Component/>
+  `,
   "app/components/counter.tsx": js`
       import * as React from "react";
       export default function Counter({ id }) {
@@ -174,42 +174,42 @@ whatsup
 
 let customServer = (options: { appPort: number; devReady: string }) => {
   return js`
-      import path from "node:path";
-      import url from "node:url";
-      import express from "express";
-      import { createRequestHandler } from "@remix-run/express";
-      import { ${options.devReady}, installGlobals } from "@remix-run/node";
-
-      installGlobals();
-
-      const app = express();
-      app.use(express.static("public", { immutable: true, maxAge: "1y" }));
-
-      const BUILD_PATH = url.pathToFileURL(path.join(process.cwd(), "build", "index.js"));
-
-      app.all(
-        "*",
-        createRequestHandler({
-          build: await import(BUILD_PATH),
-          mode: process.env.NODE_ENV,
-        })
-      );
-
-      let port = ${options.appPort};
-      app.listen(port, async () => {
-        let build = await import(BUILD_PATH);
-        console.log('✅ app ready: http://localhost:' + port);
-        if (process.env.NODE_ENV === 'development') {
-          ${options.devReady}(build);
-        }
-      });
-  `;
+        import path from "node:path";
+        import url from "node:url";
+        import express from "express";
+        import { createRequestHandler } from "@react-router/express";
+        import { ${options.devReady}, installGlobals } from "@react-router/node";
+  
+        installGlobals();
+  
+        const app = express();
+        app.use(express.static("public", { immutable: true, maxAge: "1y" }));
+  
+        const BUILD_PATH = url.pathToFileURL(path.join(process.cwd(), "build", "index.js"));
+  
+        app.all(
+          "*",
+          createRequestHandler({
+            build: await import(BUILD_PATH),
+            mode: process.env.NODE_ENV,
+          })
+        );
+  
+        let port = ${options.appPort};
+        app.listen(port, async () => {
+          let build = await import(BUILD_PATH);
+          console.log('✅ app ready: http://localhost:' + port);
+          if (process.env.NODE_ENV === 'development') {
+            ${options.devReady}(build);
+          }
+        });
+    `;
 };
 
 let HMR_TIMEOUT_MS = 30_000;
 
-let remix = "node ./node_modules/@remix-run/dev/dist/cli.js";
-let serve = "node ./node_modules/@remix-run/serve/dist/cli.js";
+let remix = "node ./node_modules/@react-router/dev/dist/cli.js";
+let serve = "node ./node_modules/@react-router/serve/dist/cli.js";
 
 test("HMR for remix-serve", async ({ page }) => {
   await dev(page, (appPort) => ({
@@ -374,20 +374,20 @@ async function dev(
 
     // change text, add updated styles, add new Tailwind class ("italic")
     let newIndex = `
-      import { useLoaderData } from "@remix-run/react";
-      import styles from "~/style.module.css";
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      export default function Index() {
-        const t = useLoaderData();
-        return (
-          <main>
-            <h1 className={styles.test + ' italic importedStyle importedSideEffectStyle'}>Changed</h1>
-          </main>
-        )
-      }
-    `;
+          import { useLoaderData } from "@react-router/react";
+          import styles from "~/style.module.css";
+          export function shouldRevalidate(args) {
+            return true;
+          }
+          export default function Index() {
+            const t = useLoaderData();
+            return (
+              <main>
+                <h1 className={styles.test + ' italic importedStyle importedSideEffectStyle'}>Changed</h1>
+              </main>
+            )
+          }
+        `;
     fs.writeFileSync(indexPath, newIndex);
 
     // detect HMR'd content and style changes
@@ -422,23 +422,23 @@ async function dev(
 
     // add loader
     let withLoader1 = `
-      import { json } from "@remix-run/node";
-      import { useLoaderData } from "@remix-run/react";
-
-      export let loader = () => json({ hello: "world" });
-
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      export default function Index() {
-        let { hello } = useLoaderData<typeof loader>();
-        return (
-          <main>
-            <h1>Hello, {hello}</h1>
-          </main>
-        )
-      }
-    `;
+          import { json } from "@react-router/node";
+          import { useLoaderData } from "@react-router/react";
+    
+          export let loader = () => json({ hello: "world" });
+    
+          export function shouldRevalidate(args) {
+            return true;
+          }
+          export default function Index() {
+            let { hello } = useLoaderData<typeof loader>();
+            return (
+              <main>
+                <h1>Hello, {hello}</h1>
+              </main>
+            )
+          }
+        `;
     fs.writeFileSync(indexPath, withLoader1);
     await expect.poll(() => dataRequests, { timeout: HMR_TIMEOUT_MS }).toBe(1);
     await page.waitForLoadState("networkidle");
@@ -448,25 +448,25 @@ async function dev(
     await page.waitForSelector(`#root-counter:has-text("inc 1")`);
 
     let withLoader2 = `
-      import { json } from "@remix-run/node";
-      import { useLoaderData } from "@remix-run/react";
-
-      export function loader() {
-        return json({ hello: "planet" })
-      }
-
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      export default function Index() {
-        let { hello } = useLoaderData<typeof loader>();
-        return (
-          <main>
-            <h1>Hello, {hello}</h1>
-          </main>
-        )
-      }
-    `;
+          import { json } from "@react-router/node";
+          import { useLoaderData } from "@react-router/react";
+    
+          export function loader() {
+            return json({ hello: "planet" })
+          }
+    
+          export function shouldRevalidate(args) {
+            return true;
+          }
+          export default function Index() {
+            let { hello } = useLoaderData<typeof loader>();
+            return (
+              <main>
+                <h1>Hello, {hello}</h1>
+              </main>
+            )
+          }
+        `;
     fs.writeFileSync(indexPath, withLoader2);
 
     await expect.poll(() => dataRequests, { timeout: HMR_TIMEOUT_MS }).toBe(2);
@@ -523,18 +523,18 @@ async function dev(
     // mdx
     await page.click(`a[href="/mdx"]`);
     await page.waitForSelector(`#crazy`);
-    let mdx = `import { useLoaderData } from '@remix-run/react'
-export const loader = () => "hot"
-export const Component = () => {
-  const data = useLoaderData()
-  return <h1 id={data}>{data}</h1>
-}
-
-# heyo
-whatsup
-
-<Component/>
-`;
+    let mdx = `import { useLoaderData } from '@react-router/react'
+    export const loader = () => "hot"
+    export const Component = () => {
+      const data = useLoaderData()
+      return <h1 id={data}>{data}</h1>
+    }
+    
+    # heyo
+    whatsup
+    
+    <Component/>
+    `;
     fs.writeFileSync(mdxPath, mdx);
     await expect.poll(() => dataRequests, { timeout: HMR_TIMEOUT_MS }).toBe(4);
     await page.waitForSelector(`#hot`);
@@ -550,19 +550,19 @@ whatsup
 
     let stderr = devStderr();
     let withSyntaxError = `
-      import { useLoaderData } from "@remix-run/react";
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      eport efault functio Index() {
-        const t = useLoaderData();
-        return (
-          <mai>
-            <h1>With Syntax Error</h1>
-          </main>
-        )
-      }
-    `;
+          import { useLoaderData } from "@react-router/react";
+          export function shouldRevalidate(args) {
+            return true;
+          }
+          eport efault functio Index() {
+            const t = useLoaderData();
+            return (
+              <mai>
+                <h1>With Syntax Error</h1>
+              </main>
+            )
+          }
+        `;
     fs.writeFileSync(indexPath, withSyntaxError);
     await wait(
       () =>
@@ -596,19 +596,19 @@ whatsup
     page.on("pageerror", expectDestructureTypeError);
 
     let withFix = `
-      import { useLoaderData } from "@remix-run/react";
-      export function shouldRevalidate(args) {
-        return true;
-      }
-      export default function Index() {
-        // const t = useLoaderData();
-        return (
-          <main>
-            <h1>With Fix</h1>
-          </main>
-        )
-      }
-    `;
+          import { useLoaderData } from "@react-router/react";
+          export function shouldRevalidate(args) {
+            return true;
+          }
+          export default function Index() {
+            // const t = useLoaderData();
+            return (
+              <main>
+                <h1>With Fix</h1>
+              </main>
+            )
+          }
+        `;
     fs.writeFileSync(indexPath, withFix);
     await page.waitForLoadState("networkidle");
     await page.getByText("With Fix").waitFor({ timeout: HMR_TIMEOUT_MS });

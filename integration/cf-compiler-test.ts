@@ -38,8 +38,8 @@ test.describe("cloudflare compiler", () => {
           type: "module",
           dependencies: {
             "@cloudflare/kv-asset-handler": "0.0.0-local-version",
-            "@remix-run/cloudflare": "0.0.0-local-version",
-            "@remix-run/react": "0.0.0-local-version",
+            "@react-router/cloudflare": "0.0.0-local-version",
+            "@react-router/react": "0.0.0-local-version",
             isbot: "0.0.0-local-version",
             react: "0.0.0-local-version",
             "react-dom": "0.0.0-local-version",
@@ -51,7 +51,7 @@ test.describe("cloudflare compiler", () => {
           },
           devDependencies: {
             "@cloudflare/workers-types": "0.0.0-local-version",
-            "@remix-run/dev": "0.0.0-local-version",
+            "@react-router/dev": "0.0.0-local-version",
           },
         }),
 

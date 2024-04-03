@@ -25,183 +25,183 @@ test.describe("rendering", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <main>
-                    <Outlet />
-                  </main>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <main>
+                            <Outlet />
+                          </main>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { Link } from "@remix-run/react";
-          export default function() {
-            return (
-              <div>
-                <h2>Index</h2>
-                <Link to="/${PAGE}">${PAGE}</Link>
-                <Link to="/${REDIRECT}">${REDIRECT}</Link>
-                <Link to="/${REDIRECT_HASH}">${REDIRECT_HASH}</Link>
-              </div>
-            );
-          }
-        `,
+                  import { Link } from "@react-router/react";
+                  export default function() {
+                    return (
+                      <div>
+                        <h2>Index</h2>
+                        <Link to="/${PAGE}">${PAGE}</Link>
+                        <Link to="/${REDIRECT}">${REDIRECT}</Link>
+                        <Link to="/${REDIRECT_HASH}">${REDIRECT_HASH}</Link>
+                      </div>
+                    );
+                  }
+                `,
 
         [`app/routes/${PAGE}.jsx`]: js`
-          import { Outlet, useLoaderData } from "@remix-run/react";
-
-          export function loader() {
-            return "${PAGE_TEXT}"
-          }
-
-          export default function() {
-            let text = useLoaderData();
-            return (
-              <>
-                <h2>{text}</h2>
-                <Outlet />
-              </>
-            );
-          }
-        `,
+                  import { Outlet, useLoaderData } from "@react-router/react";
+        
+                  export function loader() {
+                    return "${PAGE_TEXT}"
+                  }
+        
+                  export default function() {
+                    let text = useLoaderData();
+                    return (
+                      <>
+                        <h2>{text}</h2>
+                        <Outlet />
+                      </>
+                    );
+                  }
+                `,
 
         [`app/routes/${PAGE}._index.jsx`]: js`
-          import { useLoaderData, Link } from "@remix-run/react";
-
-          export function loader() {
-            return "${PAGE_INDEX_TEXT}"
-          }
-
-          export default function() {
-            let text = useLoaderData();
-            return (
-              <>
-                <h3>{text}</h3>
-                <Link to="/${PAGE}/${CHILD}">${CHILD}</Link>
-              </>
-            );
-          }
-        `,
+                  import { useLoaderData, Link } from "@react-router/react";
+        
+                  export function loader() {
+                    return "${PAGE_INDEX_TEXT}"
+                  }
+        
+                  export default function() {
+                    let text = useLoaderData();
+                    return (
+                      <>
+                        <h3>{text}</h3>
+                        <Link to="/${PAGE}/${CHILD}">${CHILD}</Link>
+                      </>
+                    );
+                  }
+                `,
 
         [`app/routes/${PAGE}.${CHILD}.jsx`]: js`
-          import { useLoaderData } from "@remix-run/react";
-
-          export function loader() {
-            return "${CHILD_TEXT}"
-          }
-
-          export default function() {
-            let text = useLoaderData();
-            return <h3>{text}</h3>;
-          }
-        `,
+                  import { useLoaderData } from "@react-router/react";
+        
+                  export function loader() {
+                    return "${CHILD_TEXT}"
+                  }
+        
+                  export default function() {
+                    let text = useLoaderData();
+                    return <h3>{text}</h3>;
+                  }
+                `,
 
         [`app/routes/${REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function loader() {
-            return redirect("/${REDIRECT_TARGET}")
-          }
-          export default function() {
-            return null;
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function loader() {
+                    return redirect("/${REDIRECT_TARGET}")
+                  }
+                  export default function() {
+                    return null;
+                  }
+                `,
 
         [`app/routes/${REDIRECT_HASH}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function loader() {
-            return redirect("/${REDIRECT_TARGET}#my-hash")
-          }
-          export default function() {
-            return null;
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function loader() {
+                    return redirect("/${REDIRECT_TARGET}#my-hash")
+                  }
+                  export default function() {
+                    return null;
+                  }
+                `,
 
         "app/routes/gh-1691.tsx": js`
-          import { json, redirect } from "@remix-run/node";
-          import { useFetcher} from "@remix-run/react";
-
-          export const action = async ( ) => {
-            return redirect("/gh-1691");
-          };
-
-          export const loader = async () => {
-            return json({});
-          };
-
-          export default function GitHubIssue1691() {
-            const fetcher = useFetcher();
-
-            return (
-              <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-                <span>{fetcher.state}</span>
-                <fetcher.Form method="post">
-                  <input type="hidden" name="source" value="fetcher" />
-                  <button type="submit" name="intent" value="add">
-                    Submit
-                  </button>
-                </fetcher.Form>
-              </div>
-            );
-          }
-        `,
+                  import { json, redirect } from "@react-router/node";
+                  import { useFetcher} from "@react-router/react";
+        
+                  export const action = async ( ) => {
+                    return redirect("/gh-1691");
+                  };
+        
+                  export const loader = async () => {
+                    return json({});
+                  };
+        
+                  export default function GitHubIssue1691() {
+                    const fetcher = useFetcher();
+        
+                    return (
+                      <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+                        <span>{fetcher.state}</span>
+                        <fetcher.Form method="post">
+                          <input type="hidden" name="source" value="fetcher" />
+                          <button type="submit" name="intent" value="add">
+                            Submit
+                          </button>
+                        </fetcher.Form>
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/parent.tsx": js`
-          import { Outlet, useLoaderData } from "@remix-run/react";
-
-          if (!global.counts) {
-            global.count = 0;
-            global.counts = new Set();
-          }
-          export const loader = async ({ request, context }) => {
-            let count = global.count;
-            if (!global.counts.has(context)) {
-              counts.add(context);
-              count = ++global.count;
-            }
-            return { count };
-          };
-
-          export default function Parent() {
-            const data = useLoaderData();
-            return (
-              <div>
-                <div id="parent">{data.count}</div>
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { Outlet, useLoaderData } from "@react-router/react";
+        
+                  if (!global.counts) {
+                    global.count = 0;
+                    global.counts = new Set();
+                  }
+                  export const loader = async ({ request, context }) => {
+                    let count = global.count;
+                    if (!global.counts.has(context)) {
+                      counts.add(context);
+                      count = ++global.count;
+                    }
+                    return { count };
+                  };
+        
+                  export default function Parent() {
+                    const data = useLoaderData();
+                    return (
+                      <div>
+                        <div id="parent">{data.count}</div>
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/parent.child.tsx": js`
-          import { redirect } from "@remix-run/node";
-          import { useFetcher} from "@remix-run/react";
-
-          export const action = async ({ request }) => {
-            return redirect("/parent");
-          };
-
-          export default function Child() {
-            const fetcher = useFetcher();
-
-            return (
-              <fetcher.Form method="post">
-                <button id="fetcher-submit-redirect" type="submit">Submit</button>
-              </fetcher.Form>
-            );
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  import { useFetcher} from "@react-router/react";
+        
+                  export const action = async ({ request }) => {
+                    return redirect("/parent");
+                  };
+        
+                  export default function Child() {
+                    const fetcher = useFetcher();
+        
+                    return (
+                      <fetcher.Form method="post">
+                        <button id="fetcher-submit-redirect" type="submit">Submit</button>
+                      </fetcher.Form>
+                    );
+                  }
+                `,
       },
     });
 

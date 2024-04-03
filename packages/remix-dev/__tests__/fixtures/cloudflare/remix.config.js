@@ -1,4 +1,4 @@
-/** @type {import('@remix-run/dev').AppConfig} */
+/** @type {import('@react-router/dev').AppConfig} */
 export default {
   server: "./server.ts",
   serverBuildPath: "functions/[[path]].js",

@@ -15,33 +15,33 @@ test.beforeAll(async () => {
   fixture = await createFixture({
     files: {
       "app/routes/_index.tsx": js`
-        import { json } from "@remix-run/node";
-        import { useActionData, useLoaderData, Form } from "@remix-run/react";
-
-        export async function action ({ request }) {
-          // New event loop causes express request to close
-          await new Promise(r => setTimeout(r, 0));
-          return json({ aborted: request.signal.aborted });
-        }
-
-        export function loader({ request }) {
-          return json({ aborted: request.signal.aborted });
-        }
-
-        export default function Index() {
-          let actionData = useActionData();
-          let data = useLoaderData();
-          return (
-            <div>
-              <p className="action">{actionData ? String(actionData.aborted) : "empty"}</p>
-              <p className="loader">{String(data.aborted)}</p>
-              <Form method="post">
-                <button type="submit">Submit</button>
-              </Form>
-            </div>
-          )
-        }
-      `,
+              import { json } from "@react-router/node";
+              import { useActionData, useLoaderData, Form } from "@react-router/react";
+      
+              export async function action ({ request }) {
+                // New event loop causes express request to close
+                await new Promise(r => setTimeout(r, 0));
+                return json({ aborted: request.signal.aborted });
+              }
+      
+              export function loader({ request }) {
+                return json({ aborted: request.signal.aborted });
+              }
+      
+              export default function Index() {
+                let actionData = useActionData();
+                let data = useLoaderData();
+                return (
+                  <div>
+                    <p className="action">{actionData ? String(actionData.aborted) : "empty"}</p>
+                    <p className="loader">{String(data.aborted)}</p>
+                    <Form method="post">
+                      <button type="submit">Submit</button>
+                    </Form>
+                  </div>
+                )
+              }
+            `,
     },
   });
 

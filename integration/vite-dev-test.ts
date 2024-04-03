@@ -23,117 +23,117 @@ test.describe("Vite dev", () => {
           export default {};
         `,
         "vite.config.ts": js`
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-          import mdx from "@mdx-js/rollup";
-
-          export default defineConfig({
-            server: {
-              port: ${devPort},
-              strictPort: true,
-            },
-            plugins: [
-              mdx(),
-              remix(),
-            ],
-          });
-        `,
+                  import { defineConfig } from "vite";
+                  import { vitePlugin as remix } from "@react-router/dev";
+                  import mdx from "@mdx-js/rollup";
+        
+                  export default defineConfig({
+                    server: {
+                      port: ${devPort},
+                      strictPort: true,
+                    },
+                    plugins: [
+                      mdx(),
+                      remix(),
+                    ],
+                  });
+                `,
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <div id="content">
-                    <h1>Root</h1>
-                    <Outlet />
-                  </div>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <div id="content">
+                            <h1>Root</h1>
+                            <Outlet />
+                          </div>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
         "app/routes/_index.tsx": js`
-          import { Suspense } from "react";
-          import { defer } from "@remix-run/node";
-          import { Await, useLoaderData } from "@remix-run/react";
-
-          export function loader() {
-            let deferred = new Promise((resolve) => {
-              setTimeout(() => resolve(true), 1000)
-            });
-            return defer({ deferred });
-          }
-
-          export default function IndexRoute() {
-            const { deferred } = useLoaderData<typeof loader>();
-
-            return (
-              <div id="index">
-                <h2 data-title>Index</h2>
-                <input />
-                <p data-hmr>HMR updated: no</p>
-                <Suspense fallback={<p data-defer>Defer finished: no</p>}>
-                  <Await resolve={deferred}>{() => <p data-defer>Defer finished: yes</p>}</Await>
-                </Suspense>
-              </div>
-            );
-          }
-        `,
+                  import { Suspense } from "react";
+                  import { defer } from "@react-router/node";
+                  import { Await, useLoaderData } from "@react-router/react";
+        
+                  export function loader() {
+                    let deferred = new Promise((resolve) => {
+                      setTimeout(() => resolve(true), 1000)
+                    });
+                    return defer({ deferred });
+                  }
+        
+                  export default function IndexRoute() {
+                    const { deferred } = useLoaderData<typeof loader>();
+        
+                    return (
+                      <div id="index">
+                        <h2 data-title>Index</h2>
+                        <input />
+                        <p data-hmr>HMR updated: no</p>
+                        <Suspense fallback={<p data-defer>Defer finished: no</p>}>
+                          <Await resolve={deferred}>{() => <p data-defer>Defer finished: yes</p>}</Await>
+                        </Suspense>
+                      </div>
+                    );
+                  }
+                `,
         "app/routes/set-cookies.tsx": js`
-          import { LoaderFunction } from "@remix-run/node";
-
-          export const loader: LoaderFunction = () => {
-            const headers = new Headers();
-
-            headers.append(
-              "Set-Cookie",
-              "first=one; Domain=localhost; Path=/; SameSite=Lax"
-            );
-
-            headers.append(
-              "Set-Cookie",
-              "second=two; Domain=localhost; Path=/; SameSite=Lax"
-            );
-
-            headers.append(
-              "Set-Cookie",
-              "third=three; Domain=localhost; Path=/; SameSite=Lax"
-            );
-
-            headers.set("location", "http://localhost:${devPort}/get-cookies");
-
-            const response = new Response(null, {
-              headers,
-              status: 302,
-            });
-
-            return response;
-          };
-        `,
+                  import { LoaderFunction } from "@react-router/node";
+        
+                  export const loader: LoaderFunction = () => {
+                    const headers = new Headers();
+        
+                    headers.append(
+                      "Set-Cookie",
+                      "first=one; Domain=localhost; Path=/; SameSite=Lax"
+                    );
+        
+                    headers.append(
+                      "Set-Cookie",
+                      "second=two; Domain=localhost; Path=/; SameSite=Lax"
+                    );
+        
+                    headers.append(
+                      "Set-Cookie",
+                      "third=three; Domain=localhost; Path=/; SameSite=Lax"
+                    );
+        
+                    headers.set("location", "http://localhost:${devPort}/get-cookies");
+        
+                    const response = new Response(null, {
+                      headers,
+                      status: 302,
+                    });
+        
+                    return response;
+                  };
+                `,
         "app/routes/get-cookies.tsx": js`
-          import { json, LoaderFunctionArgs } from "@remix-run/node";
-          import { useLoaderData } from "@remix-run/react"
-
-          export const loader = ({ request }: LoaderFunctionArgs) => json({cookies: request.headers.get("Cookie")});
-
-          export default function IndexRoute() {
-            const { cookies } = useLoaderData<typeof loader>();
-
-            return (
-              <div id="get-cookies">
-                <h2 data-title>Get Cookies</h2>
-                <p data-cookies>{cookies}</p>
-              </div>
-            );
-          }
-        `,
+                  import { json, LoaderFunctionArgs } from "@react-router/node";
+                  import { useLoaderData } from "@react-router/react"
+        
+                  export const loader = ({ request }: LoaderFunctionArgs) => json({cookies: request.headers.get("Cookie")});
+        
+                  export default function IndexRoute() {
+                    const { cookies } = useLoaderData<typeof loader>();
+        
+                    return (
+                      <div id="get-cookies">
+                        <h2 data-title>Get Cookies</h2>
+                        <p data-cookies>{cookies}</p>
+                      </div>
+                    );
+                  }
+                `,
         "app/routes/jsx.jsx": js`
           export default function JsxRoute() {
             return (
@@ -144,124 +144,124 @@ test.describe("Vite dev", () => {
           }
         `,
         "app/routes/mdx.mdx": js`
-          import { json } from "@remix-run/node";
-          import { useLoaderData } from "@remix-run/react";
-
-          export const loader = () => {
-            return json({
-              content: "MDX route content from loader",
-            })
-          }
-
-          export function MdxComponent() {
-            const { content } = useLoaderData();
-            return <div data-mdx-route>{content}</div>
-          }
-
-          ## MDX Route
-
-          <MdxComponent />
-        `,
+                  import { json } from "@react-router/node";
+                  import { useLoaderData } from "@react-router/react";
+        
+                  export const loader = () => {
+                    return json({
+                      content: "MDX route content from loader",
+                    })
+                  }
+        
+                  export function MdxComponent() {
+                    const { content } = useLoaderData();
+                    return <div data-mdx-route>{content}</div>
+                  }
+        
+                  ## MDX Route
+        
+                  <MdxComponent />
+                `,
         ".env": `
           ENV_VAR_FROM_DOTENV_FILE=Content from .env file
         `,
         "app/routes/dotenv.tsx": js`
-          import { useState, useEffect } from "react";
-          import { json } from "@remix-run/node";
-          import { useLoaderData } from "@remix-run/react";
-
-          export const loader = () => {
-            return json({
-              loaderContent: process.env.ENV_VAR_FROM_DOTENV_FILE,
-            })
-          }
-
-          export default function DotenvRoute() {
-            const { loaderContent } = useLoaderData();
-
-            const [clientContent, setClientContent] = useState('');
-            useEffect(() => {
-              try {
-                setClientContent("process.env.ENV_VAR_FROM_DOTENV_FILE shouldn't be available on the client, found: " + process.env.ENV_VAR_FROM_DOTENV_FILE);
-              } catch (err) {
-                setClientContent("process.env.ENV_VAR_FROM_DOTENV_FILE not available on the client, which is a good thing");
-              }
-            }, []);
-
-            return <>
-              <div data-dotenv-route-loader-content>{loaderContent}</div>
-              <div data-dotenv-route-client-content>{clientContent}</div>
-            </>
-          }
-        `,
+                  import { useState, useEffect } from "react";
+                  import { json } from "@react-router/node";
+                  import { useLoaderData } from "@react-router/react";
+        
+                  export const loader = () => {
+                    return json({
+                      loaderContent: process.env.ENV_VAR_FROM_DOTENV_FILE,
+                    })
+                  }
+        
+                  export default function DotenvRoute() {
+                    const { loaderContent } = useLoaderData();
+        
+                    const [clientContent, setClientContent] = useState('');
+                    useEffect(() => {
+                      try {
+                        setClientContent("process.env.ENV_VAR_FROM_DOTENV_FILE shouldn't be available on the client, found: " + process.env.ENV_VAR_FROM_DOTENV_FILE);
+                      } catch (err) {
+                        setClientContent("process.env.ENV_VAR_FROM_DOTENV_FILE not available on the client, which is a good thing");
+                      }
+                    }, []);
+        
+                    return <>
+                      <div data-dotenv-route-loader-content>{loaderContent}</div>
+                      <div data-dotenv-route-client-content>{clientContent}</div>
+                    </>
+                  }
+                `,
         "app/routes/error-stacktrace.tsx": js`
-          import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-          import { Link, useLocation } from "@remix-run/react";
-
-          export const loader: LoaderFunction = ({ request }) => {
-            if (request.url.includes("crash-loader")) {
-              throw new Error("crash-loader");
-            }
-            return null;
-          };
-
-          export default function TestRoute() {
-            const location = useLocation();
-
-            if (import.meta.env.SSR && location.search.includes("crash-server-render")) {
-              throw new Error("crash-server-render");
-            }
-
-            return (
-              <div>
-                <ul>
-                  {["crash-loader", "crash-server-render"].map(
-                    (v) => (
-                      <li key={v}>
-                        <Link to={"/?" + v}>{v}</Link>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            );
-          }
-        `,
+                  import type { LoaderFunction, MetaFunction } from "@react-router/node";
+                  import { Link, useLocation } from "@react-router/react";
+        
+                  export const loader: LoaderFunction = ({ request }) => {
+                    if (request.url.includes("crash-loader")) {
+                      throw new Error("crash-loader");
+                    }
+                    return null;
+                  };
+        
+                  export default function TestRoute() {
+                    const location = useLocation();
+        
+                    if (import.meta.env.SSR && location.search.includes("crash-server-render")) {
+                      throw new Error("crash-server-render");
+                    }
+        
+                    return (
+                      <div>
+                        <ul>
+                          {["crash-loader", "crash-server-render"].map(
+                            (v) => (
+                              <li key={v}>
+                                <Link to={"/?" + v}>{v}</Link>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    );
+                  }
+                `,
         "app/routes/known-route-exports.tsx": js`
-          import { useMatches } from "@remix-run/react";
-
-          export const meta = () => [{
-            title: "HMR meta: 0"
-          }]
-
-          export const links = () => [{
-            rel: "icon",
-            href: "/favicon.ico",
-            type: "image/png",
-            "data-link": "HMR links: 0",
-          }]
-
-          export const handle = {
-            data: "HMR handle: 0"
-          };
-
-          export default function TestRoute() {
-            const matches = useMatches();
-
-            return (
-              <div id="known-route-export-hmr">
-                <input />
-                <p data-hmr>HMR component: 0</p>
-                <p data-handle>{matches[1].handle.data}</p>
-              </div>
-            );
-          }
-        `,
+                  import { useMatches } from "@react-router/react";
+        
+                  export const meta = () => [{
+                    title: "HMR meta: 0"
+                  }]
+        
+                  export const links = () => [{
+                    rel: "icon",
+                    href: "/favicon.ico",
+                    type: "image/png",
+                    "data-link": "HMR links: 0",
+                  }]
+        
+                  export const handle = {
+                    data: "HMR handle: 0"
+                  };
+        
+                  export default function TestRoute() {
+                    const matches = useMatches();
+        
+                    return (
+                      <div id="known-route-export-hmr">
+                        <input />
+                        <p data-hmr>HMR component: 0</p>
+                        <p data-handle>{matches[1].handle.data}</p>
+                      </div>
+                    );
+                  }
+                `,
       },
     });
 
     let nodeBin = process.argv[0];
-    let remixBin = "node_modules/@remix-run/dev/dist/cli.js";
+    let remixBin = "node_modules/@react-router/dev/dist/cli.js";
     devProc = spawn(nodeBin, [remixBin, "vite:dev"], {
       cwd: projectDir,
       env: process.env,

@@ -20,68 +20,68 @@ test.describe("file-uploads", () => {
       useRemixServe: true, // To support usage of process.cwd() in fileUploadHandler.ts
       files: {
         "app/fileUploadHandler.ts": js`
-          import * as path from "node:path";
-          import * as url from "node:url";
-          import {
-            unstable_composeUploadHandlers as composeUploadHandlers,
-            unstable_createFileUploadHandler as createFileUploadHandler,
-            unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-          } from "@remix-run/node";
-
-          export let uploadHandler = composeUploadHandlers(
-            createFileUploadHandler({
-              directory: path.resolve(process.cwd(), "uploads"),
-              maxPartSize: 10_000, // 10kb
-              // you probably want to avoid conflicts in production
-              // do not set to false or passthrough filename in real
-              // applications.
-              avoidFileConflicts: false,
-              file: ({ filename }) => filename
-            }),
-            createMemoryUploadHandler(),
-          );
-        `,
+                  import * as path from "node:path";
+                  import * as url from "node:url";
+                  import {
+                    unstable_composeUploadHandlers as composeUploadHandlers,
+                    unstable_createFileUploadHandler as createFileUploadHandler,
+                    unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+                  } from "@react-router/node";
+        
+                  export let uploadHandler = composeUploadHandlers(
+                    createFileUploadHandler({
+                      directory: path.resolve(process.cwd(), "uploads"),
+                      maxPartSize: 10_000, // 10kb
+                      // you probably want to avoid conflicts in production
+                      // do not set to false or passthrough filename in real
+                      // applications.
+                      avoidFileConflicts: false,
+                      file: ({ filename }) => filename
+                    }),
+                    createMemoryUploadHandler(),
+                  );
+                `,
         "app/routes/file-upload.tsx": js`
-          import {
-            unstable_parseMultipartFormData as parseMultipartFormData,
-          } from "@remix-run/node";
-          import { Form, useActionData } from "@remix-run/react";
-          import { uploadHandler } from "~/fileUploadHandler";
-
-          export let action = async ({ request }) => {
-            try {
-              let formData = await parseMultipartFormData(request, uploadHandler);
-
-              if (formData.get("test") !== "hidden") {
-                return { errorMessage: "hidden field not in form data" };
-              }
-
-              let file = formData.get("file");
-              if (typeof file === "string" || !file) {
-                return { errorMessage: "invalid file type" };
-              }
-
-              return { name: file.name, size: file.size };
-            } catch (error) {
-              return { errorMessage: error.message };
-            }
-          };
-
-          export default function Upload() {
-            let actionData = useActionData();
-            return (
-              <>
-                <Form method="post" encType="multipart/form-data">
-                  <label htmlFor="file">Choose a file:</label>
-                  <input type="file" id="file" name="file" />
-                  <input type="hidden" name="test" value="hidden" />
-                  <button type="submit">Submit</button>
-                </Form>
-                {actionData ? <pre>{JSON.stringify(actionData, null, 2)}</pre> : null}
-              </>
-            );
-          }
-        `,
+                  import {
+                    unstable_parseMultipartFormData as parseMultipartFormData,
+                  } from "@react-router/node";
+                  import { Form, useActionData } from "@react-router/react";
+                  import { uploadHandler } from "~/fileUploadHandler";
+        
+                  export let action = async ({ request }) => {
+                    try {
+                      let formData = await parseMultipartFormData(request, uploadHandler);
+        
+                      if (formData.get("test") !== "hidden") {
+                        return { errorMessage: "hidden field not in form data" };
+                      }
+        
+                      let file = formData.get("file");
+                      if (typeof file === "string" || !file) {
+                        return { errorMessage: "invalid file type" };
+                      }
+        
+                      return { name: file.name, size: file.size };
+                    } catch (error) {
+                      return { errorMessage: error.message };
+                    }
+                  };
+        
+                  export default function Upload() {
+                    let actionData = useActionData();
+                    return (
+                      <>
+                        <Form method="post" encType="multipart/form-data">
+                          <label htmlFor="file">Choose a file:</label>
+                          <input type="file" id="file" name="file" />
+                          <input type="hidden" name="test" value="hidden" />
+                          <button type="submit">Submit</button>
+                        </Form>
+                        {actionData ? <pre>{JSON.stringify(actionData, null, 2)}</pre> : null}
+                      </>
+                    );
+                  }
+                `,
       },
     });
 
@@ -156,68 +156,68 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/fileUploadHandler.ts": js`
-            import * as path from "node:path";
-            import * as url from "node:url";
-            import {
-              unstable_composeUploadHandlers as composeUploadHandlers,
-              unstable_createFileUploadHandler as createFileUploadHandler,
-              unstable_createMemoryUploadHandler as createMemoryUploadHandler,
-            } from "@remix-run/node";
-
-            export let uploadHandler = composeUploadHandlers(
-              createFileUploadHandler({
-                directory: path.resolve(process.cwd(), "uploads"),
-                maxPartSize: 10_000, // 10kb
-                // you probably want to avoid conflicts in production
-                // do not set to false or passthrough filename in real
-                // applications.
-                avoidFileConflicts: false,
-                file: ({ filename }) => filename
-              }),
-              createMemoryUploadHandler(),
-            );
-          `,
+                      import * as path from "node:path";
+                      import * as url from "node:url";
+                      import {
+                        unstable_composeUploadHandlers as composeUploadHandlers,
+                        unstable_createFileUploadHandler as createFileUploadHandler,
+                        unstable_createMemoryUploadHandler as createMemoryUploadHandler,
+                      } from "@react-router/node";
+          
+                      export let uploadHandler = composeUploadHandlers(
+                        createFileUploadHandler({
+                          directory: path.resolve(process.cwd(), "uploads"),
+                          maxPartSize: 10_000, // 10kb
+                          // you probably want to avoid conflicts in production
+                          // do not set to false or passthrough filename in real
+                          // applications.
+                          avoidFileConflicts: false,
+                          file: ({ filename }) => filename
+                        }),
+                        createMemoryUploadHandler(),
+                      );
+                    `,
           "app/routes/file-upload.tsx": js`
-            import {
-              unstable_parseMultipartFormData as parseMultipartFormData,
-            } from "@remix-run/node";
-            import { Form, useActionData } from "@remix-run/react";
-            import { uploadHandler } from "~/fileUploadHandler";
-
-            export let action = async ({ request }) => {
-              try {
-                let formData = await parseMultipartFormData(request, uploadHandler);
-
-                if (formData.get("test") !== "hidden") {
-                  return { errorMessage: "hidden field not in form data" };
-                }
-
-                let file = formData.get("file");
-                if (typeof file === "string" || !file) {
-                  return { errorMessage: "invalid file type" };
-                }
-
-                return { name: file.name, size: file.size };
-              } catch (error) {
-                return { errorMessage: error.message };
-              }
-            };
-
-            export default function Upload() {
-              let actionData = useActionData();
-              return (
-                <>
-                  <Form method="post" encType="multipart/form-data">
-                    <label htmlFor="file">Choose a file:</label>
-                    <input type="file" id="file" name="file" />
-                    <input type="hidden" name="test" value="hidden" />
-                    <button type="submit">Submit</button>
-                  </Form>
-                  {actionData ? <pre>{JSON.stringify(actionData, null, 2)}</pre> : null}
-                </>
-              );
-            }
-          `,
+                      import {
+                        unstable_parseMultipartFormData as parseMultipartFormData,
+                      } from "@react-router/node";
+                      import { Form, useActionData } from "@react-router/react";
+                      import { uploadHandler } from "~/fileUploadHandler";
+          
+                      export let action = async ({ request }) => {
+                        try {
+                          let formData = await parseMultipartFormData(request, uploadHandler);
+          
+                          if (formData.get("test") !== "hidden") {
+                            return { errorMessage: "hidden field not in form data" };
+                          }
+          
+                          let file = formData.get("file");
+                          if (typeof file === "string" || !file) {
+                            return { errorMessage: "invalid file type" };
+                          }
+          
+                          return { name: file.name, size: file.size };
+                        } catch (error) {
+                          return { errorMessage: error.message };
+                        }
+                      };
+          
+                      export default function Upload() {
+                        let actionData = useActionData();
+                        return (
+                          <>
+                            <Form method="post" encType="multipart/form-data">
+                              <label htmlFor="file">Choose a file:</label>
+                              <input type="file" id="file" name="file" />
+                              <input type="hidden" name="test" value="hidden" />
+                              <button type="submit">Submit</button>
+                            </Form>
+                            {actionData ? <pre>{JSON.stringify(actionData, null, 2)}</pre> : null}
+                          </>
+                        );
+                      }
+                    `,
         },
       });
 

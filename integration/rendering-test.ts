@@ -16,26 +16,26 @@ test.describe("rendering", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <div id="content">
-                    <h1>Root</h1>
-                    <Outlet />
-                  </div>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <div id="content">
+                            <h1>Root</h1>
+                            <Outlet />
+                          </div>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
           export default function() {

@@ -16,40 +16,40 @@ test.describe("redirects", () => {
     fixture = await createFixture({
       files: {
         "app/routes/absolute.tsx": js`
-          import * as React from 'react';
-          import { Outlet } from "@remix-run/react";
-
-          export default function Component() {
-            let [count, setCount] = React.useState(0);
-            return (
-              <>
-                <button
-                  id="increment"
-                  onClick={() => setCount(count + 1)}>
-                  {"Count:" + count}
-                </button>
-                <Outlet/>
-              </>
-            );
-          }
-        `,
+                  import * as React from 'react';
+                  import { Outlet } from "@react-router/react";
+        
+                  export default function Component() {
+                    let [count, setCount] = React.useState(0);
+                    return (
+                      <>
+                        <button
+                          id="increment"
+                          onClick={() => setCount(count + 1)}>
+                          {"Count:" + count}
+                        </button>
+                        <Outlet/>
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/absolute._index.tsx": js`
-          import { redirect } from "@remix-run/node";
-          import { Form } from "@remix-run/react";
-
-          export async function action({ request }) {
-            return redirect(new URL(request.url).origin + "/absolute/landing");
-          };
-
-          export default function Component() {
-            return (
-              <Form method="post">
-                <button type="submit">Submit</button>
-              </Form>
-            );
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  import { Form } from "@react-router/react";
+        
+                  export async function action({ request }) {
+                    return redirect(new URL(request.url).origin + "/absolute/landing");
+                  };
+        
+                  export default function Component() {
+                    return (
+                      <Form method="post">
+                        <button type="submit">Submit</button>
+                      </Form>
+                    );
+                  }
+                `,
 
         "app/routes/absolute.landing.tsx": js`
           export default function Component() {
@@ -58,40 +58,40 @@ test.describe("redirects", () => {
         `,
 
         "app/routes/loader.external.ts": js`
-          import { redirect } from "@remix-run/node";
-          export const loader = () => {
-            return redirect("https://remix.run/");
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export const loader = () => {
+                    return redirect("https://remix.run/");
+                  }
+                `,
 
         "app/routes/redirect-document.tsx": js`
-          import * as React from "react";
-          import { Outlet } from "@remix-run/react";
-
-          export default function Component() {
-            let [count, setCount] = React.useState(0);
-            let countText = 'Count:' + count;
-            return (
-              <>
-                <button onClick={() => setCount(count+1)}>{countText}</button>
-                <Outlet />
-              </>
-            );
-          }
-        `,
+                  import * as React from "react";
+                  import { Outlet } from "@react-router/react";
+        
+                  export default function Component() {
+                    let [count, setCount] = React.useState(0);
+                    let countText = 'Count:' + count;
+                    return (
+                      <>
+                        <button onClick={() => setCount(count+1)}>{countText}</button>
+                        <Outlet />
+                      </>
+                    );
+                  }
+                `,
 
         "app/routes/redirect-document._index.tsx": js`
-          import { Link } from "@remix-run/react";
-
-          export default function Component() {
-            return <Link to="/redirect-document/a">Link</Link>
-          }
-        `,
+                  import { Link } from "@react-router/react";
+        
+                  export default function Component() {
+                    return <Link to="/redirect-document/a">Link</Link>
+                  }
+                `,
 
         "app/routes/redirect-document.a.tsx": js`
-          import { redirectDocument } from "@remix-run/node";
-          export const loader = () =>  redirectDocument("/redirect-document/b");
-        `,
+                  import { redirectDocument } from "@react-router/node";
+                  export const loader = () =>  redirectDocument("/redirect-document/b");
+                `,
 
         "app/routes/redirect-document.b.tsx": js`
           export default function Component() {
@@ -157,40 +157,40 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/routes/absolute.tsx": js`
-            import * as React from 'react';
-            import { Outlet } from "@remix-run/react";
-
-            export default function Component() {
-              let [count, setCount] = React.useState(0);
-              return (
-                <>
-                  <button
-                    id="increment"
-                    onClick={() => setCount(count + 1)}>
-                    {"Count:" + count}
-                  </button>
-                  <Outlet/>
-                </>
-              );
-            }
-          `,
+                      import * as React from 'react';
+                      import { Outlet } from "@react-router/react";
+          
+                      export default function Component() {
+                        let [count, setCount] = React.useState(0);
+                        return (
+                          <>
+                            <button
+                              id="increment"
+                              onClick={() => setCount(count + 1)}>
+                              {"Count:" + count}
+                            </button>
+                            <Outlet/>
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/absolute._index.tsx": js`
-            import { redirect } from "@remix-run/node";
-            import { Form } from "@remix-run/react";
-
-            export async function action({ request }) {
-              return redirect(new URL(request.url).origin + "/absolute/landing");
-            };
-
-            export default function Component() {
-              return (
-                <Form method="post">
-                  <button type="submit">Submit</button>
-                </Form>
-              );
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      import { Form } from "@react-router/react";
+          
+                      export async function action({ request }) {
+                        return redirect(new URL(request.url).origin + "/absolute/landing");
+                      };
+          
+                      export default function Component() {
+                        return (
+                          <Form method="post">
+                            <button type="submit">Submit</button>
+                          </Form>
+                        );
+                      }
+                    `,
 
           "app/routes/absolute.landing.tsx": js`
             export default function Component() {
@@ -199,40 +199,40 @@ test.describe("single fetch", () => {
           `,
 
           "app/routes/loader.external.ts": js`
-            import { redirect } from "@remix-run/node";
-            export const loader = () => {
-              return redirect("https://remix.run/");
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      export const loader = () => {
+                        return redirect("https://remix.run/");
+                      }
+                    `,
 
           "app/routes/redirect-document.tsx": js`
-            import * as React from "react";
-            import { Outlet } from "@remix-run/react";
-
-            export default function Component() {
-              let [count, setCount] = React.useState(0);
-              let countText = 'Count:' + count;
-              return (
-                <>
-                  <button onClick={() => setCount(count+1)}>{countText}</button>
-                  <Outlet />
-                </>
-              );
-            }
-          `,
+                      import * as React from "react";
+                      import { Outlet } from "@react-router/react";
+          
+                      export default function Component() {
+                        let [count, setCount] = React.useState(0);
+                        let countText = 'Count:' + count;
+                        return (
+                          <>
+                            <button onClick={() => setCount(count+1)}>{countText}</button>
+                            <Outlet />
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/redirect-document._index.tsx": js`
-            import { Link } from "@remix-run/react";
-
-            export default function Component() {
-              return <Link to="/redirect-document/a">Link</Link>
-            }
-          `,
+                      import { Link } from "@react-router/react";
+          
+                      export default function Component() {
+                        return <Link to="/redirect-document/a">Link</Link>
+                      }
+                    `,
 
           "app/routes/redirect-document.a.tsx": js`
-            import { redirectDocument } from "@remix-run/node";
-            export const loader = () =>  redirectDocument("/redirect-document/b");
-          `,
+                      import { redirectDocument } from "@react-router/node";
+                      export const loader = () =>  redirectDocument("/redirect-document/b");
+                    `,
 
           "app/routes/redirect-document.b.tsx": js`
             export default function Component() {

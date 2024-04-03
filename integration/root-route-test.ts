@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import {
   createAppFixture,
   createFixture,
@@ -79,26 +79,26 @@ test.describe("root route", () => {
       {
         files: {
           "app/root.tsx": js`
-          import { useRouteError } from '@remix-run/react';
-          export function Layout({ children }) {
-            return (
-              <html>
-                <head>
-                  <title>Layout Title</title>
-                </head>
-                <body>
-                  {children}
-                </body>
-              </html>
-            );
-          }
-          export default function Root() {
-            throw new Error('broken render')
-          }
-          export function ErrorBoundary() {
-            return <p>{useRouteError().message}</p>;
-          }
-        `,
+                    import { useRouteError } from '@react-router/react';
+                    export function Layout({ children }) {
+                      return (
+                        <html>
+                          <head>
+                            <title>Layout Title</title>
+                          </head>
+                          <body>
+                            {children}
+                          </body>
+                        </html>
+                      );
+                    }
+                    export default function Root() {
+                      throw new Error('broken render')
+                    }
+                    export function ErrorBoundary() {
+                      return <p>{useRouteError().message}</p>;
+                    }
+                  `,
         },
       },
       ServerMode.Development

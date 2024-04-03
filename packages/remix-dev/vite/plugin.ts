@@ -10,7 +10,7 @@ import {
   type ServerBuild,
   unstable_setDevServerHooks as setDevServerHooks,
   createRequestHandler,
-} from "@remix-run/server-runtime";
+} from "@react-router/server-runtime";
 import {
   init as initEsModuleLexer,
   parse as esModuleLexer,
@@ -1057,19 +1057,19 @@ export const remixVitePlugin: RemixVitePlugin = (remixUserConfig = {}) => {
               // This is only necessary for development within the Remix repo
               // because these packages are symlinked and Vite treats them as
               // internal source code. For consumers this is a no-op.
-              "@remix-run/architect",
-              "@remix-run/cloudflare-pages",
-              "@remix-run/cloudflare-workers",
-              "@remix-run/cloudflare",
-              "@remix-run/css-bundle",
-              "@remix-run/deno",
-              "@remix-run/dev",
-              "@remix-run/express",
-              "@remix-run/netlify",
-              "@remix-run/node",
-              "@remix-run/react",
-              "@remix-run/serve",
-              "@remix-run/server-runtime",
+              "@react-router/architect",
+              "@react-router/cloudflare-pages",
+              "@react-router/cloudflare-workers",
+              "@react-router/cloudflare",
+              "@react-router/css-bundle",
+              "@react-router/deno",
+              "@react-router/dev",
+              "@react-router/express",
+              "@react-router/netlify",
+              "@react-router/node",
+              "@react-router/react",
+              "@react-router/serve",
+              "@react-router/server-runtime",
             ],
           },
           optimizeDeps: {
@@ -1087,14 +1087,14 @@ export const remixVitePlugin: RemixVitePlugin = (remixUserConfig = {}) => {
               // server entry files since those come from within `node_modules`.
               // That means that before Vite pre-bundles dependencies (e.g. first time dev server is run)
               // mismatching Remix routers cause `Error: You must render this element inside a <Remix> element`.
-              "@remix-run/react",
+              "@react-router/react",
 
               // For some reason, the `vite-dotenv` integration test consistently fails on webkit
-              // with `504 (Outdated Optimize Dep)` from Vite  unless `@remix-run/node` is included
+              // with `504 (Outdated Optimize Dep)` from Vite  unless `@react-router/node` is included
               // in `optimizeDeps.include`. 🤷
               // This could be caused by how we copy `node_modules/` into integration test fixtures,
               // so maybe this will be unnecessary once we switch to pnpm
-              "@remix-run/node",
+              "@react-router/node",
             ],
           },
           esbuild: {
@@ -1107,8 +1107,8 @@ export const remixVitePlugin: RemixVitePlugin = (remixUserConfig = {}) => {
               "react",
               "react-dom",
 
-              // see description for `@remix-run/react` in `optimizeDeps.include`
-              "@remix-run/react",
+              // see description for `@react-router/react` in `optimizeDeps.include`
+              "@react-router/react",
             ],
           },
           base: viteUserConfig.base,
@@ -1907,7 +1907,9 @@ async function handleSpaMode(
   // generated from routes/_index.tsx.
   let serverBuildPath = path.join(serverBuildDirectoryPath, serverBuildFile);
   let build = await import(url.pathToFileURL(serverBuildPath).toString());
-  let { createRequestHandler: createHandler } = await import("@remix-run/node");
+  let { createRequestHandler: createHandler } = await import(
+    "@react-router/node"
+  );
   let handler = createHandler(build, viteConfig.mode);
   let response = await handler(new Request(`http://localhost${basename}`));
   let html = await response.text();

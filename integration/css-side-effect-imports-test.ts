@@ -24,24 +24,24 @@ test.describe("CSS side-effect imports", () => {
       },
       files: {
         "app/root.tsx": js`
-          import { Links, Outlet } from "@remix-run/react";
-          import { cssBundleHref } from "@remix-run/css-bundle";
-          export function links() {
-            return [{ rel: "stylesheet", href: cssBundleHref }];
-          }
-          export default function Root() {
-            return (
-              <html>
-                <head>
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                </body>
-              </html>
-            )
-          }
-        `,
+                  import { Links, Outlet } from "@react-router/react";
+                  import { cssBundleHref } from "@react-router/css-bundle";
+                  export function links() {
+                    return [{ rel: "stylesheet", href: cssBundleHref }];
+                  }
+                  export default function Root() {
+                    return (
+                      <html>
+                        <head>
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                        </body>
+                      </html>
+                    )
+                  }
+                `,
         ...basicSideEffectFixture(),
         ...rootRelativeFixture(),
         ...imageUrlsFixture(),

@@ -9,14 +9,14 @@ import stripIndent from "strip-indent";
 import serializeJavaScript from "serialize-javascript";
 import { sync as spawnSync, spawn } from "cross-spawn";
 import type { JsonObject } from "type-fest";
-import type { AppConfig } from "@remix-run/dev";
+import type { AppConfig } from "@react-router/dev";
 
-import { ServerMode } from "../../build/node_modules/@remix-run/server-runtime/dist/mode.js";
-import type { ServerBuild } from "../../build/node_modules/@remix-run/server-runtime/dist/index.js";
-import { createRequestHandler } from "../../build/node_modules/@remix-run/server-runtime/dist/index.js";
-import { createRequestHandler as createExpressHandler } from "../../build/node_modules/@remix-run/express/dist/index.js";
-import { installGlobals } from "../../build/node_modules/@remix-run/node/dist/index.js";
-import { decodeViaTurboStream } from "../../build/node_modules/@remix-run/react/dist/single-fetch.js";
+import { ServerMode } from "../../build/node_modules/@react-router/server-runtime/dist/mode.js";
+import type { ServerBuild } from "../../build/node_modules/@react-router/server-runtime/dist/index.js";
+import { createRequestHandler } from "../../build/node_modules/@react-router/server-runtime/dist/index.js";
+import { createRequestHandler as createExpressHandler } from "../../build/node_modules/@react-router/express/dist/index.js";
+import { installGlobals } from "../../build/node_modules/@react-router/node/dist/index.js";
+import { decodeViaTurboStream } from "../../build/node_modules/@react-router/react/dist/single-fetch.js";
 import { viteConfig } from "./vite.js";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
@@ -194,7 +194,7 @@ export async function createAppFixture(fixture: Fixture, mode?: ServerMode) {
         let serveProcess = spawn(
           nodebin,
           [
-            "node_modules/@remix-run/serve/dist/cli.js",
+            "node_modules/@react-router/serve/dist/cli.js",
             fixture.compiler === "vite"
               ? "build/server/index.js"
               : "build/index.js",
@@ -329,7 +329,7 @@ export async function createFixtureProject(
   await fse.copy(integrationTemplateDir, projectDir);
   // let remixDev = path.join(
   //   projectDir,
-  //   "node_modules/@remix-run/dev/dist/cli.js"
+  //   "node_modules/@react-router/dev/dist/cli.js"
   // );
   // await fse.chmod(remixDev, 0o755);
   // await fse.ensureSymlink(
@@ -339,7 +339,7 @@ export async function createFixtureProject(
   //
   // let remixServe = path.join(
   //   projectDir,
-  //   "node_modules/@remix-run/serve/dist/cli.js"
+  //   "node_modules/@react-router/serve/dist/cli.js"
   // );
   // await fse.chmod(remixServe, 0o755);
   // await fse.ensureSymlink(
@@ -416,7 +416,7 @@ function build(
   mode = mode === ServerMode.Test ? ServerMode.Production : mode;
   compiler = compiler ?? "vite";
 
-  let remixBin = "node_modules/@remix-run/dev/dist/cli.js";
+  let remixBin = "node_modules/@react-router/dev/dist/cli.js";
 
   let buildArgs: string[] =
     compiler === "vite"

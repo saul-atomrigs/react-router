@@ -19,73 +19,73 @@ test.describe("mdx", () => {
       compiler: "remix",
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/blog.tsx": js`
-          import { useMatches, Outlet } from "@remix-run/react";
-
-          export default function Blog() {
-            const matches = useMatches();
-            const mdxMatch = matches[matches.length - 1];
-            return (
-              <div>
-                <p id="additionalData">{mdxMatch.data.additionalData === 10 && 'Additional Data: 10'}</p>
-                <p id="handle">{mdxMatch.handle.someData}</p>
-                <Outlet />
-              </div>
-            );
-          }
-        `,
+                  import { useMatches, Outlet } from "@react-router/react";
+        
+                  export default function Blog() {
+                    const matches = useMatches();
+                    const mdxMatch = matches[matches.length - 1];
+                    return (
+                      <div>
+                        <p id="additionalData">{mdxMatch.data.additionalData === 10 && 'Additional Data: 10'}</p>
+                        <p id="handle">{mdxMatch.handle.someData}</p>
+                        <Outlet />
+                      </div>
+                    );
+                  }
+                `,
 
         "app/routes/blog.post.mdx": mdx`---
-meta:
-- title: My First Post
-- name: description
-  content: Isn't this awesome?
-handle:
-  someData: abc
-headers:
-  Cache-Control: no-cache
----
-
-import stylesheetHref from "../app.css"
-
-export const links = () => [
-  { rel: "stylesheet", href: stylesheetHref }
-]
-
-import { useLoaderData } from '@remix-run/react';
-
-export const loader = async () => {
-  return { mamboNumber: 5 };
-};
-
-export function ComponentUsingData() {
-  const { mamboNumber } = useLoaderData();
-
-  return <div id="loader">Mambo Number: {mamboNumber}</div>;
-}
-
-# This is some markdown!
-
-<ComponentUsingData />
-        `.trim(),
+        meta:
+        - title: My First Post
+        - name: description
+          content: Isn't this awesome?
+        handle:
+          someData: abc
+        headers:
+          Cache-Control: no-cache
+        ---
+        
+        import stylesheetHref from "../app.css"
+        
+        export const links = () => [
+          { rel: "stylesheet", href: stylesheetHref }
+        ]
+        
+        import { useLoaderData } from '@react-router/react';
+        
+        export const loader = async () => {
+          return { mamboNumber: 5 };
+        };
+        
+        export function ComponentUsingData() {
+          const { mamboNumber } = useLoaderData();
+        
+          return <div id="loader">Mambo Number: {mamboNumber}</div>;
+        }
+        
+        # This is some markdown!
+        
+        <ComponentUsingData />
+                `.trim(),
 
         "app/routes/basic.mdx": mdx`
 # This is some basic markdown!

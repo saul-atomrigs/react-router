@@ -24,24 +24,24 @@ const TEST_ROUTES = [
 
 const files = {
   "app/root.tsx": `
-    import { Links, Meta, Outlet, Scripts, LiveReload } from "@remix-run/react";
-
-    export default function Root() {
-      return (
-        <html lang="en">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <Outlet />
-            <Scripts />
-            <LiveReload />
-          </body>
-        </html>
-      );
-    }
-  `,
+      import { Links, Meta, Outlet, Scripts, LiveReload } from "@react-router/react";
+  
+      export default function Root() {
+        return (
+          <html lang="en">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <Outlet />
+              <Scripts />
+              <LiveReload />
+            </body>
+          </html>
+        );
+      }
+    `,
   ...Object.assign({}, ...TEST_ROUTES.map(createRoute)),
 };
 
@@ -51,13 +51,13 @@ test.describe(() => {
   test.beforeAll(async () => {
     cwd = await createProject({
       "vite.config.ts": dedent`
-        import { vitePlugin as remix } from "@remix-run/dev";
-
-        export default {
-          build: { manifest: true },
-          plugins: [remix({ manifest: true })],
-        }
-      `,
+              import { vitePlugin as remix } from "@react-router/dev";
+      
+              export default {
+                build: { manifest: true },
+                plugins: [remix({ manifest: true })],
+              }
+            `,
       ...files,
     });
 

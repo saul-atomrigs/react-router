@@ -19,36 +19,38 @@ test.describe("flat routes", () => {
     fixture = await createFixture({
       files: {
         "vite.config.js": `
-          import { defineConfig } from "vite";
-          import { vitePlugin as remix } from "@remix-run/dev";
-
-          export default defineConfig({
-            plugins: [remix({
-              ignoredRouteFiles: [${JSON.stringify(`**/${IGNORED_ROUTE}.*`)}],
-            })],
-          });
-        `,
+                  import { defineConfig } from "vite";
+                  import { vitePlugin as remix } from "@react-router/dev";
+        
+                  export default defineConfig({
+                    plugins: [remix({
+                      ignoredRouteFiles: [${JSON.stringify(
+                        `**/${IGNORED_ROUTE}.*`
+                      )}],
+                    })],
+                  });
+                `,
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <div id="content">
-                    <h1>Root</h1>
-                    <Outlet />
-                  </div>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <div id="content">
+                            <h1>Root</h1>
+                            <Outlet />
+                          </div>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
           export default function () {
@@ -89,17 +91,17 @@ test.describe("flat routes", () => {
         `,
 
         "app/routes/dashboard/route.tsx": js`
-          import { Outlet } from "@remix-run/react";
-
-          export default function () {
-            return (
-              <>
-                <h2>Dashboard Layout</h2>
-                <Outlet />
-              </>
-            )
-          }
-        `,
+                  import { Outlet } from "@react-router/react";
+        
+                  export default function () {
+                    return (
+                      <>
+                        <h2>Dashboard Layout</h2>
+                        <Outlet />
+                      </>
+                    )
+                  }
+                `,
 
         "app/routes/dashboard._index/route.tsx": js`
           export default function () {
@@ -299,61 +301,61 @@ test.describe("pathless routes and route collisions", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Link, Outlet, Scripts, useMatches } from "@remix-run/react";
-
-          export default function App() {
-            let matches = 'Number of matches: ' + useMatches().length;
-            return (
-              <html lang="en">
-                <body>
-                  <nav>
-                    <Link to="/nested">/nested</Link>
-                    <br />
-                    <Link to="/nested/foo">/nested/foo</Link>
-                    <br />
-                  </nav>
-                  <p>{matches}</p>
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Link, Outlet, Scripts, useMatches } from "@react-router/react";
+        
+                  export default function App() {
+                    let matches = 'Number of matches: ' + useMatches().length;
+                    return (
+                      <html lang="en">
+                        <body>
+                          <nav>
+                            <Link to="/nested">/nested</Link>
+                            <br />
+                            <Link to="/nested/foo">/nested/foo</Link>
+                            <br />
+                          </nav>
+                          <p>{matches}</p>
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
         "app/routes/nested._index.tsx": js`
           export default function Index() {
             return <h1>Index</h1>;
           }
         `,
         "app/routes/nested._pathless.tsx": js`
-          import { Outlet } from "@remix-run/react";
-
-          export default function Layout() {
-            return (
-              <>
-                <div>Pathless Layout</div>
-                <Outlet />
-              </>
-            );
-          }
-        `,
+                  import { Outlet } from "@react-router/react";
+        
+                  export default function Layout() {
+                    return (
+                      <>
+                        <div>Pathless Layout</div>
+                        <Outlet />
+                      </>
+                    );
+                  }
+                `,
         "app/routes/nested._pathless.foo.tsx": js`
           export default function Foo() {
             return <h1>Foo</h1>;
           }
         `,
         "app/routes/nested._pathless2.tsx": js`
-          import { Outlet } from "@remix-run/react";
-
-          export default function Layout() {
-            return (
-              <>
-                <div>Pathless 2 Layout</div>
-                <Outlet />
-              </>
-            );
-          }
-        `,
+                  import { Outlet } from "@react-router/react";
+        
+                  export default function Layout() {
+                    return (
+                      <>
+                        <div>Pathless 2 Layout</div>
+                        <Outlet />
+                      </>
+                    );
+                  }
+                `,
         "app/routes/nested._pathless2.bar.tsx": js`
           export default function Bar() {
             return <h1>Bar</h1>;

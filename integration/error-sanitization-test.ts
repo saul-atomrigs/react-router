@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { UNSAFE_ErrorResponseImpl as ErrorResponseImpl } from "@remix-run/router";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import type { Fixture } from "./helpers/create-fixture.js";
 import {
   createAppFixture,
@@ -12,121 +12,121 @@ import { PlaywrightFixture } from "./helpers/playwright-fixture.js";
 
 const routeFiles = {
   "app/root.tsx": js`
-    import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-    export default function Root() {
-      return (
-        <html lang="en">
-          <head>
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <main>
-              <Outlet />
-            </main>
-            <Scripts />
-          </body>
-        </html>
-      );
-    }
-  `,
+      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+  
+      export default function Root() {
+        return (
+          <html lang="en">
+            <head>
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <main>
+                <Outlet />
+              </main>
+              <Scripts />
+            </body>
+          </html>
+        );
+      }
+    `,
 
   "app/routes/_index.tsx": js`
-    import { useLoaderData, useLocation, useRouteError } from "@remix-run/react";
-
-    export function loader({ request }) {
-      if (new URL(request.url).searchParams.has('loader')) {
-        throw new Error("Loader Error");
+      import { useLoaderData, useLocation, useRouteError } from "@react-router/react";
+  
+      export function loader({ request }) {
+        if (new URL(request.url).searchParams.has('loader')) {
+          throw new Error("Loader Error");
+        }
+        if (new URL(request.url).searchParams.has('subclass')) {
+          // This will throw a ReferenceError
+          console.log(thisisnotathing);
+        }
+        return "LOADER"
       }
-      if (new URL(request.url).searchParams.has('subclass')) {
-        // This will throw a ReferenceError
-        console.log(thisisnotathing);
+  
+      export default function Component() {
+        let data = useLoaderData();
+        let location = useLocation();
+  
+        if (location.search.includes('render')) {
+          throw new Error("Render Error");
+        }
+  
+        return (
+          <>
+            <h1>Index Route</h1>
+            <p>{JSON.stringify(data)}</p>
+          </>
+        );
       }
-      return "LOADER"
-    }
-
-    export default function Component() {
-      let data = useLoaderData();
-      let location = useLocation();
-
-      if (location.search.includes('render')) {
-        throw new Error("Render Error");
+  
+      export function ErrorBoundary() {
+        let error = useRouteError();
+        return (
+          <>
+            <h1>Index Error</h1>
+            <p>{"MESSAGE:" + error.message}</p>
+            <p>{"NAME:" + error.name}</p>
+            {error.stack ? <p>{"STACK:" + error.stack}</p> : null}
+          </>
+        );
       }
-
-      return (
-        <>
-          <h1>Index Route</h1>
-          <p>{JSON.stringify(data)}</p>
-        </>
-      );
-    }
-
-    export function ErrorBoundary() {
-      let error = useRouteError();
-      return (
-        <>
-          <h1>Index Error</h1>
-          <p>{"MESSAGE:" + error.message}</p>
-          <p>{"NAME:" + error.name}</p>
-          {error.stack ? <p>{"STACK:" + error.stack}</p> : null}
-        </>
-      );
-    }
-  `,
+    `,
 
   "app/routes/defer.tsx": js`
-    import * as React from 'react';
-    import { defer } from "@remix-run/server-runtime";
-    import { Await, useAsyncError, useLoaderData, useRouteError  } from "@remix-run/react";
-
-    export function loader({ request }) {
-      if (new URL(request.url).searchParams.has('loader')) {
+      import * as React from 'react';
+      import { defer } from "@react-router/server-runtime";
+      import { Await, useAsyncError, useLoaderData, useRouteError  } from "@react-router/react";
+  
+      export function loader({ request }) {
+        if (new URL(request.url).searchParams.has('loader')) {
+          return defer({
+            lazy: Promise.reject(new Error("REJECTED")),
+          })
+        }
         return defer({
-          lazy: Promise.reject(new Error("REJECTED")),
+          lazy: Promise.resolve("RESOLVED"),
         })
       }
-      return defer({
-        lazy: Promise.resolve("RESOLVED"),
-      })
-    }
-
-    export default function Component() {
-      let data = useLoaderData();
-
-      return (
-        <>
-          <h1>Defer Route</h1>
-          <React.Suspense fallback={<p>Loading...</p>}>
-            <Await resolve={data.lazy} errorElement={<AwaitError />}>
-              {(val) => <p>{val}</p>}
-            </Await>
-          </React.Suspense>
-        </>
-      );
-    }
-
-    function AwaitError() {
-      let error = useAsyncError();
-      return (
-        <>
-          <h2>Defer Error</h2>
-          <p>{error.message}</p>
-        </>
-      );
-    }
-
-    export function ErrorBoundary() {
-      let error = useRouteError();
-      return (
-        <>
-          <h1>Defer Error</h1>
-          <p>{"MESSAGE:" + error.message}</p>
-          {error.stack ? <p>{"STACK:" + error.stack}</p> : null}
-        </>
-      );
-    }
-  `,
+  
+      export default function Component() {
+        let data = useLoaderData();
+  
+        return (
+          <>
+            <h1>Defer Route</h1>
+            <React.Suspense fallback={<p>Loading...</p>}>
+              <Await resolve={data.lazy} errorElement={<AwaitError />}>
+                {(val) => <p>{val}</p>}
+              </Await>
+            </React.Suspense>
+          </>
+        );
+      }
+  
+      function AwaitError() {
+        let error = useAsyncError();
+        return (
+          <>
+            <h2>Defer Error</h2>
+            <p>{error.message}</p>
+          </>
+        );
+      }
+  
+      export function ErrorBoundary() {
+        let error = useRouteError();
+        return (
+          <>
+            <h1>Defer Error</h1>
+            <p>{"MESSAGE:" + error.message}</p>
+            {error.stack ? <p>{"STACK:" + error.stack}</p> : null}
+          </>
+        );
+      }
+    `,
 
   "app/routes/resource.tsx": js`
     export function loader({ request }) {
@@ -470,46 +470,46 @@ test.describe("Error Sanitization", () => {
         {
           files: {
             "app/entry.server.tsx": js`
-              import type { EntryContext } from "@remix-run/node";
-              import { RemixServer, isRouteErrorResponse } from "@remix-run/react";
-              import { renderToString } from "react-dom/server";
-
-              export default function handleRequest(
-                request: Request,
-                responseStatusCode: number,
-                responseHeaders: Headers,
-                remixContext: EntryContext
-              ) {
-                let markup = renderToString(
-                  <RemixServer context={remixContext} url={request.url} />
-                );
-
-                responseHeaders.set("Content-Type", "text/html");
-
-                return new Response("<!DOCTYPE html>" + markup, {
-                  status: responseStatusCode,
-                  headers: responseHeaders,
-                });
-              }
-
-              export function handleError(
-                error: unknown,
-                { request }: { request: Request },
-              ) {
-                console.error("App Specific Error Logging:");
-                console.error("  Request: " + request.method + " " + request.url);
-                if (isRouteErrorResponse(error)) {
-                  console.error("  Status: " + error.status + " " + error.statusText);
-                  console.error("  Error: " + error.error.message);
-                  console.error("  Stack: " + error.error.stack);
-                } else if (error instanceof Error) {
-                  console.error("  Error: " + error.message);
-                  console.error("  Stack: " + error.stack);
-                } else {
-                  console.error("Dunno what this is");
-                }
-              }
-            `,
+                          import type { EntryContext } from "@react-router/node";
+                          import { RemixServer, isRouteErrorResponse } from "@react-router/react";
+                          import { renderToString } from "react-dom/server";
+            
+                          export default function handleRequest(
+                            request: Request,
+                            responseStatusCode: number,
+                            responseHeaders: Headers,
+                            remixContext: EntryContext
+                          ) {
+                            let markup = renderToString(
+                              <RemixServer context={remixContext} url={request.url} />
+                            );
+            
+                            responseHeaders.set("Content-Type", "text/html");
+            
+                            return new Response("<!DOCTYPE html>" + markup, {
+                              status: responseStatusCode,
+                              headers: responseHeaders,
+                            });
+                          }
+            
+                          export function handleError(
+                            error: unknown,
+                            { request }: { request: Request },
+                          ) {
+                            console.error("App Specific Error Logging:");
+                            console.error("  Request: " + request.method + " " + request.url);
+                            if (isRouteErrorResponse(error)) {
+                              console.error("  Status: " + error.status + " " + error.statusText);
+                              console.error("  Error: " + error.error.message);
+                              console.error("  Stack: " + error.error.stack);
+                            } else if (error instanceof Error) {
+                              console.error("  Error: " + error.message);
+                              console.error("  Stack: " + error.stack);
+                            } else {
+                              console.error("Dunno what this is");
+                            }
+                          }
+                        `,
             ...routeFiles,
           },
         },
@@ -1031,82 +1031,82 @@ test.describe("single fetch", () => {
             singleFetch: true,
             files: {
               "app/entry.server.tsx": js`
-                import { PassThrough } from "node:stream";
-
-                import { createReadableStreamFromReadable } from "@remix-run/node";
-                import { RemixServer, isRouteErrorResponse } from "@remix-run/react";
-                import { renderToPipeableStream } from "react-dom/server";
-
-                const ABORT_DELAY = 5_000;
-
-                export default function handleRequest(
-                  request,
-                  responseStatusCode,
-                  responseHeaders,
-                  remixContext
-                ) {
-                  return new Promise((resolve, reject) => {
-                    let shellRendered = false;
-                    const { pipe, abort } = renderToPipeableStream(
-                      <RemixServer
-                        context={remixContext}
-                        url={request.url}
-                        abortDelay={ABORT_DELAY}
-                      />,
-                      {
-                        onShellReady() {
-                          shellRendered = true;
-                          const body = new PassThrough();
-                          const stream = createReadableStreamFromReadable(body);
-
-                          responseHeaders.set("Content-Type", "text/html");
-
-                          resolve(
-                            new Response(stream, {
-                              headers: responseHeaders,
-                              status: responseStatusCode,
-                            })
-                          );
-
-                          pipe(body);
-                        },
-                        onShellError(error) {
-                          reject(error);
-                        },
-                        onError(error) {
-                          responseStatusCode = 500;
-                          // Log streaming rendering errors from inside the shell.  Don't log
-                          // errors encountered during initial shell rendering since they'll
-                          // reject and get logged in handleDocumentRequest.
-                          if (shellRendered) {
-                            console.error(error);
-                          }
-                        },
-                      }
-                    );
-
-                    setTimeout(abort, ABORT_DELAY);
-                  });
-                }
-
-                export function handleError(
-                  error: unknown,
-                  { request }: { request: Request },
-                ) {
-                  console.error("App Specific Error Logging:");
-                  console.error("  Request: " + request.method + " " + request.url);
-                  if (isRouteErrorResponse(error)) {
-                    console.error("  Status: " + error.status + " " + error.statusText);
-                    console.error("  Error: " + error.error.message);
-                    console.error("  Stack: " + error.error.stack);
-                  } else if (error instanceof Error) {
-                    console.error("  Error: " + error.message);
-                    console.error("  Stack: " + error.stack);
-                  } else {
-                    console.error("Dunno what this is");
-                  }
-                }
-              `,
+                              import { PassThrough } from "node:stream";
+              
+                              import { createReadableStreamFromReadable } from "@react-router/node";
+                              import { RemixServer, isRouteErrorResponse } from "@react-router/react";
+                              import { renderToPipeableStream } from "react-dom/server";
+              
+                              const ABORT_DELAY = 5_000;
+              
+                              export default function handleRequest(
+                                request,
+                                responseStatusCode,
+                                responseHeaders,
+                                remixContext
+                              ) {
+                                return new Promise((resolve, reject) => {
+                                  let shellRendered = false;
+                                  const { pipe, abort } = renderToPipeableStream(
+                                    <RemixServer
+                                      context={remixContext}
+                                      url={request.url}
+                                      abortDelay={ABORT_DELAY}
+                                    />,
+                                    {
+                                      onShellReady() {
+                                        shellRendered = true;
+                                        const body = new PassThrough();
+                                        const stream = createReadableStreamFromReadable(body);
+              
+                                        responseHeaders.set("Content-Type", "text/html");
+              
+                                        resolve(
+                                          new Response(stream, {
+                                            headers: responseHeaders,
+                                            status: responseStatusCode,
+                                          })
+                                        );
+              
+                                        pipe(body);
+                                      },
+                                      onShellError(error) {
+                                        reject(error);
+                                      },
+                                      onError(error) {
+                                        responseStatusCode = 500;
+                                        // Log streaming rendering errors from inside the shell.  Don't log
+                                        // errors encountered during initial shell rendering since they'll
+                                        // reject and get logged in handleDocumentRequest.
+                                        if (shellRendered) {
+                                          console.error(error);
+                                        }
+                                      },
+                                    }
+                                  );
+              
+                                  setTimeout(abort, ABORT_DELAY);
+                                });
+                              }
+              
+                              export function handleError(
+                                error: unknown,
+                                { request }: { request: Request },
+                              ) {
+                                console.error("App Specific Error Logging:");
+                                console.error("  Request: " + request.method + " " + request.url);
+                                if (isRouteErrorResponse(error)) {
+                                  console.error("  Status: " + error.status + " " + error.statusText);
+                                  console.error("  Error: " + error.error.message);
+                                  console.error("  Stack: " + error.error.stack);
+                                } else if (error instanceof Error) {
+                                  console.error("  Error: " + error.message);
+                                  console.error("  Stack: " + error.stack);
+                                } else {
+                                  console.error("Dunno what this is");
+                                }
+                              }
+                            `,
               ...routeFiles,
             },
           },

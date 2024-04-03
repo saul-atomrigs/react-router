@@ -16,77 +16,77 @@ test.describe("useMatches", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import * as React from 'react';
-          import { json } from "@remix-run/node";
-          import { Link, Links, Meta, Outlet, Scripts, useMatches } from "@remix-run/react";
-          export const handle = { stuff: "root handle"};
-          export const loader = () => json("ROOT");
-          export default function Root() {
-            let matches = useMatches();
-            let [matchesCount, setMatchesCount] = React.useState(0);
-            React.useEffect(() => setMatchesCount(matchesCount + 1), [matches]);
-
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <Link to="/about">About</Link>
-                  <pre id="matches">
-                    {JSON.stringify(matches, null, 2)}
-                  </pre>
-                  {matchesCount > 0 ? <pre id="matches-count-root">{matchesCount}</pre> : null}
-                  <Outlet />
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import * as React from 'react';
+                  import { json } from "@react-router/node";
+                  import { Link, Links, Meta, Outlet, Scripts, useMatches } from "@react-router/react";
+                  export const handle = { stuff: "root handle"};
+                  export const loader = () => json("ROOT");
+                  export default function Root() {
+                    let matches = useMatches();
+                    let [matchesCount, setMatchesCount] = React.useState(0);
+                    React.useEffect(() => setMatchesCount(matchesCount + 1), [matches]);
+        
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <Link to="/about">About</Link>
+                          <pre id="matches">
+                            {JSON.stringify(matches, null, 2)}
+                          </pre>
+                          {matchesCount > 0 ? <pre id="matches-count-root">{matchesCount}</pre> : null}
+                          <Outlet />
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/_index.tsx": js`
-          import { json } from "@remix-run/node";
-          export const handle = { stuff: "index handle"};
-          export const loader = () => json("INDEX");
-          export default function Index() {
-            return <h1 id="index">Index Page</h1>
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  export const handle = { stuff: "index handle"};
+                  export const loader = () => json("INDEX");
+                  export default function Index() {
+                    return <h1 id="index">Index Page</h1>
+                  }
+                `,
 
         "app/routes/about.tsx": js`
-          import { json } from "@remix-run/node";
-          export const handle = { stuff: "about handle"};
-          export const loader = async () => {
-            await new Promise(r => setTimeout(r, 100));
-            return json("ABOUT");
-          }
-          export default function About() {
-            return <h1 id="about">About Page</h1>
-          }
-        `,
+                  import { json } from "@react-router/node";
+                  export const handle = { stuff: "about handle"};
+                  export const loader = async () => {
+                    await new Promise(r => setTimeout(r, 100));
+                    return json("ABOUT");
+                  }
+                  export default function About() {
+                    return <h1 id="about">About Page</h1>
+                  }
+                `,
 
         "app/routes/count.tsx": js`
-          import * as React from 'react';
-          import { useMatches } from "@remix-run/react";
-          export default function Count() {
-            let matches = useMatches();
-            let [count, setCount] = React.useState(0);
-            let [matchesCount, setMatchesCount] = React.useState(0);
-            React.useEffect(() => setMatchesCount(matchesCount + 1), [matches]);
-            return (
-              <>
-                <h1>Count Page</h1>
-                <button id="increment" onClick={() => setCount(count + 1)}>
-                  Increment
-                </button>
-                <pre id="count">{count}</pre>
-                {matchesCount > 0 ? <pre id="matches-count-child">{matchesCount}</pre> : null}
-              </>
-            );
-          }
-        `,
+                  import * as React from 'react';
+                  import { useMatches } from "@react-router/react";
+                  export default function Count() {
+                    let matches = useMatches();
+                    let [count, setCount] = React.useState(0);
+                    let [matchesCount, setMatchesCount] = React.useState(0);
+                    React.useEffect(() => setMatchesCount(matchesCount + 1), [matches]);
+                    return (
+                      <>
+                        <h1>Count Page</h1>
+                        <button id="increment" onClick={() => setCount(count + 1)}>
+                          Increment
+                        </button>
+                        <pre id="count">{count}</pre>
+                        {matchesCount > 0 ? <pre id="matches-count-child">{matchesCount}</pre> : null}
+                      </>
+                    );
+                  }
+                `,
       },
     });
 

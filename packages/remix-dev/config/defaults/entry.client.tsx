@@ -1,4 +1,4 @@
-import { RemixBrowser } from "@remix-run/react";
+import { RemixBrowser } from "@react-router/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 

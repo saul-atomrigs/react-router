@@ -1,5 +1,5 @@
-import type { EntryContext } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
+import type { EntryContext } from "@react-router/node";
+import { RemixServer } from "@react-router/react";
 import * as React from "react";
 import { renderToString } from "react-dom/server";
 

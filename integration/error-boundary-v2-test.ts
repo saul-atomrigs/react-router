@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { test, expect } from "@playwright/test";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import {
   createAppFixture,
   createFixture,
@@ -19,122 +19,122 @@ test.describe("ErrorBoundary", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-          export default function Root() {
-            return (
-              <html lang="en">
-                <head>
-                  <Meta />
-                  <Links />
-                </head>
-                <body>
-                  <main>
-                    <Outlet />
-                  </main>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+        
+                  export default function Root() {
+                    return (
+                      <html lang="en">
+                        <head>
+                          <Meta />
+                          <Links />
+                        </head>
+                        <body>
+                          <main>
+                            <Outlet />
+                          </main>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
 
         "app/routes/parent.tsx": js`
-          import {
-            Link,
-            Outlet,
-            isRouteErrorResponse,
-            useLoaderData,
-            useRouteError,
-          } from "@remix-run/react";
-
-          export function loader() {
-            return "PARENT LOADER";
-          }
-
-          export default function Component() {
-            return (
-              <div>
-                <nav>
-                  <ul>
-                    <li><Link to="/parent/child-with-boundary">Link</Link></li>
-                    <li><Link to="/parent/child-with-boundary?type=error">Link</Link></li>
-                    <li><Link to="/parent/child-with-boundary?type=response">Link</Link></li>
-                    <li><Link to="/parent/child-with-boundary?type=render">Link</Link></li>
-                    <li><Link to="/parent/child-without-boundary?type=error">Link</Link></li>
-                    <li><Link to="/parent/child-without-boundary?type=response">Link</Link></li>
-                    <li><Link to="/parent/child-without-boundary?type=render">Link</Link></li>
-                  </ul>
-                </nav>
-                <p id="parent-data">{useLoaderData()}</p>
-                <Outlet />
-              </div>
-            )
-          }
-
-          export function ErrorBoundary() {
-            let error = useRouteError();
-            return isRouteErrorResponse(error) ?
-              <p id="parent-error-response">{error.status + ' ' + error.data}</p> :
-              <p id="parent-error">{error.message}</p>;
-          }
-        `,
+                  import {
+                    Link,
+                    Outlet,
+                    isRouteErrorResponse,
+                    useLoaderData,
+                    useRouteError,
+                  } from "@react-router/react";
+        
+                  export function loader() {
+                    return "PARENT LOADER";
+                  }
+        
+                  export default function Component() {
+                    return (
+                      <div>
+                        <nav>
+                          <ul>
+                            <li><Link to="/parent/child-with-boundary">Link</Link></li>
+                            <li><Link to="/parent/child-with-boundary?type=error">Link</Link></li>
+                            <li><Link to="/parent/child-with-boundary?type=response">Link</Link></li>
+                            <li><Link to="/parent/child-with-boundary?type=render">Link</Link></li>
+                            <li><Link to="/parent/child-without-boundary?type=error">Link</Link></li>
+                            <li><Link to="/parent/child-without-boundary?type=response">Link</Link></li>
+                            <li><Link to="/parent/child-without-boundary?type=render">Link</Link></li>
+                          </ul>
+                        </nav>
+                        <p id="parent-data">{useLoaderData()}</p>
+                        <Outlet />
+                      </div>
+                    )
+                  }
+        
+                  export function ErrorBoundary() {
+                    let error = useRouteError();
+                    return isRouteErrorResponse(error) ?
+                      <p id="parent-error-response">{error.status + ' ' + error.data}</p> :
+                      <p id="parent-error">{error.message}</p>;
+                  }
+                `,
 
         "app/routes/parent.child-with-boundary.tsx": js`
-          import {
-            isRouteErrorResponse,
-            useLoaderData,
-            useLocation,
-            useRouteError,
-          } from "@remix-run/react";
-
-          export function loader({ request }) {
-            let errorType = new URL(request.url).searchParams.get('type');
-            if (errorType === 'response') {
-              throw new Response('Loader Response', { status: 418 });
-            } else if (errorType === 'error') {
-              throw new Error('Loader Error');
-            }
-            return "CHILD LOADER";
-          }
-
-          export default function Component() {;
-            let data = useLoaderData();
-            if (new URLSearchParams(useLocation().search).get('type') === "render") {
-              throw new Error("Render Error");
-            }
-            return <p id="child-data">{data}</p>;
-          }
-
-          export function ErrorBoundary() {
-            let error = useRouteError();
-            return isRouteErrorResponse(error) ?
-              <p id="child-error-response">{error.status + ' ' + error.data}</p> :
-              <p id="child-error">{error.message}</p>;
-          }
-        `,
+                  import {
+                    isRouteErrorResponse,
+                    useLoaderData,
+                    useLocation,
+                    useRouteError,
+                  } from "@react-router/react";
+        
+                  export function loader({ request }) {
+                    let errorType = new URL(request.url).searchParams.get('type');
+                    if (errorType === 'response') {
+                      throw new Response('Loader Response', { status: 418 });
+                    } else if (errorType === 'error') {
+                      throw new Error('Loader Error');
+                    }
+                    return "CHILD LOADER";
+                  }
+        
+                  export default function Component() {;
+                    let data = useLoaderData();
+                    if (new URLSearchParams(useLocation().search).get('type') === "render") {
+                      throw new Error("Render Error");
+                    }
+                    return <p id="child-data">{data}</p>;
+                  }
+        
+                  export function ErrorBoundary() {
+                    let error = useRouteError();
+                    return isRouteErrorResponse(error) ?
+                      <p id="child-error-response">{error.status + ' ' + error.data}</p> :
+                      <p id="child-error">{error.message}</p>;
+                  }
+                `,
 
         "app/routes/parent.child-without-boundary.tsx": js`
-          import { useLoaderData, useLocation } from "@remix-run/react";
-
-          export function loader({ request }) {
-            let errorType = new URL(request.url).searchParams.get('type');
-            if (errorType === 'response') {
-              throw new Response('Loader Response', { status: 418 });
-            } else if (errorType === 'error') {
-              throw new Error('Loader Error');
-            }
-            return "CHILD LOADER";
-          }
-
-          export default function Component() {;
-            let data = useLoaderData();
-            if (new URLSearchParams(useLocation().search).get('type') === "render") {
-              throw new Error("Render Error");
-            }
-            return <p id="child-data">{data}</p>;
-          }
-        `,
+                  import { useLoaderData, useLocation } from "@react-router/react";
+        
+                  export function loader({ request }) {
+                    let errorType = new URL(request.url).searchParams.get('type');
+                    if (errorType === 'response') {
+                      throw new Response('Loader Response', { status: 418 });
+                    } else if (errorType === 'error') {
+                      throw new Error('Loader Error');
+                    }
+                    return "CHILD LOADER";
+                  }
+        
+                  export default function Component() {;
+                    let data = useLoaderData();
+                    if (new URLSearchParams(useLocation().search).get('type') === "render") {
+                      throw new Error("Render Error");
+                    }
+                    return <p id="child-data">{data}</p>;
+                  }
+                `,
       },
     });
 
@@ -254,122 +254,122 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/root.tsx": js`
-            import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
-
-            export default function Root() {
-              return (
-                <html lang="en">
-                  <head>
-                    <Meta />
-                    <Links />
-                  </head>
-                  <body>
-                    <main>
-                      <Outlet />
-                    </main>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Links, Meta, Outlet, Scripts } from "@react-router/react";
+          
+                      export default function Root() {
+                        return (
+                          <html lang="en">
+                            <head>
+                              <Meta />
+                              <Links />
+                            </head>
+                            <body>
+                              <main>
+                                <Outlet />
+                              </main>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/parent.tsx": js`
-            import {
-              Link,
-              Outlet,
-              isRouteErrorResponse,
-              useLoaderData,
-              useRouteError,
-            } from "@remix-run/react";
-
-            export function loader() {
-              return "PARENT LOADER";
-            }
-
-            export default function Component() {
-              return (
-                <div>
-                  <nav>
-                    <ul>
-                      <li><Link to="/parent/child-with-boundary">Link</Link></li>
-                      <li><Link to="/parent/child-with-boundary?type=error">Link</Link></li>
-                      <li><Link to="/parent/child-with-boundary?type=response">Link</Link></li>
-                      <li><Link to="/parent/child-with-boundary?type=render">Link</Link></li>
-                      <li><Link to="/parent/child-without-boundary?type=error">Link</Link></li>
-                      <li><Link to="/parent/child-without-boundary?type=response">Link</Link></li>
-                      <li><Link to="/parent/child-without-boundary?type=render">Link</Link></li>
-                    </ul>
-                  </nav>
-                  <p id="parent-data">{useLoaderData()}</p>
-                  <Outlet />
-                </div>
-              )
-            }
-
-            export function ErrorBoundary() {
-              let error = useRouteError();
-              return isRouteErrorResponse(error) ?
-                <p id="parent-error-response">{error.status + ' ' + error.data}</p> :
-                <p id="parent-error">{error.message}</p>;
-            }
-          `,
+                      import {
+                        Link,
+                        Outlet,
+                        isRouteErrorResponse,
+                        useLoaderData,
+                        useRouteError,
+                      } from "@react-router/react";
+          
+                      export function loader() {
+                        return "PARENT LOADER";
+                      }
+          
+                      export default function Component() {
+                        return (
+                          <div>
+                            <nav>
+                              <ul>
+                                <li><Link to="/parent/child-with-boundary">Link</Link></li>
+                                <li><Link to="/parent/child-with-boundary?type=error">Link</Link></li>
+                                <li><Link to="/parent/child-with-boundary?type=response">Link</Link></li>
+                                <li><Link to="/parent/child-with-boundary?type=render">Link</Link></li>
+                                <li><Link to="/parent/child-without-boundary?type=error">Link</Link></li>
+                                <li><Link to="/parent/child-without-boundary?type=response">Link</Link></li>
+                                <li><Link to="/parent/child-without-boundary?type=render">Link</Link></li>
+                              </ul>
+                            </nav>
+                            <p id="parent-data">{useLoaderData()}</p>
+                            <Outlet />
+                          </div>
+                        )
+                      }
+          
+                      export function ErrorBoundary() {
+                        let error = useRouteError();
+                        return isRouteErrorResponse(error) ?
+                          <p id="parent-error-response">{error.status + ' ' + error.data}</p> :
+                          <p id="parent-error">{error.message}</p>;
+                      }
+                    `,
 
           "app/routes/parent.child-with-boundary.tsx": js`
-            import {
-              isRouteErrorResponse,
-              useLoaderData,
-              useLocation,
-              useRouteError,
-            } from "@remix-run/react";
-
-            export function loader({ request }) {
-              let errorType = new URL(request.url).searchParams.get('type');
-              if (errorType === 'response') {
-                throw new Response('Loader Response', { status: 418 });
-              } else if (errorType === 'error') {
-                throw new Error('Loader Error');
-              }
-              return "CHILD LOADER";
-            }
-
-            export default function Component() {;
-              let data = useLoaderData();
-              if (new URLSearchParams(useLocation().search).get('type') === "render") {
-                throw new Error("Render Error");
-              }
-              return <p id="child-data">{data}</p>;
-            }
-
-            export function ErrorBoundary() {
-              let error = useRouteError();
-              return isRouteErrorResponse(error) ?
-                <p id="child-error-response">{error.status + ' ' + error.data}</p> :
-                <p id="child-error">{error.message}</p>;
-            }
-          `,
+                      import {
+                        isRouteErrorResponse,
+                        useLoaderData,
+                        useLocation,
+                        useRouteError,
+                      } from "@react-router/react";
+          
+                      export function loader({ request }) {
+                        let errorType = new URL(request.url).searchParams.get('type');
+                        if (errorType === 'response') {
+                          throw new Response('Loader Response', { status: 418 });
+                        } else if (errorType === 'error') {
+                          throw new Error('Loader Error');
+                        }
+                        return "CHILD LOADER";
+                      }
+          
+                      export default function Component() {;
+                        let data = useLoaderData();
+                        if (new URLSearchParams(useLocation().search).get('type') === "render") {
+                          throw new Error("Render Error");
+                        }
+                        return <p id="child-data">{data}</p>;
+                      }
+          
+                      export function ErrorBoundary() {
+                        let error = useRouteError();
+                        return isRouteErrorResponse(error) ?
+                          <p id="child-error-response">{error.status + ' ' + error.data}</p> :
+                          <p id="child-error">{error.message}</p>;
+                      }
+                    `,
 
           "app/routes/parent.child-without-boundary.tsx": js`
-            import { useLoaderData, useLocation } from "@remix-run/react";
-
-            export function loader({ request }) {
-              let errorType = new URL(request.url).searchParams.get('type');
-              if (errorType === 'response') {
-                throw new Response('Loader Response', { status: 418 });
-              } else if (errorType === 'error') {
-                throw new Error('Loader Error');
-              }
-              return "CHILD LOADER";
-            }
-
-            export default function Component() {;
-              let data = useLoaderData();
-              if (new URLSearchParams(useLocation().search).get('type') === "render") {
-                throw new Error("Render Error");
-              }
-              return <p id="child-data">{data}</p>;
-            }
-          `,
+                      import { useLoaderData, useLocation } from "@react-router/react";
+          
+                      export function loader({ request }) {
+                        let errorType = new URL(request.url).searchParams.get('type');
+                        if (errorType === 'response') {
+                          throw new Response('Loader Response', { status: 418 });
+                        } else if (errorType === 'error') {
+                          throw new Error('Loader Error');
+                        }
+                        return "CHILD LOADER";
+                      }
+          
+                      export default function Component() {;
+                        let data = useLoaderData();
+                        if (new URLSearchParams(useLocation().search).get('type') === "render") {
+                          throw new Error("Render Error");
+                        }
+                        return <p id="child-data">{data}</p>;
+                      }
+                    `,
         },
       });
 

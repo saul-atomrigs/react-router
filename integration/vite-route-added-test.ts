@@ -7,20 +7,20 @@ import { createProject, viteDev, viteConfig } from "./helpers/vite.js";
 
 const files = {
   "app/routes/_index.tsx": String.raw`
-    import { useState, useEffect } from "react";
-    import { Link } from "@remix-run/react";
-
-    export default function IndexRoute() {
-      const [mounted, setMounted] = useState(false);
-      useEffect(() => {
-        setMounted(true);
-      }, []);
-
-      return (
-        <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
-      );
-    }
-  `,
+      import { useState, useEffect } from "react";
+      import { Link } from "@react-router/react";
+  
+      export default function IndexRoute() {
+        const [mounted, setMounted] = useState(false);
+        useEffect(() => {
+          setMounted(true);
+        }, []);
+  
+        return (
+          <p data-mounted>Mounted: {mounted ? "yes" : "no"}</p>
+        );
+      }
+    `,
 };
 
 test.describe(async () => {

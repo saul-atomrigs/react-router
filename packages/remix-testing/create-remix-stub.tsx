@@ -8,7 +8,7 @@ import type {
 } from "@remix-run/router";
 import { UNSAFE_convertRoutesToDataRoutes } from "@remix-run/router";
 // @ts-expect-error TODO: Update import
-import { UNSAFE_RemixContext as RemixContext } from "@remix-run/react";
+import { UNSAFE_RemixContext as RemixContext } from "@react-router/react";
 import type {
   UNSAFE_FutureConfig as FutureConfig,
   UNSAFE_AssetsManifest as AssetsManifest,
@@ -17,7 +17,7 @@ import type {
   UNSAFE_RemixContextObject as RemixContextObject,
   MetaFunction,
   // @ts-expect-error TODO: Update import
-} from "@remix-run/react";
+} from "@react-router/react";
 import type {
   DataRouteObject,
   IndexRouteObject,
@@ -29,7 +29,7 @@ import type {
   AppLoadContext,
   LinksFunction,
   LoaderFunction,
-} from "@remix-run/server-runtime";
+} from "@react-router/server-runtime";
 
 interface StubIndexRouteObject
   extends Omit<

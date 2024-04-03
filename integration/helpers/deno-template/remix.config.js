@@ -1,4 +1,4 @@
-/** @type {import('@remix-run/dev').AppConfig} */
+/** @type {import('@react-router/dev').AppConfig} */
 module.exports = {
   server: "./server.ts",
   serverConditions: ["deno", "worker"],

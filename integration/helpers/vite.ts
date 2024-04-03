@@ -12,9 +12,9 @@ import glob from "glob";
 import dedent from "dedent";
 import type { Page } from "@playwright/test";
 import { test as base, expect } from "@playwright/test";
-import type { VitePluginConfig } from "@remix-run/dev";
+import type { VitePluginConfig } from "@react-router/dev";
 
-const remixBin = "node_modules/@remix-run/dev/dist/cli.js";
+const remixBin = "node_modules/@react-router/dev/dist/cli.js";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const TMP_DIR = path.join(root, ".tmp/integration");
@@ -47,19 +47,19 @@ export const viteConfig = {
     };
 
     return dedent`
-      import { vitePlugin as remix } from "@remix-run/dev";
-      import envOnly from "vite-env-only";
-      import tsconfigPaths from "vite-tsconfig-paths";
-
-      export default {
-        ${await viteConfig.server(args)}
-        plugins: [
-          remix(${JSON.stringify(remixPluginOptions)}),
-          envOnly(),
-          tsconfigPaths()
-        ],
-      };
-    `;
+          import { vitePlugin as remix } from "@react-router/dev";
+          import envOnly from "vite-env-only";
+          import tsconfigPaths from "vite-tsconfig-paths";
+    
+          export default {
+            ${await viteConfig.server(args)}
+            plugins: [
+              remix(${JSON.stringify(remixPluginOptions)}),
+              envOnly(),
+              tsconfigPaths()
+            ],
+          };
+        `;
   },
 };
 
@@ -68,46 +68,46 @@ export const EXPRESS_SERVER = (args: {
   loadContext?: Record<string, unknown>;
 }) =>
   String.raw`
-    import { createRequestHandler } from "@remix-run/express";
-    import { installGlobals } from "@remix-run/node";
-    import express from "express";
-
-    installGlobals();
-
-    let viteDevServer =
-      process.env.NODE_ENV === "production"
-        ? undefined
-        : await import("vite").then((vite) =>
-            vite.createServer({
-              server: { middlewareMode: true },
-            })
-          );
-
-    const app = express();
-
-    if (viteDevServer) {
-      app.use(viteDevServer.middlewares);
-    } else {
-      app.use(
-        "/assets",
-        express.static("build/client/assets", { immutable: true, maxAge: "1y" })
+      import { createRequestHandler } from "@react-router/express";
+      import { installGlobals } from "@react-router/node";
+      import express from "express";
+  
+      installGlobals();
+  
+      let viteDevServer =
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : await import("vite").then((vite) =>
+              vite.createServer({
+                server: { middlewareMode: true },
+              })
+            );
+  
+      const app = express();
+  
+      if (viteDevServer) {
+        app.use(viteDevServer.middlewares);
+      } else {
+        app.use(
+          "/assets",
+          express.static("build/client/assets", { immutable: true, maxAge: "1y" })
+        );
+      }
+      app.use(express.static("build/client", { maxAge: "1h" }));
+  
+      app.all(
+        "*",
+        createRequestHandler({
+          build: viteDevServer
+            ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
+            : await import("./build/index.js"),
+          getLoadContext: () => (${JSON.stringify(args.loadContext ?? {})}),
+        })
       );
-    }
-    app.use(express.static("build/client", { maxAge: "1h" }));
-
-    app.all(
-      "*",
-      createRequestHandler({
-        build: viteDevServer
-          ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
-          : await import("./build/index.js"),
-        getLoadContext: () => (${JSON.stringify(args.loadContext ?? {})}),
-      })
-    );
-
-    const port = ${args.port};
-    app.listen(port, () => console.log('http://localhost:' + port));
-  `;
+  
+      const port = ${args.port};
+      app.listen(port, () => console.log('http://localhost:' + port));
+    `;
 
 type TemplateName = "vite-template" | "vite-cloudflare-template";
 
@@ -177,7 +177,7 @@ export const viteRemixServe = async ({
   let serveProc = spawn(
     nodeBin,
     [
-      "node_modules/@remix-run/serve/dist/cli.js",
+      "node_modules/@react-router/serve/dist/cli.js",
       `build/server/${serverBundle ? serverBundle + "/" : ""}index.js`,
     ],
     {

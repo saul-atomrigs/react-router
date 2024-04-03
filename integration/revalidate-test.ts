@@ -16,142 +16,142 @@ test.describe("Revalidation", () => {
       await createFixture({
         files: {
           "app/root.tsx": js`
-            import { Link, Outlet, Scripts, useNavigation } from "@remix-run/react";
-
-            export default function Component() {
-              let navigation = useNavigation();
-              return (
-                <html>
-                  <head />
-                  <body>
-                    <nav>
-                      {navigation.state === 'idle' ?
-                        <p id="idle">Idle</p> :
-                        <p id="busy">Busy</p>}
-                      <ul>
-                        <li><Link to="/">/</Link></li>
-                        <li><Link to="/parent">/parent</Link></li>
-                        <li><Link to="/parent/child">/parent/child</Link></li>
-                        <li><Link to="/parent/child?revalidate=parent">/parent/child</Link></li>
-                        <li><Link to="/parent/child?revalidate=child">/parent/child</Link></li>
-                        <li><Link to="/parent/child?revalidate=parent,child">/parent/child</Link></li>
-                      </ul>
-                    </nav>
-                    <Outlet />
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { Link, Outlet, Scripts, useNavigation } from "@react-router/react";
+          
+                      export default function Component() {
+                        let navigation = useNavigation();
+                        return (
+                          <html>
+                            <head />
+                            <body>
+                              <nav>
+                                {navigation.state === 'idle' ?
+                                  <p id="idle">Idle</p> :
+                                  <p id="busy">Busy</p>}
+                                <ul>
+                                  <li><Link to="/">/</Link></li>
+                                  <li><Link to="/parent">/parent</Link></li>
+                                  <li><Link to="/parent/child">/parent/child</Link></li>
+                                  <li><Link to="/parent/child?revalidate=parent">/parent/child</Link></li>
+                                  <li><Link to="/parent/child?revalidate=child">/parent/child</Link></li>
+                                  <li><Link to="/parent/child?revalidate=parent,child">/parent/child</Link></li>
+                                </ul>
+                              </nav>
+                              <Outlet />
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
 
           "app/routes/parent.tsx": js`
-            import { json } from "@remix-run/node";
-            import { Outlet, useLoaderData } from "@remix-run/react";
-
-            export async function loader({ request }) {
-              let header = request.headers.get('Cookie') || '';
-              let cookie = header
-                .split(';')
-                .map(c => c.trim())
-                .find(c => c.startsWith('parent='))
-              let strValue = (cookie || 'parent=0').split("=")[1];
-              let value = parseInt(strValue, 10) + 1;
-              return json({ value }, {
-                headers: {
-                  "Set-Cookie": "parent=" + value,
-                }
-              })
-            };
-
-            export function shouldRevalidate({ nextUrl, formData }) {
-              if (nextUrl.searchParams.get('revalidate')?.split(',')?.includes('parent')) {
-                return true;
-              }
-              if (formData?.getAll('revalidate')?.includes('parent')) {
-                return true;
-              }
-              return false
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              return (
-                <>
-                  <p id="parent-data">{'Value:' + data.value}</p>
-                  <Outlet />
-                </>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import { Outlet, useLoaderData } from "@react-router/react";
+          
+                      export async function loader({ request }) {
+                        let header = request.headers.get('Cookie') || '';
+                        let cookie = header
+                          .split(';')
+                          .map(c => c.trim())
+                          .find(c => c.startsWith('parent='))
+                        let strValue = (cookie || 'parent=0').split("=")[1];
+                        let value = parseInt(strValue, 10) + 1;
+                        return json({ value }, {
+                          headers: {
+                            "Set-Cookie": "parent=" + value,
+                          }
+                        })
+                      };
+          
+                      export function shouldRevalidate({ nextUrl, formData }) {
+                        if (nextUrl.searchParams.get('revalidate')?.split(',')?.includes('parent')) {
+                          return true;
+                        }
+                        if (formData?.getAll('revalidate')?.includes('parent')) {
+                          return true;
+                        }
+                        return false
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        return (
+                          <>
+                            <p id="parent-data">{'Value:' + data.value}</p>
+                            <Outlet />
+                          </>
+                        );
+                      }
+                    `,
 
           "app/routes/parent.child.tsx": js`
-            import { json } from "@remix-run/node";
-            import { Form, useLoaderData, useRevalidator } from "@remix-run/react";
-
-            export async function action() {
-              return json({ action: 'data' })
-            }
-
-            export async function loader({ request }) {
-              let header = request.headers.get('Cookie') || '';
-              let cookie = header
-                .split(';')
-                .map(c => c.trim())
-                .find(c => c.startsWith('child='))
-              let strValue = (cookie || 'child=0').split("=")[1];
-              let value = parseInt(strValue, 10) + 1;
-              return json({ value }, {
-                headers: {
-                  "Set-Cookie": "child=" + value,
-                }
-              })
-            };
-
-            export function shouldRevalidate({ nextUrl, formData }) {
-              let revalidate = (nextUrl.searchParams.get('revalidate') || '').split(',')
-              if (revalidate.includes('child')) {
-                return true;
-              }
-              if (formData?.getAll('revalidate')?.includes('child')) {
-                return true;
-              }
-              return false
-            }
-
-            export default function Component() {
-              let data = useLoaderData();
-              let revalidator = useRevalidator();
-              return (
-                <>
-                  <p id="child-data">{'Value:' + data.value}</p>
-                  <Form method="post" action=".">
-                    <input type="hidden" name="revalidate" value="" />
-                    <button type="submit" id="submit-neither">Submit and revalidate neither</button>
-                  </Form>
-                  <Form method="post" action=".">
-                    <input type="hidden" name="revalidate" value="parent" />
-                    <button type="submit" id="submit-parent">Submit and revalidate parent</button>
-                  </Form>
-                  <Form method="post" action=".">
-                    <input type="hidden" name="revalidate" value="child" />
-                    <button type="submit" id="submit-child">Submit and revalidate child</button>
-                  </Form>
-                  <Form method="post" action=".">
-                    <input type="hidden" name="revalidate" value="parent" />
-                    <input type="hidden" name="revalidate" value="child" />
-                    <button type="submit" id="submit-both">Submit and revalidate both</button>
-                  </Form>
-                  {revalidator.state === 'idle' ?
-                    <p id="revalidation-idle">Revalidation idle</p> :
-                    <p id="revalidation-busy">Revalidation busy</p>}
-                  <button id="revalidate" onClick={() => revalidator.revalidate()}>
-                    Revalidate
-                  </button>
-                </>
-              );
-            }
-          `,
+                      import { json } from "@react-router/node";
+                      import { Form, useLoaderData, useRevalidator } from "@react-router/react";
+          
+                      export async function action() {
+                        return json({ action: 'data' })
+                      }
+          
+                      export async function loader({ request }) {
+                        let header = request.headers.get('Cookie') || '';
+                        let cookie = header
+                          .split(';')
+                          .map(c => c.trim())
+                          .find(c => c.startsWith('child='))
+                        let strValue = (cookie || 'child=0').split("=")[1];
+                        let value = parseInt(strValue, 10) + 1;
+                        return json({ value }, {
+                          headers: {
+                            "Set-Cookie": "child=" + value,
+                          }
+                        })
+                      };
+          
+                      export function shouldRevalidate({ nextUrl, formData }) {
+                        let revalidate = (nextUrl.searchParams.get('revalidate') || '').split(',')
+                        if (revalidate.includes('child')) {
+                          return true;
+                        }
+                        if (formData?.getAll('revalidate')?.includes('child')) {
+                          return true;
+                        }
+                        return false
+                      }
+          
+                      export default function Component() {
+                        let data = useLoaderData();
+                        let revalidator = useRevalidator();
+                        return (
+                          <>
+                            <p id="child-data">{'Value:' + data.value}</p>
+                            <Form method="post" action=".">
+                              <input type="hidden" name="revalidate" value="" />
+                              <button type="submit" id="submit-neither">Submit and revalidate neither</button>
+                            </Form>
+                            <Form method="post" action=".">
+                              <input type="hidden" name="revalidate" value="parent" />
+                              <button type="submit" id="submit-parent">Submit and revalidate parent</button>
+                            </Form>
+                            <Form method="post" action=".">
+                              <input type="hidden" name="revalidate" value="child" />
+                              <button type="submit" id="submit-child">Submit and revalidate child</button>
+                            </Form>
+                            <Form method="post" action=".">
+                              <input type="hidden" name="revalidate" value="parent" />
+                              <input type="hidden" name="revalidate" value="child" />
+                              <button type="submit" id="submit-both">Submit and revalidate both</button>
+                            </Form>
+                            {revalidator.state === 'idle' ?
+                              <p id="revalidation-idle">Revalidation idle</p> :
+                              <p id="revalidation-busy">Revalidation busy</p>}
+                            <button id="revalidate" onClick={() => revalidator.revalidate()}>
+                              Revalidate
+                            </button>
+                          </>
+                        );
+                      }
+                    `,
         },
       })
     );
@@ -306,142 +306,142 @@ test.describe("single fetch", () => {
           singleFetch: true,
           files: {
             "app/root.tsx": js`
-              import { Link, Outlet, Scripts, useNavigation } from "@remix-run/react";
-
-              export default function Component() {
-                let navigation = useNavigation();
-                return (
-                  <html>
-                    <head />
-                    <body>
-                      <nav>
-                        {navigation.state === 'idle' ?
-                          <p id="idle">Idle</p> :
-                          <p id="busy">Busy</p>}
-                        <ul>
-                          <li><Link to="/">/</Link></li>
-                          <li><Link to="/parent">/parent</Link></li>
-                          <li><Link to="/parent/child">/parent/child</Link></li>
-                          <li><Link to="/parent/child?revalidate=parent">/parent/child?revalidate=parent</Link></li>
-                          <li><Link to="/parent/child?revalidate=child">/parent/child?revalidate=child</Link></li>
-                          <li><Link to="/parent/child?revalidate=parent,child">/parent/child?revalidate=parent,child</Link></li>
-                        </ul>
-                      </nav>
-                      <Outlet />
-                      <Scripts />
-                    </body>
-                  </html>
-                );
-              }
-            `,
+                          import { Link, Outlet, Scripts, useNavigation } from "@react-router/react";
+            
+                          export default function Component() {
+                            let navigation = useNavigation();
+                            return (
+                              <html>
+                                <head />
+                                <body>
+                                  <nav>
+                                    {navigation.state === 'idle' ?
+                                      <p id="idle">Idle</p> :
+                                      <p id="busy">Busy</p>}
+                                    <ul>
+                                      <li><Link to="/">/</Link></li>
+                                      <li><Link to="/parent">/parent</Link></li>
+                                      <li><Link to="/parent/child">/parent/child</Link></li>
+                                      <li><Link to="/parent/child?revalidate=parent">/parent/child?revalidate=parent</Link></li>
+                                      <li><Link to="/parent/child?revalidate=child">/parent/child?revalidate=child</Link></li>
+                                      <li><Link to="/parent/child?revalidate=parent,child">/parent/child?revalidate=parent,child</Link></li>
+                                    </ul>
+                                  </nav>
+                                  <Outlet />
+                                  <Scripts />
+                                </body>
+                              </html>
+                            );
+                          }
+                        `,
 
             "app/routes/parent.tsx": js`
-              import { json } from "@remix-run/node";
-              import { Outlet, useLoaderData } from "@remix-run/react";
-
-              export async function loader({ request }) {
-                let header = request.headers.get('Cookie') || '';
-                let cookie = header
-                  .split(';')
-                  .map(c => c.trim())
-                  .find(c => c.startsWith('parent='))
-                let strValue = (cookie || 'parent=0').split("=")[1];
-                let value = parseInt(strValue, 10) + 1;
-                return json({ value }, {
-                  headers: {
-                    "Set-Cookie": "parent=" + value,
-                  }
-                })
-              };
-
-              export function shouldRevalidate({ nextUrl, formData }) {
-                if (nextUrl.searchParams.get('revalidate')?.split(',')?.includes('parent')) {
-                  return true;
-                }
-                if (formData?.getAll('revalidate')?.includes('parent')) {
-                  return true;
-                }
-                return false
-              }
-
-              export default function Component() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <p id="parent-data">{'Value:' + data.value}</p>
-                    <Outlet />
-                  </>
-                );
-              }
-            `,
+                          import { json } from "@react-router/node";
+                          import { Outlet, useLoaderData } from "@react-router/react";
+            
+                          export async function loader({ request }) {
+                            let header = request.headers.get('Cookie') || '';
+                            let cookie = header
+                              .split(';')
+                              .map(c => c.trim())
+                              .find(c => c.startsWith('parent='))
+                            let strValue = (cookie || 'parent=0').split("=")[1];
+                            let value = parseInt(strValue, 10) + 1;
+                            return json({ value }, {
+                              headers: {
+                                "Set-Cookie": "parent=" + value,
+                              }
+                            })
+                          };
+            
+                          export function shouldRevalidate({ nextUrl, formData }) {
+                            if (nextUrl.searchParams.get('revalidate')?.split(',')?.includes('parent')) {
+                              return true;
+                            }
+                            if (formData?.getAll('revalidate')?.includes('parent')) {
+                              return true;
+                            }
+                            return false
+                          }
+            
+                          export default function Component() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <p id="parent-data">{'Value:' + data.value}</p>
+                                <Outlet />
+                              </>
+                            );
+                          }
+                        `,
 
             "app/routes/parent.child.tsx": js`
-              import { json } from "@remix-run/node";
-              import { Form, useLoaderData, useRevalidator } from "@remix-run/react";
-
-              export async function action() {
-                return json({ action: 'data' })
-              }
-
-              export async function loader({ request }) {
-                let header = request.headers.get('Cookie') || '';
-                let cookie = header
-                  .split(';')
-                  .map(c => c.trim())
-                  .find(c => c.startsWith('child='))
-                let strValue = (cookie || 'child=0').split("=")[1];
-                let value = parseInt(strValue, 10) + 1;
-                return json({ value }, {
-                  headers: {
-                    "Set-Cookie": "child=" + value,
-                  }
-                })
-              };
-
-              export function shouldRevalidate({ nextUrl, formData }) {
-                let revalidate = (nextUrl.searchParams.get('revalidate') || '').split(',')
-                if (revalidate.includes('child')) {
-                  return true;
-                }
-                if (formData?.getAll('revalidate')?.includes('child')) {
-                  return true;
-                }
-                return false
-              }
-
-              export default function Component() {
-                let data = useLoaderData();
-                let revalidator = useRevalidator();
-                return (
-                  <>
-                    <p id="child-data">{'Value:' + data.value}</p>
-                    <Form method="post" action=".">
-                      <input type="hidden" name="revalidate" value="" />
-                      <button type="submit" id="submit-neither">Submit and revalidate neither</button>
-                    </Form>
-                    <Form method="post" action=".">
-                      <input type="hidden" name="revalidate" value="parent" />
-                      <button type="submit" id="submit-parent">Submit and revalidate parent</button>
-                    </Form>
-                    <Form method="post" action=".">
-                      <input type="hidden" name="revalidate" value="child" />
-                      <button type="submit" id="submit-child">Submit and revalidate child</button>
-                    </Form>
-                    <Form method="post" action=".">
-                      <input type="hidden" name="revalidate" value="parent" />
-                      <input type="hidden" name="revalidate" value="child" />
-                      <button type="submit" id="submit-both">Submit and revalidate both</button>
-                    </Form>
-                    {revalidator.state === 'idle' ?
-                      <p id="revalidation-idle">Revalidation idle</p> :
-                      <p id="revalidation-busy">Revalidation busy</p>}
-                    <button id="revalidate" onClick={() => revalidator.revalidate()}>
-                      Revalidate
-                    </button>
-                  </>
-                );
-              }
-            `,
+                          import { json } from "@react-router/node";
+                          import { Form, useLoaderData, useRevalidator } from "@react-router/react";
+            
+                          export async function action() {
+                            return json({ action: 'data' })
+                          }
+            
+                          export async function loader({ request }) {
+                            let header = request.headers.get('Cookie') || '';
+                            let cookie = header
+                              .split(';')
+                              .map(c => c.trim())
+                              .find(c => c.startsWith('child='))
+                            let strValue = (cookie || 'child=0').split("=")[1];
+                            let value = parseInt(strValue, 10) + 1;
+                            return json({ value }, {
+                              headers: {
+                                "Set-Cookie": "child=" + value,
+                              }
+                            })
+                          };
+            
+                          export function shouldRevalidate({ nextUrl, formData }) {
+                            let revalidate = (nextUrl.searchParams.get('revalidate') || '').split(',')
+                            if (revalidate.includes('child')) {
+                              return true;
+                            }
+                            if (formData?.getAll('revalidate')?.includes('child')) {
+                              return true;
+                            }
+                            return false
+                          }
+            
+                          export default function Component() {
+                            let data = useLoaderData();
+                            let revalidator = useRevalidator();
+                            return (
+                              <>
+                                <p id="child-data">{'Value:' + data.value}</p>
+                                <Form method="post" action=".">
+                                  <input type="hidden" name="revalidate" value="" />
+                                  <button type="submit" id="submit-neither">Submit and revalidate neither</button>
+                                </Form>
+                                <Form method="post" action=".">
+                                  <input type="hidden" name="revalidate" value="parent" />
+                                  <button type="submit" id="submit-parent">Submit and revalidate parent</button>
+                                </Form>
+                                <Form method="post" action=".">
+                                  <input type="hidden" name="revalidate" value="child" />
+                                  <button type="submit" id="submit-child">Submit and revalidate child</button>
+                                </Form>
+                                <Form method="post" action=".">
+                                  <input type="hidden" name="revalidate" value="parent" />
+                                  <input type="hidden" name="revalidate" value="child" />
+                                  <button type="submit" id="submit-both">Submit and revalidate both</button>
+                                </Form>
+                                {revalidator.state === 'idle' ?
+                                  <p id="revalidation-idle">Revalidation idle</p> :
+                                  <p id="revalidation-busy">Revalidation busy</p>}
+                                <button id="revalidate" onClick={() => revalidator.revalidate()}>
+                                  Revalidate
+                                </button>
+                              </>
+                            );
+                          }
+                        `,
           },
         })
       );

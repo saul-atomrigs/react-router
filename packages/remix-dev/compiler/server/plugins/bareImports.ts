@@ -38,8 +38,8 @@ export function serverBareModulesPlugin(ctx: Context): Plugin {
           return undefined;
         }
 
-        // Always bundle @remix-run/css-bundle
-        if (path === "@remix-run/css-bundle") {
+        // Always bundle @react-router/css-bundle
+        if (path === "@react-router/css-bundle") {
           return undefined;
         }
 

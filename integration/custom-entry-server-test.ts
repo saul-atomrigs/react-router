@@ -15,27 +15,27 @@ test.beforeAll(async () => {
   fixture = await createFixture({
     files: {
       "app/entry.server.tsx": js`
-        import * as React from "react";
-        import { RemixServer } from "@remix-run/react";
-        import { renderToString } from "react-dom/server";
-
-        export default function handleRequest(
-          request,
-          responseStatusCode,
-          responseHeaders,
-          remixContext
-        ) {
-          let markup = renderToString(
-            <RemixServer context={remixContext} url={request.url} />
-          );
-          responseHeaders.set("Content-Type", "text/html");
-          responseHeaders.set("x-custom-header", "custom-value");
-          return new Response('<!doctype html>' + markup, {
-            headers: responseHeaders,
-            status: responseStatusCode,
-          });
-        }
-      `,
+              import * as React from "react";
+              import { RemixServer } from "@react-router/react";
+              import { renderToString } from "react-dom/server";
+      
+              export default function handleRequest(
+                request,
+                responseStatusCode,
+                responseHeaders,
+                remixContext
+              ) {
+                let markup = renderToString(
+                  <RemixServer context={remixContext} url={request.url} />
+                );
+                responseHeaders.set("Content-Type", "text/html");
+                responseHeaders.set("x-custom-header", "custom-value");
+                return new Response('<!doctype html>' + markup, {
+                  headers: responseHeaders,
+                  status: responseStatusCode,
+                });
+              }
+            `,
       "app/routes/_index.tsx": js`
         export default function Index() {
           return <h1>Hello World</h1>

@@ -15,17 +15,17 @@ test.beforeAll(async () => {
   fixture = await createFixture({
     files: {
       "app/routes/_index.tsx": js`
-        import { Link } from "@remix-run/react";
-
-        export default function Index() {
-          return (
-            <div>
-              <div id="pizza">pizza</div>
-              <Link to="/burgers">burger link</Link>
-            </div>
-          )
-        }
-      `,
+              import { Link } from "@react-router/react";
+      
+              export default function Index() {
+                return (
+                  <div>
+                    <div id="pizza">pizza</div>
+                    <Link to="/burgers">burger link</Link>
+                  </div>
+                )
+              }
+            `,
 
       "app/routes/burgers.tsx": js`
         export default function Index() {

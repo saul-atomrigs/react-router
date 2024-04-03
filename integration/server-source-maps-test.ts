@@ -13,26 +13,26 @@ test.beforeAll(async () => {
     sourcemap: true,
     files: {
       "app/routes/_index.tsx": js`
-        import { json } from "@remix-run/node";
-        import { useLoaderData } from "@remix-run/react";
-
-        export function loader() {
-          try {
-            throw new Error("💩");
-          } catch {
-            return json(err.stack);
-          }
-        }
-
-        export default function Index() {
-          let data = useLoaderData();
-          return (
-            <pre>
-              {data}
-            </pre>
-          )
-        }
-      `,
+              import { json } from "@react-router/node";
+              import { useLoaderData } from "@react-router/react";
+      
+              export function loader() {
+                try {
+                  throw new Error("💩");
+                } catch {
+                  return json(err.stack);
+                }
+              }
+      
+              export default function Index() {
+                let data = useLoaderData();
+                return (
+                  <pre>
+                    {data}
+                  </pre>
+                )
+              }
+            `,
     },
   });
 });

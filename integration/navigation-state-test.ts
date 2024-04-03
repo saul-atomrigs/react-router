@@ -37,92 +37,92 @@ test.describe("navigation states", () => {
     fixture = await createFixture({
       files: {
         "app/root.tsx": js`
-          import { useMemo, useRef } from "react";
-          import { Outlet, Scripts, useNavigation } from "@remix-run/react";
-          export default function() {
-            const navigation = useNavigation();
-            const navigationsRef = useRef();
-            const navigations = useMemo(() => {
-              const savedNavigations = navigationsRef.current || [];
-              savedNavigations.push(navigation);
-              navigationsRef.current = savedNavigations;
-              return savedNavigations;
-            }, [navigation]);
-            return (
-              <html lang="en">
-                <head><title>Test</title></head>
-                <body>
-                  <Outlet />
-                    {navigation.state != "idle" && (
-                      <p id="loading-indicator">Loading...</p>
-                    )}
-                  <p>
-                    <code id="navigations">
-                      {JSON.stringify(navigations, null, 2)}
-                    </code>
-                  </p>
-                  <Scripts />
-                </body>
-              </html>
-            );
-          }
-        `,
+                  import { useMemo, useRef } from "react";
+                  import { Outlet, Scripts, useNavigation } from "@react-router/react";
+                  export default function() {
+                    const navigation = useNavigation();
+                    const navigationsRef = useRef();
+                    const navigations = useMemo(() => {
+                      const savedNavigations = navigationsRef.current || [];
+                      savedNavigations.push(navigation);
+                      navigationsRef.current = savedNavigations;
+                      return savedNavigations;
+                    }, [navigation]);
+                    return (
+                      <html lang="en">
+                        <head><title>Test</title></head>
+                        <body>
+                          <Outlet />
+                            {navigation.state != "idle" && (
+                              <p id="loading-indicator">Loading...</p>
+                            )}
+                          <p>
+                            <code id="navigations">
+                              {JSON.stringify(navigations, null, 2)}
+                            </code>
+                          </p>
+                          <Scripts />
+                        </body>
+                      </html>
+                    );
+                  }
+                `,
         "app/routes/_index.tsx": js`
-          import { Form, Link, useFetcher } from "@remix-run/react";
-          export function loader() { return null; }
-          export default function() {
-            const fetcher = useFetcher();
-            return (
-              <ul>
-                <li>
-                  <Link to="/${STATES.NORMAL_LOAD}">
-                    ${STATES.NORMAL_LOAD}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/${STATES.LOADING_REDIRECT}">
-                    ${STATES.LOADING_REDIRECT}
-                  </Link>
-                </li>
-                <li>
-                  <Form action="/${STATES.SUBMITTING_LOADER}" method="get">
-                    <button type="submit" name="key" value="value">
-                      ${STATES.SUBMITTING_LOADER}
-                    </button>
-                  </Form>
-                </li>
-                <li>
-                  <Form action="/${STATES.SUBMITTING_LOADER_REDIRECT}" method="get">
-                    <button type="submit">
-                      ${STATES.SUBMITTING_LOADER_REDIRECT}
-                    </button>
-                  </Form>
-                </li>
-                <li>
-                  <Form action="/${STATES.SUBMITTING_ACTION}" method="post">
-                    <button type="submit">
-                      ${STATES.SUBMITTING_ACTION}
-                    </button>
-                  </Form>
-                </li>
-                <li>
-                  <Form action="/${STATES.SUBMITTING_ACTION_REDIRECT}" method="post">
-                    <button type="submit">
-                      ${STATES.SUBMITTING_ACTION_REDIRECT}
-                    </button>
-                  </Form>
-                </li>
-                <li>
-                  <fetcher.Form action="/${STATES.FETCHER_REDIRECT}" method="post">
-                    <button type="submit">
-                      ${STATES.FETCHER_REDIRECT}
-                    </button>
-                  </fetcher.Form>
-                </li>
-              </ul>
-            );
-          }
-        `,
+                  import { Form, Link, useFetcher } from "@react-router/react";
+                  export function loader() { return null; }
+                  export default function() {
+                    const fetcher = useFetcher();
+                    return (
+                      <ul>
+                        <li>
+                          <Link to="/${STATES.NORMAL_LOAD}">
+                            ${STATES.NORMAL_LOAD}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/${STATES.LOADING_REDIRECT}">
+                            ${STATES.LOADING_REDIRECT}
+                          </Link>
+                        </li>
+                        <li>
+                          <Form action="/${STATES.SUBMITTING_LOADER}" method="get">
+                            <button type="submit" name="key" value="value">
+                              ${STATES.SUBMITTING_LOADER}
+                            </button>
+                          </Form>
+                        </li>
+                        <li>
+                          <Form action="/${STATES.SUBMITTING_LOADER_REDIRECT}" method="get">
+                            <button type="submit">
+                              ${STATES.SUBMITTING_LOADER_REDIRECT}
+                            </button>
+                          </Form>
+                        </li>
+                        <li>
+                          <Form action="/${STATES.SUBMITTING_ACTION}" method="post">
+                            <button type="submit">
+                              ${STATES.SUBMITTING_ACTION}
+                            </button>
+                          </Form>
+                        </li>
+                        <li>
+                          <Form action="/${STATES.SUBMITTING_ACTION_REDIRECT}" method="post">
+                            <button type="submit">
+                              ${STATES.SUBMITTING_ACTION_REDIRECT}
+                            </button>
+                          </Form>
+                        </li>
+                        <li>
+                          <fetcher.Form action="/${STATES.FETCHER_REDIRECT}" method="post">
+                            <button type="submit">
+                              ${STATES.FETCHER_REDIRECT}
+                            </button>
+                          </fetcher.Form>
+                        </li>
+                      </ul>
+                    );
+                  }
+                `,
         [`app/routes/${STATES.NORMAL_LOAD}.jsx`]: js`
           export default function() {
             return (
@@ -133,18 +133,18 @@ test.describe("navigation states", () => {
           }
         `,
         [`app/routes/${STATES.LOADING_REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function loader() {
-            return redirect("/?redirected");
-          }
-          export default function() {
-            return (
-              <h2 id="${STATES.LOADING_REDIRECT}">
-                ${STATES.LOADING_REDIRECT}
-              </h2>
-            );
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function loader() {
+                    return redirect("/?redirected");
+                  }
+                  export default function() {
+                    return (
+                      <h2 id="${STATES.LOADING_REDIRECT}">
+                        ${STATES.LOADING_REDIRECT}
+                      </h2>
+                    );
+                  }
+                `,
         [`app/routes/${STATES.SUBMITTING_LOADER}.jsx`]: js`
           export default function() {
             return (
@@ -155,18 +155,18 @@ test.describe("navigation states", () => {
           }
         `,
         [`app/routes/${STATES.SUBMITTING_LOADER_REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function loader() {
-            return redirect("/?redirected");
-          }
-          export default function() {
-            return (
-              <h2 id="${STATES.SUBMITTING_LOADER_REDIRECT}">
-                ${STATES.SUBMITTING_LOADER_REDIRECT}
-              </h2>
-            );
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function loader() {
+                    return redirect("/?redirected");
+                  }
+                  export default function() {
+                    return (
+                      <h2 id="${STATES.SUBMITTING_LOADER_REDIRECT}">
+                        ${STATES.SUBMITTING_LOADER_REDIRECT}
+                      </h2>
+                    );
+                  }
+                `,
         [`app/routes/${STATES.SUBMITTING_ACTION}.jsx`]: js`
           export function loader() { return null; }
           export function action() { return null; }
@@ -179,24 +179,24 @@ test.describe("navigation states", () => {
           }
         `,
         [`app/routes/${STATES.SUBMITTING_ACTION_REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function action() {
-            return redirect("/?redirected");
-          }
-          export default function() {
-            return (
-              <h2 id="${STATES.SUBMITTING_ACTION_REDIRECT}">
-                ${STATES.SUBMITTING_ACTION_REDIRECT}
-              </h2>
-            );
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function action() {
+                    return redirect("/?redirected");
+                  }
+                  export default function() {
+                    return (
+                      <h2 id="${STATES.SUBMITTING_ACTION_REDIRECT}">
+                        ${STATES.SUBMITTING_ACTION_REDIRECT}
+                      </h2>
+                    );
+                  }
+                `,
         [`app/routes/${STATES.FETCHER_REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          export function action() {
-            return redirect("/?redirected");
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  export function action() {
+                    return redirect("/?redirected");
+                  }
+                `,
       },
     });
 
@@ -485,92 +485,92 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/root.tsx": js`
-            import { useMemo, useRef } from "react";
-            import { Outlet, Scripts, useNavigation } from "@remix-run/react";
-            export default function() {
-              const navigation = useNavigation();
-              const navigationsRef = useRef();
-              const navigations = useMemo(() => {
-                const savedNavigations = navigationsRef.current || [];
-                savedNavigations.push(navigation);
-                navigationsRef.current = savedNavigations;
-                return savedNavigations;
-              }, [navigation]);
-              return (
-                <html lang="en">
-                  <head><title>Test</title></head>
-                  <body>
-                    <Outlet />
-                      {navigation.state != "idle" && (
-                        <p id="loading-indicator">Loading...</p>
-                      )}
-                    <p>
-                      <code id="navigations">
-                        {JSON.stringify(navigations, null, 2)}
-                      </code>
-                    </p>
-                    <Scripts />
-                  </body>
-                </html>
-              );
-            }
-          `,
+                      import { useMemo, useRef } from "react";
+                      import { Outlet, Scripts, useNavigation } from "@react-router/react";
+                      export default function() {
+                        const navigation = useNavigation();
+                        const navigationsRef = useRef();
+                        const navigations = useMemo(() => {
+                          const savedNavigations = navigationsRef.current || [];
+                          savedNavigations.push(navigation);
+                          navigationsRef.current = savedNavigations;
+                          return savedNavigations;
+                        }, [navigation]);
+                        return (
+                          <html lang="en">
+                            <head><title>Test</title></head>
+                            <body>
+                              <Outlet />
+                                {navigation.state != "idle" && (
+                                  <p id="loading-indicator">Loading...</p>
+                                )}
+                              <p>
+                                <code id="navigations">
+                                  {JSON.stringify(navigations, null, 2)}
+                                </code>
+                              </p>
+                              <Scripts />
+                            </body>
+                          </html>
+                        );
+                      }
+                    `,
           "app/routes/_index.tsx": js`
-            import { Form, Link, useFetcher } from "@remix-run/react";
-            export function loader() { return null; }
-            export default function() {
-              const fetcher = useFetcher();
-              return (
-                <ul>
-                  <li>
-                    <Link to="/${STATES.NORMAL_LOAD}">
-                      ${STATES.NORMAL_LOAD}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/${STATES.LOADING_REDIRECT}">
-                      ${STATES.LOADING_REDIRECT}
-                    </Link>
-                  </li>
-                  <li>
-                    <Form action="/${STATES.SUBMITTING_LOADER}" method="get">
-                      <button type="submit" name="key" value="value">
-                        ${STATES.SUBMITTING_LOADER}
-                      </button>
-                    </Form>
-                  </li>
-                  <li>
-                    <Form action="/${STATES.SUBMITTING_LOADER_REDIRECT}" method="get">
-                      <button type="submit">
-                        ${STATES.SUBMITTING_LOADER_REDIRECT}
-                      </button>
-                    </Form>
-                  </li>
-                  <li>
-                    <Form action="/${STATES.SUBMITTING_ACTION}" method="post">
-                      <button type="submit">
-                        ${STATES.SUBMITTING_ACTION}
-                      </button>
-                    </Form>
-                  </li>
-                  <li>
-                    <Form action="/${STATES.SUBMITTING_ACTION_REDIRECT}" method="post">
-                      <button type="submit">
-                        ${STATES.SUBMITTING_ACTION_REDIRECT}
-                      </button>
-                    </Form>
-                  </li>
-                  <li>
-                    <fetcher.Form action="/${STATES.FETCHER_REDIRECT}" method="post">
-                      <button type="submit">
-                        ${STATES.FETCHER_REDIRECT}
-                      </button>
-                    </fetcher.Form>
-                  </li>
-                </ul>
-              );
-            }
-          `,
+                      import { Form, Link, useFetcher } from "@react-router/react";
+                      export function loader() { return null; }
+                      export default function() {
+                        const fetcher = useFetcher();
+                        return (
+                          <ul>
+                            <li>
+                              <Link to="/${STATES.NORMAL_LOAD}">
+                                ${STATES.NORMAL_LOAD}
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/${STATES.LOADING_REDIRECT}">
+                                ${STATES.LOADING_REDIRECT}
+                              </Link>
+                            </li>
+                            <li>
+                              <Form action="/${STATES.SUBMITTING_LOADER}" method="get">
+                                <button type="submit" name="key" value="value">
+                                  ${STATES.SUBMITTING_LOADER}
+                                </button>
+                              </Form>
+                            </li>
+                            <li>
+                              <Form action="/${STATES.SUBMITTING_LOADER_REDIRECT}" method="get">
+                                <button type="submit">
+                                  ${STATES.SUBMITTING_LOADER_REDIRECT}
+                                </button>
+                              </Form>
+                            </li>
+                            <li>
+                              <Form action="/${STATES.SUBMITTING_ACTION}" method="post">
+                                <button type="submit">
+                                  ${STATES.SUBMITTING_ACTION}
+                                </button>
+                              </Form>
+                            </li>
+                            <li>
+                              <Form action="/${STATES.SUBMITTING_ACTION_REDIRECT}" method="post">
+                                <button type="submit">
+                                  ${STATES.SUBMITTING_ACTION_REDIRECT}
+                                </button>
+                              </Form>
+                            </li>
+                            <li>
+                              <fetcher.Form action="/${STATES.FETCHER_REDIRECT}" method="post">
+                                <button type="submit">
+                                  ${STATES.FETCHER_REDIRECT}
+                                </button>
+                              </fetcher.Form>
+                            </li>
+                          </ul>
+                        );
+                      }
+                    `,
           [`app/routes/${STATES.NORMAL_LOAD}.jsx`]: js`
             export default function() {
               return (
@@ -581,18 +581,18 @@ test.describe("single fetch", () => {
             }
           `,
           [`app/routes/${STATES.LOADING_REDIRECT}.jsx`]: js`
-            import { redirect } from "@remix-run/node";
-            export function loader() {
-              return redirect("/?redirected");
-            }
-            export default function() {
-              return (
-                <h2 id="${STATES.LOADING_REDIRECT}">
-                  ${STATES.LOADING_REDIRECT}
-                </h2>
-              );
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      export function loader() {
+                        return redirect("/?redirected");
+                      }
+                      export default function() {
+                        return (
+                          <h2 id="${STATES.LOADING_REDIRECT}">
+                            ${STATES.LOADING_REDIRECT}
+                          </h2>
+                        );
+                      }
+                    `,
           [`app/routes/${STATES.SUBMITTING_LOADER}.jsx`]: js`
             export default function() {
               return (
@@ -603,18 +603,18 @@ test.describe("single fetch", () => {
             }
           `,
           [`app/routes/${STATES.SUBMITTING_LOADER_REDIRECT}.jsx`]: js`
-            import { redirect } from "@remix-run/node";
-            export function loader() {
-              return redirect("/?redirected");
-            }
-            export default function() {
-              return (
-                <h2 id="${STATES.SUBMITTING_LOADER_REDIRECT}">
-                  ${STATES.SUBMITTING_LOADER_REDIRECT}
-                </h2>
-              );
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      export function loader() {
+                        return redirect("/?redirected");
+                      }
+                      export default function() {
+                        return (
+                          <h2 id="${STATES.SUBMITTING_LOADER_REDIRECT}">
+                            ${STATES.SUBMITTING_LOADER_REDIRECT}
+                          </h2>
+                        );
+                      }
+                    `,
           [`app/routes/${STATES.SUBMITTING_ACTION}.jsx`]: js`
             export function loader() { return null; }
             export function action() { return null; }
@@ -627,24 +627,24 @@ test.describe("single fetch", () => {
             }
           `,
           [`app/routes/${STATES.SUBMITTING_ACTION_REDIRECT}.jsx`]: js`
-            import { redirect } from "@remix-run/node";
-            export function action() {
-              return redirect("/?redirected");
-            }
-            export default function() {
-              return (
-                <h2 id="${STATES.SUBMITTING_ACTION_REDIRECT}">
-                  ${STATES.SUBMITTING_ACTION_REDIRECT}
-                </h2>
-              );
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      export function action() {
+                        return redirect("/?redirected");
+                      }
+                      export default function() {
+                        return (
+                          <h2 id="${STATES.SUBMITTING_ACTION_REDIRECT}">
+                            ${STATES.SUBMITTING_ACTION_REDIRECT}
+                          </h2>
+                        );
+                      }
+                    `,
           [`app/routes/${STATES.FETCHER_REDIRECT}.jsx`]: js`
-            import { redirect } from "@remix-run/node";
-            export function action() {
-              return redirect("/?redirected");
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      export function action() {
+                        return redirect("/?redirected");
+                      }
+                    `,
         },
       });
 

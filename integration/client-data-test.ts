@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { ServerMode } from "../build/node_modules/@remix-run/server-runtime/dist/mode.js";
+import { ServerMode } from "../build/node_modules/@react-router/server-runtime/dist/mode.js";
 import {
   createAppFixture,
   createFixture,
@@ -26,115 +26,115 @@ function getFiles({
 }) {
   return {
     "app/root.tsx": js`
-      import { Outlet, Scripts } from '@remix-run/react'
-
-      export default function Root() {
-        return (
-          <html>
-            <head></head>
-            <body>
-              <main>
-                <Outlet />
-              </main>
-              <Scripts />
-            </body>
-          </html>
-        );
-      }
-    `,
+          import { Outlet, Scripts } from '@react-router/react'
+    
+          export default function Root() {
+            return (
+              <html>
+                <head></head>
+                <body>
+                  <main>
+                    <Outlet />
+                  </main>
+                  <Scripts />
+                </body>
+              </html>
+            );
+          }
+        `,
     "app/routes/_index.tsx": js`
-      import { Link } from '@remix-run/react'
-      export default function Component() {
-        return <Link to="/parent/child">Go to /parent/child</Link>
-      }
-    `,
+          import { Link } from '@react-router/react'
+          export default function Component() {
+            return <Link to="/parent/child">Go to /parent/child</Link>
+          }
+        `,
     "app/routes/parent.tsx": js`
-      import { json } from '@remix-run/node'
-      import { Outlet, useLoaderData } from '@remix-run/react'
-      export function loader() {
-        return json({ message: 'Parent Server Loader'});
-      }
-      ${
-        parentClientLoader
-          ? js`
-              export async function clientLoader({ serverLoader }) {
-                // Need a small delay to ensure we capture the server-rendered
-                // fallbacks for assertions
-                await new Promise(r => setTimeout(r, 100))
-                let data = await serverLoader();
-                return { message: data.message + " (mutated by client)" };
-              }
-            `
-          : ""
-      }
-      ${
-        parentClientLoaderHydrate
-          ? js`
-              clientLoader.hydrate = true;
-              export function HydrateFallback() {
-                return <p>Parent Fallback</p>
-              }
-            `
-          : ""
-      }
-      ${parentAdditions || ""}
-      export default function Component() {
-        let data = useLoaderData();
-        return (
-          <>
-            <p id="parent-data">{data.message}</p>
-            <Outlet/>
-          </>
-        );
-      }
-    `,
+          import { json } from '@react-router/node'
+          import { Outlet, useLoaderData } from '@react-router/react'
+          export function loader() {
+            return json({ message: 'Parent Server Loader'});
+          }
+          ${
+            parentClientLoader
+              ? js`
+                  export async function clientLoader({ serverLoader }) {
+                    // Need a small delay to ensure we capture the server-rendered
+                    // fallbacks for assertions
+                    await new Promise(r => setTimeout(r, 100))
+                    let data = await serverLoader();
+                    return { message: data.message + " (mutated by client)" };
+                  }
+                `
+              : ""
+          }
+          ${
+            parentClientLoaderHydrate
+              ? js`
+                  clientLoader.hydrate = true;
+                  export function HydrateFallback() {
+                    return <p>Parent Fallback</p>
+                  }
+                `
+              : ""
+          }
+          ${parentAdditions || ""}
+          export default function Component() {
+            let data = useLoaderData();
+            return (
+              <>
+                <p id="parent-data">{data.message}</p>
+                <Outlet/>
+              </>
+            );
+          }
+        `,
     "app/routes/parent.child.tsx": js`
-      import { json } from '@remix-run/node'
-      import { Form, Outlet, useActionData, useLoaderData } from '@remix-run/react'
-      export function loader() {
-        return json({ message: 'Child Server Loader'});
-      }
-      export function action() {
-        return json({ message: 'Child Server Action'});
-      }
-      ${
-        childClientLoader
-          ? js`
-              export async function clientLoader({ serverLoader }) {
-                // Need a small delay to ensure we capture the server-rendered
-                // fallbacks for assertions
-                await new Promise(r => setTimeout(r, 100))
-                let data = await serverLoader();
-                return { message: data.message + " (mutated by client)" };
-              }
-            `
-          : ""
-      }
-      ${
-        childClientLoaderHydrate
-          ? js`
-              clientLoader.hydrate = true;
-              export function HydrateFallback() {
-                return <p>Child Fallback</p>
-              }
-            `
-          : ""
-      }
-      ${childAdditions || ""}
-      export default function Component() {
-        let data = useLoaderData();
-        let actionData = useActionData();
-        return (
-          <>
-            <p id="child-data">{data.message}</p>
-            <Form method="post">
-              <button type="submit">Submit</button>
-              {actionData ? <p id="child-action-data">{actionData.message}</p> : null}
-            </Form>
-          </>
-        );
-      }
-    `,
+          import { json } from '@react-router/node'
+          import { Form, Outlet, useActionData, useLoaderData } from '@react-router/react'
+          export function loader() {
+            return json({ message: 'Child Server Loader'});
+          }
+          export function action() {
+            return json({ message: 'Child Server Action'});
+          }
+          ${
+            childClientLoader
+              ? js`
+                  export async function clientLoader({ serverLoader }) {
+                    // Need a small delay to ensure we capture the server-rendered
+                    // fallbacks for assertions
+                    await new Promise(r => setTimeout(r, 100))
+                    let data = await serverLoader();
+                    return { message: data.message + " (mutated by client)" };
+                  }
+                `
+              : ""
+          }
+          ${
+            childClientLoaderHydrate
+              ? js`
+                  clientLoader.hydrate = true;
+                  export function HydrateFallback() {
+                    return <p>Child Fallback</p>
+                  }
+                `
+              : ""
+          }
+          ${childAdditions || ""}
+          export default function Component() {
+            let data = useLoaderData();
+            let actionData = useActionData();
+            return (
+              <>
+                <p id="child-data">{data.message}</p>
+                <Form method="post">
+                  <button type="submit">Submit</button>
+                  {actionData ? <p id="child-action-data">{actionData.message}</p> : null}
+                </Form>
+              </>
+            );
+          }
+        `,
   };
 }
 
@@ -321,40 +321,40 @@ test.describe("Client Data", () => {
             childClientLoaderHydrate: false,
           }),
           "app/routes/parent.child.tsx": js`
-            import * as React from 'react';
-            import { defer, json } from '@remix-run/node'
-            import { Await, useLoaderData } from '@remix-run/react'
-            export function loader() {
-              return defer({
-                message: 'Child Server Loader',
-                lazy: new Promise(r => setTimeout(() => r("Child Deferred Data"), 1000)),
-              });
-            }
-            export async function clientLoader({ serverLoader }) {
-              let data = await serverLoader();
-              return {
-                ...data,
-                message: data.message + " (mutated by client)",
-              };
-            }
-            clientLoader.hydrate = true;
-            export function HydrateFallback() {
-              return <p>Child Fallback</p>
-            }
-            export default function Component() {
-              let data = useLoaderData();
-              return (
-                <>
-                  <p id="child-data">{data.message}</p>
-                  <React.Suspense fallback={<p>Loading Deferred Data...</p>}>
-                    <Await resolve={data.lazy}>
-                      {(value) => <p id="child-deferred-data">{value}</p>}
-                    </Await>
-                  </React.Suspense>
-                </>
-              );
-            }
-          `,
+                      import * as React from 'react';
+                      import { defer, json } from '@react-router/node'
+                      import { Await, useLoaderData } from '@react-router/react'
+                      export function loader() {
+                        return defer({
+                          message: 'Child Server Loader',
+                          lazy: new Promise(r => setTimeout(() => r("Child Deferred Data"), 1000)),
+                        });
+                      }
+                      export async function clientLoader({ serverLoader }) {
+                        let data = await serverLoader();
+                        return {
+                          ...data,
+                          message: data.message + " (mutated by client)",
+                        };
+                      }
+                      clientLoader.hydrate = true;
+                      export function HydrateFallback() {
+                        return <p>Child Fallback</p>
+                      }
+                      export default function Component() {
+                        let data = useLoaderData();
+                        return (
+                          <>
+                            <p id="child-data">{data.message}</p>
+                            <React.Suspense fallback={<p>Loading Deferred Data...</p>}>
+                              <Await resolve={data.lazy}>
+                                {(value) => <p id="child-deferred-data">{value}</p>}
+                              </Await>
+                            </React.Suspense>
+                          </>
+                        );
+                      }
+                    `,
         },
       });
 
@@ -420,28 +420,28 @@ test.describe("Client Data", () => {
             childClientLoaderHydrate: false,
           }),
           "app/routes/parent.child.tsx": js`
-            import * as React from 'react';
-            import { json } from '@remix-run/node';
-            import { useLoaderData } from '@remix-run/react';
-            export function loader() {
-              return json({
-                message: "Child Server Loader Data",
-              });
-            }
-            export async function clientLoader({ serverLoader }) {
-              await new Promise(r => setTimeout(r, 100));
-              return {
-                message: "Child Client Loader Data",
-              };
-            }
-            export function HydrateFallback() {
-              return <p>SHOULD NOT SEE ME</p>
-            }
-            export default function Component() {
-              let data = useLoaderData();
-              return <p id="child-data">{data.message}</p>;
-            }
-          `,
+                      import * as React from 'react';
+                      import { json } from '@react-router/node';
+                      import { useLoaderData } from '@react-router/react';
+                      export function loader() {
+                        return json({
+                          message: "Child Server Loader Data",
+                        });
+                      }
+                      export async function clientLoader({ serverLoader }) {
+                        await new Promise(r => setTimeout(r, 100));
+                        return {
+                          message: "Child Client Loader Data",
+                        };
+                      }
+                      export function HydrateFallback() {
+                        return <p>SHOULD NOT SEE ME</p>
+                      }
+                      export default function Component() {
+                        let data = useLoaderData();
+                        return <p id="child-data">{data.message}</p>;
+                      }
+                    `,
         },
       });
       appFixture = await createAppFixture(fixture);
@@ -474,23 +474,23 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { useLoaderData } from '@remix-run/react';
-              // Even without setting hydrate=true, this should run on hydration
-              export async function clientLoader({ serverLoader }) {
-                await new Promise(r => setTimeout(r, 100));
-                return {
-                  message: "Loader Data (clientLoader only)",
-                };
-              }
-              export function HydrateFallback() {
-                return <p>Child Fallback</p>
-              }
-              export default function Component() {
-                let data = useLoaderData();
-                return <p id="child-data">{data.message}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { useLoaderData } from '@react-router/react';
+                          // Even without setting hydrate=true, this should run on hydration
+                          export async function clientLoader({ serverLoader }) {
+                            await new Promise(r => setTimeout(r, 100));
+                            return {
+                              message: "Loader Data (clientLoader only)",
+                            };
+                          }
+                          export function HydrateFallback() {
+                            return <p>Child Fallback</p>
+                          }
+                          export default function Component() {
+                            let data = useLoaderData();
+                            return <p id="child-data">{data.message}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -517,20 +517,20 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { useLoaderData } from '@remix-run/react';
-              // Even without setting hydrate=true, this should run on hydration
-              export async function clientLoader({ serverLoader }) {
-                await new Promise(r => setTimeout(r, 100));
-                return {
-                  message: "Loader Data (clientLoader only)",
-                };
-              }
-              export default function Component() {
-                let data = useLoaderData();
-                return <p id="child-data">{data.message}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { useLoaderData } from '@react-router/react';
+                          // Even without setting hydrate=true, this should run on hydration
+                          export async function clientLoader({ serverLoader }) {
+                            await new Promise(r => setTimeout(r, 100));
+                            return {
+                              message: "Loader Data (clientLoader only)",
+                            };
+                          }
+                          export default function Component() {
+                            let data = useLoaderData();
+                            return <p id="child-data">{data.message}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -560,22 +560,22 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { useLoaderData, useRouteError } from '@remix-run/react';
-              export async function clientLoader({ serverLoader }) {
-                return await serverLoader();
-              }
-              export default function Component() {
-                return <p>Child</p>;
-              }
-              export function HydrateFallback() {
-                return <p>Loading...</p>;
-              }
-              export function ErrorBoundary() {
-                let error = useRouteError();
-                return <p id="child-error">{error.status} {error.data}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { useLoaderData, useRouteError } from '@react-router/react';
+                          export async function clientLoader({ serverLoader }) {
+                            return await serverLoader();
+                          }
+                          export default function Component() {
+                            return <p>Child</p>;
+                          }
+                          export function HydrateFallback() {
+                            return <p>Loading...</p>;
+                          }
+                          export function ErrorBoundary() {
+                            let error = useRouteError();
+                            return <p id="child-error">{error.status} {error.data}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -603,43 +603,43 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { json } from '@remix-run/node';
-              import { useLoaderData, useRevalidator } from '@remix-run/react';
-              let isFirstCall = true;
-              export async function loader({ serverLoader }) {
-                if (isFirstCall) {
-                  isFirstCall = false
-                  return json({
-                    message: "Child Server Loader Data (1)",
-                  });
-                }
-                return json({
-                  message: "Child Server Loader Data (2+)",
-                });
-              }
-              export async function clientLoader({ serverLoader }) {
-                await new Promise(r => setTimeout(r, 100));
-                let serverData = await serverLoader();
-                return {
-                  message: serverData.message + " (mutated by client)",
-                };
-              }
-              clientLoader.hydrate=true;
-              export default function Component() {
-                let data = useLoaderData();
-                let revalidator = useRevalidator();
-                return (
-                  <>
-                    <p id="child-data">{data.message}</p>
-                    <button onClick={() => revalidator.revalidate()}>Revalidate</button>
-                  </>
-                );
-              }
-              export function HydrateFallback() {
-                return <p>Loading...</p>
-              }
-            `,
+                          import * as React from 'react';
+                          import { json } from '@react-router/node';
+                          import { useLoaderData, useRevalidator } from '@react-router/react';
+                          let isFirstCall = true;
+                          export async function loader({ serverLoader }) {
+                            if (isFirstCall) {
+                              isFirstCall = false
+                              return json({
+                                message: "Child Server Loader Data (1)",
+                              });
+                            }
+                            return json({
+                              message: "Child Server Loader Data (2+)",
+                            });
+                          }
+                          export async function clientLoader({ serverLoader }) {
+                            await new Promise(r => setTimeout(r, 100));
+                            let serverData = await serverLoader();
+                            return {
+                              message: serverData.message + " (mutated by client)",
+                            };
+                          }
+                          clientLoader.hydrate=true;
+                          export default function Component() {
+                            let data = useLoaderData();
+                            let revalidator = useRevalidator();
+                            return (
+                              <>
+                                <p id="child-data">{data.message}</p>
+                                <button onClick={() => revalidator.revalidate()}>Revalidate</button>
+                              </>
+                            );
+                          }
+                          export function HydrateFallback() {
+                            return <p>Loading...</p>
+                          }
+                        `,
           },
         })
       );
@@ -668,53 +668,53 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { json } from '@remix-run/node';
-              import { useLoaderData, useRevalidator } from '@remix-run/react';
-              let isFirstCall = true;
-              export async function loader({ serverLoader }) {
-                if (isFirstCall) {
-                  isFirstCall = false
-                  return json({
-                    message: "Child Server Loader Data (1)",
-                  });
-                }
-                return json({
-                  message: "Child Server Loader Data (2+)",
-                });
-              }
-              let isFirstClientCall = true;
-              export async function clientLoader({ serverLoader }) {
-                await new Promise(r => setTimeout(r, 100));
-                if (isFirstClientCall) {
-                  isFirstClientCall = false;
-                  // First time through - don't even call serverLoader
-                  return {
-                    message: "Child Client Loader Data",
-                  };
-                }
-                // Only call the serverLoader on subsequent calls and this
-                // should *not* return us the initialData any longer
-                let serverData = await serverLoader();
-                return {
-                  message: serverData.message + " (mutated by client)",
-                };
-              }
-              clientLoader.hydrate=true;
-              export default function Component() {
-                let data = useLoaderData();
-                let revalidator = useRevalidator();
-                return (
-                  <>
-                    <p id="child-data">{data.message}</p>
-                    <button onClick={() => revalidator.revalidate()}>Revalidate</button>
-                  </>
-                );
-              }
-              export function HydrateFallback() {
-                return <p>Loading...</p>
-              }
-            `,
+                          import * as React from 'react';
+                          import { json } from '@react-router/node';
+                          import { useLoaderData, useRevalidator } from '@react-router/react';
+                          let isFirstCall = true;
+                          export async function loader({ serverLoader }) {
+                            if (isFirstCall) {
+                              isFirstCall = false
+                              return json({
+                                message: "Child Server Loader Data (1)",
+                              });
+                            }
+                            return json({
+                              message: "Child Server Loader Data (2+)",
+                            });
+                          }
+                          let isFirstClientCall = true;
+                          export async function clientLoader({ serverLoader }) {
+                            await new Promise(r => setTimeout(r, 100));
+                            if (isFirstClientCall) {
+                              isFirstClientCall = false;
+                              // First time through - don't even call serverLoader
+                              return {
+                                message: "Child Client Loader Data",
+                              };
+                            }
+                            // Only call the serverLoader on subsequent calls and this
+                            // should *not* return us the initialData any longer
+                            let serverData = await serverLoader();
+                            return {
+                              message: serverData.message + " (mutated by client)",
+                            };
+                          }
+                          clientLoader.hydrate=true;
+                          export default function Component() {
+                            let data = useLoaderData();
+                            let revalidator = useRevalidator();
+                            return (
+                              <>
+                                <p id="child-data">{data.message}</p>
+                                <button onClick={() => revalidator.revalidate()}>Revalidate</button>
+                              </>
+                            );
+                          }
+                          export function HydrateFallback() {
+                            return <p>Loading...</p>
+                          }
+                        `,
           },
         })
       );
@@ -746,26 +746,26 @@ test.describe("Client Data", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import { ClientLoaderFunctionArgs, useRouteError } from "@remix-run/react";
-
-                export function loader() {
-                  throw new Error("Broken!")
-                }
-
-                export async function clientLoader({ serverLoader }) {
-                  return await serverLoader();
-                }
-                clientLoader.hydrate = true;
-
-                export default function Index() {
-                  return <h1>Should not see me</h1>;
-                }
-
-                export function ErrorBoundary() {
-                  let error = useRouteError();
-                  return <p id="child-error">{error.message}</p>;
-                }
-              `,
+                              import { ClientLoaderFunctionArgs, useRouteError } from "@react-router/react";
+              
+                              export function loader() {
+                                throw new Error("Broken!")
+                              }
+              
+                              export async function clientLoader({ serverLoader }) {
+                                return await serverLoader();
+                              }
+                              clientLoader.hydrate = true;
+              
+                              export default function Index() {
+                                return <h1>Should not see me</h1>;
+                              }
+              
+                              export function ErrorBoundary() {
+                                let error = useRouteError();
+                                return <p id="child-error">{error.message}</p>;
+                              }
+                            `,
             },
           },
           ServerMode.Development // Avoid error sanitization
@@ -805,24 +805,24 @@ test.describe("Client Data", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import { json } from '@remix-run/node'
-                import { useRouteError } from '@remix-run/react'
-                export function loader() {
-                  throw json({ message: 'Child Server Error'});
-                }
-                export default function Component() {
-                  return <h1>Should not see me</h1>;
-                }
-                export function ErrorBoundary() {
-                  const error = useRouteError();
-                  return (
-                    <>
-                      <h1>Child Error</h1>
-                      <pre>{JSON.stringify(error, null, 2)}</pre>
-                    </>
-                  );
-                }
-              `,
+                              import { json } from '@react-router/node'
+                              import { useRouteError } from '@react-router/react'
+                              export function loader() {
+                                throw json({ message: 'Child Server Error'});
+                              }
+                              export default function Component() {
+                                return <h1>Should not see me</h1>;
+                              }
+                              export function ErrorBoundary() {
+                                const error = useRouteError();
+                                return (
+                                  <>
+                                    <h1>Child Error</h1>
+                                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                                  </>
+                                );
+                              }
+                            `,
             },
           },
           ServerMode.Development // Avoid error sanitization
@@ -947,22 +947,22 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { useLoaderData, useRouteError } from '@remix-run/react';
-              export async function clientLoader({ serverLoader }) {
-                return await serverLoader();
-              }
-              export default function Component() {
-                return <p>Child</p>;
-              }
-              export function HydrateFallback() {
-                return <p>Loading...</p>;
-              }
-              export function ErrorBoundary() {
-                let error = useRouteError();
-                return <p id="child-error">{error.status} {error.data}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { useLoaderData, useRouteError } from '@react-router/react';
+                          export async function clientLoader({ serverLoader }) {
+                            return await serverLoader();
+                          }
+                          export default function Component() {
+                            return <p>Child</p>;
+                          }
+                          export function HydrateFallback() {
+                            return <p>Loading...</p>;
+                          }
+                          export function ErrorBoundary() {
+                            let error = useRouteError();
+                            return <p id="child-error">{error.status} {error.data}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -1155,24 +1155,24 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { json } from '@remix-run/node';
-              import { Form, useRouteError } from '@remix-run/react';
-              export async function clientAction({ serverAction }) {
-                return await serverAction();
-              }
-              export default function Component() {
-                return (
-                  <Form method="post">
-                    <button type="submit">Submit</button>
-                  </Form>
-                );
-              }
-              export function ErrorBoundary() {
-                let error = useRouteError();
-                return <p id="child-error">{error.status} {error.data}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { json } from '@react-router/node';
+                          import { Form, useRouteError } from '@react-router/react';
+                          export async function clientAction({ serverAction }) {
+                            return await serverAction();
+                          }
+                          export default function Component() {
+                            return (
+                              <Form method="post">
+                                <button type="submit">Submit</button>
+                              </Form>
+                            );
+                          }
+                          export function ErrorBoundary() {
+                            let error = useRouteError();
+                            return <p id="child-error">{error.status} {error.data}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -1372,24 +1372,24 @@ test.describe("Client Data", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { json } from '@remix-run/node';
-              import { Form, useRouteError } from '@remix-run/react';
-              export async function clientAction({ serverAction }) {
-                return await serverAction();
-              }
-              export default function Component() {
-                return (
-                  <Form method="post">
-                    <button type="submit">Submit</button>
-                  </Form>
-                );
-              }
-              export function ErrorBoundary() {
-                let error = useRouteError();
-                return <p id="child-error">{error.status} {error.data}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { json } from '@react-router/node';
+                          import { Form, useRouteError } from '@react-router/react';
+                          export async function clientAction({ serverAction }) {
+                            return await serverAction();
+                          }
+                          export default function Component() {
+                            return (
+                              <Form method="post">
+                                <button type="submit">Submit</button>
+                              </Form>
+                            );
+                          }
+                          export function ErrorBoundary() {
+                            let error = useRouteError();
+                            return <p id="child-error">{error.status} {error.data}</p>;
+                          }
+                        `,
           },
         })
       );
@@ -1604,40 +1604,40 @@ test.describe("single fetch", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { defer, json } from '@remix-run/node'
-              import { Await, useLoaderData } from '@remix-run/react'
-              export function loader() {
-                return defer({
-                  message: 'Child Server Loader',
-                  lazy: new Promise(r => setTimeout(() => r("Child Deferred Data"), 1000)),
-                });
-              }
-              export async function clientLoader({ serverLoader }) {
-                let data = await serverLoader();
-                return {
-                  ...data,
-                  message: data.message + " (mutated by client)",
-                };
-              }
-              clientLoader.hydrate = true;
-              export function HydrateFallback() {
-                return <p>Child Fallback</p>
-              }
-              export default function Component() {
-                let data = useLoaderData();
-                return (
-                  <>
-                    <p id="child-data">{data.message}</p>
-                    <React.Suspense fallback={<p>Loading Deferred Data...</p>}>
-                      <Await resolve={data.lazy}>
-                        {(value) => <p id="child-deferred-data">{value}</p>}
-                      </Await>
-                    </React.Suspense>
-                  </>
-                );
-              }
-            `,
+                          import * as React from 'react';
+                          import { defer, json } from '@react-router/node'
+                          import { Await, useLoaderData } from '@react-router/react'
+                          export function loader() {
+                            return defer({
+                              message: 'Child Server Loader',
+                              lazy: new Promise(r => setTimeout(() => r("Child Deferred Data"), 1000)),
+                            });
+                          }
+                          export async function clientLoader({ serverLoader }) {
+                            let data = await serverLoader();
+                            return {
+                              ...data,
+                              message: data.message + " (mutated by client)",
+                            };
+                          }
+                          clientLoader.hydrate = true;
+                          export function HydrateFallback() {
+                            return <p>Child Fallback</p>
+                          }
+                          export default function Component() {
+                            let data = useLoaderData();
+                            return (
+                              <>
+                                <p id="child-data">{data.message}</p>
+                                <React.Suspense fallback={<p>Loading Deferred Data...</p>}>
+                                  <Await resolve={data.lazy}>
+                                    {(value) => <p id="child-deferred-data">{value}</p>}
+                                  </Await>
+                                </React.Suspense>
+                              </>
+                            );
+                          }
+                        `,
           },
         });
 
@@ -1703,28 +1703,28 @@ test.describe("single fetch", () => {
               childClientLoaderHydrate: false,
             }),
             "app/routes/parent.child.tsx": js`
-              import * as React from 'react';
-              import { json } from '@remix-run/node';
-              import { useLoaderData } from '@remix-run/react';
-              export function loader() {
-                return json({
-                  message: "Child Server Loader Data",
-                });
-              }
-              export async function clientLoader({ serverLoader }) {
-                await new Promise(r => setTimeout(r, 100));
-                return {
-                  message: "Child Client Loader Data",
-                };
-              }
-              export function HydrateFallback() {
-                return <p>SHOULD NOT SEE ME</p>
-              }
-              export default function Component() {
-                let data = useLoaderData();
-                return <p id="child-data">{data.message}</p>;
-              }
-            `,
+                          import * as React from 'react';
+                          import { json } from '@react-router/node';
+                          import { useLoaderData } from '@react-router/react';
+                          export function loader() {
+                            return json({
+                              message: "Child Server Loader Data",
+                            });
+                          }
+                          export async function clientLoader({ serverLoader }) {
+                            await new Promise(r => setTimeout(r, 100));
+                            return {
+                              message: "Child Client Loader Data",
+                            };
+                          }
+                          export function HydrateFallback() {
+                            return <p>SHOULD NOT SEE ME</p>
+                          }
+                          export default function Component() {
+                            let data = useLoaderData();
+                            return <p id="child-data">{data.message}</p>;
+                          }
+                        `,
           },
         });
         appFixture = await createAppFixture(fixture);
@@ -1757,23 +1757,23 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { useLoaderData } from '@remix-run/react';
-                // Even without setting hydrate=true, this should run on hydration
-                export async function clientLoader({ serverLoader }) {
-                  await new Promise(r => setTimeout(r, 100));
-                  return {
-                    message: "Loader Data (clientLoader only)",
-                  };
-                }
-                export function HydrateFallback() {
-                  return <p>Child Fallback</p>
-                }
-                export default function Component() {
-                  let data = useLoaderData();
-                  return <p id="child-data">{data.message}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { useLoaderData } from '@react-router/react';
+                              // Even without setting hydrate=true, this should run on hydration
+                              export async function clientLoader({ serverLoader }) {
+                                await new Promise(r => setTimeout(r, 100));
+                                return {
+                                  message: "Loader Data (clientLoader only)",
+                                };
+                              }
+                              export function HydrateFallback() {
+                                return <p>Child Fallback</p>
+                              }
+                              export default function Component() {
+                                let data = useLoaderData();
+                                return <p id="child-data">{data.message}</p>;
+                              }
+                            `,
             },
           })
         );
@@ -1800,20 +1800,20 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { useLoaderData } from '@remix-run/react';
-                // Even without setting hydrate=true, this should run on hydration
-                export async function clientLoader({ serverLoader }) {
-                  await new Promise(r => setTimeout(r, 100));
-                  return {
-                    message: "Loader Data (clientLoader only)",
-                  };
-                }
-                export default function Component() {
-                  let data = useLoaderData();
-                  return <p id="child-data">{data.message}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { useLoaderData } from '@react-router/react';
+                              // Even without setting hydrate=true, this should run on hydration
+                              export async function clientLoader({ serverLoader }) {
+                                await new Promise(r => setTimeout(r, 100));
+                                return {
+                                  message: "Loader Data (clientLoader only)",
+                                };
+                              }
+                              export default function Component() {
+                                let data = useLoaderData();
+                                return <p id="child-data">{data.message}</p>;
+                              }
+                            `,
             },
           })
         );
@@ -1843,22 +1843,22 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { useLoaderData, useRouteError } from '@remix-run/react';
-                export async function clientLoader({ serverLoader }) {
-                  return await serverLoader();
-                }
-                export default function Component() {
-                  return <p>Child</p>;
-                }
-                export function HydrateFallback() {
-                  return <p>Loading...</p>;
-                }
-                export function ErrorBoundary() {
-                  let error = useRouteError();
-                  return <p id="child-error">{error.status} {error.data}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { useLoaderData, useRouteError } from '@react-router/react';
+                              export async function clientLoader({ serverLoader }) {
+                                return await serverLoader();
+                              }
+                              export default function Component() {
+                                return <p>Child</p>;
+                              }
+                              export function HydrateFallback() {
+                                return <p>Loading...</p>;
+                              }
+                              export function ErrorBoundary() {
+                                let error = useRouteError();
+                                return <p id="child-error">{error.status} {error.data}</p>;
+                              }
+                            `,
             },
           })
         );
@@ -1886,43 +1886,43 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { json } from '@remix-run/node';
-                import { useLoaderData, useRevalidator } from '@remix-run/react';
-                let isFirstCall = true;
-                export async function loader({ serverLoader }) {
-                  if (isFirstCall) {
-                    isFirstCall = false
-                    return json({
-                      message: "Child Server Loader Data (1)",
-                    });
-                  }
-                  return json({
-                    message: "Child Server Loader Data (2+)",
-                  });
-                }
-                export async function clientLoader({ serverLoader }) {
-                  await new Promise(r => setTimeout(r, 100));
-                  let serverData = await serverLoader();
-                  return {
-                    message: serverData.message + " (mutated by client)",
-                  };
-                }
-                clientLoader.hydrate=true;
-                export default function Component() {
-                  let data = useLoaderData();
-                  let revalidator = useRevalidator();
-                  return (
-                    <>
-                      <p id="child-data">{data.message}</p>
-                      <button onClick={() => revalidator.revalidate()}>Revalidate</button>
-                    </>
-                  );
-                }
-                export function HydrateFallback() {
-                  return <p>Loading...</p>
-                }
-              `,
+                              import * as React from 'react';
+                              import { json } from '@react-router/node';
+                              import { useLoaderData, useRevalidator } from '@react-router/react';
+                              let isFirstCall = true;
+                              export async function loader({ serverLoader }) {
+                                if (isFirstCall) {
+                                  isFirstCall = false
+                                  return json({
+                                    message: "Child Server Loader Data (1)",
+                                  });
+                                }
+                                return json({
+                                  message: "Child Server Loader Data (2+)",
+                                });
+                              }
+                              export async function clientLoader({ serverLoader }) {
+                                await new Promise(r => setTimeout(r, 100));
+                                let serverData = await serverLoader();
+                                return {
+                                  message: serverData.message + " (mutated by client)",
+                                };
+                              }
+                              clientLoader.hydrate=true;
+                              export default function Component() {
+                                let data = useLoaderData();
+                                let revalidator = useRevalidator();
+                                return (
+                                  <>
+                                    <p id="child-data">{data.message}</p>
+                                    <button onClick={() => revalidator.revalidate()}>Revalidate</button>
+                                  </>
+                                );
+                              }
+                              export function HydrateFallback() {
+                                return <p>Loading...</p>
+                              }
+                            `,
             },
           })
         );
@@ -1957,53 +1957,53 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { json } from '@remix-run/node';
-                import { useLoaderData, useRevalidator } from '@remix-run/react';
-                let isFirstCall = true;
-                export async function loader({ serverLoader }) {
-                  if (isFirstCall) {
-                    isFirstCall = false
-                    return json({
-                      message: "Child Server Loader Data (1)",
-                    });
-                  }
-                  return json({
-                    message: "Child Server Loader Data (2+)",
-                  });
-                }
-                let isFirstClientCall = true;
-                export async function clientLoader({ serverLoader }) {
-                  await new Promise(r => setTimeout(r, 100));
-                  if (isFirstClientCall) {
-                    isFirstClientCall = false;
-                    // First time through - don't even call serverLoader
-                    return {
-                      message: "Child Client Loader Data",
-                    };
-                  }
-                  // Only call the serverLoader on subsequent calls and this
-                  // should *not* return us the initialData any longer
-                  let serverData = await serverLoader();
-                  return {
-                    message: serverData.message + " (mutated by client)",
-                  };
-                }
-                clientLoader.hydrate=true;
-                export default function Component() {
-                  let data = useLoaderData();
-                  let revalidator = useRevalidator();
-                  return (
-                    <>
-                      <p id="child-data">{data.message}</p>
-                      <button onClick={() => revalidator.revalidate()}>Revalidate</button>
-                    </>
-                  );
-                }
-                export function HydrateFallback() {
-                  return <p>Loading...</p>
-                }
-              `,
+                              import * as React from 'react';
+                              import { json } from '@react-router/node';
+                              import { useLoaderData, useRevalidator } from '@react-router/react';
+                              let isFirstCall = true;
+                              export async function loader({ serverLoader }) {
+                                if (isFirstCall) {
+                                  isFirstCall = false
+                                  return json({
+                                    message: "Child Server Loader Data (1)",
+                                  });
+                                }
+                                return json({
+                                  message: "Child Server Loader Data (2+)",
+                                });
+                              }
+                              let isFirstClientCall = true;
+                              export async function clientLoader({ serverLoader }) {
+                                await new Promise(r => setTimeout(r, 100));
+                                if (isFirstClientCall) {
+                                  isFirstClientCall = false;
+                                  // First time through - don't even call serverLoader
+                                  return {
+                                    message: "Child Client Loader Data",
+                                  };
+                                }
+                                // Only call the serverLoader on subsequent calls and this
+                                // should *not* return us the initialData any longer
+                                let serverData = await serverLoader();
+                                return {
+                                  message: serverData.message + " (mutated by client)",
+                                };
+                              }
+                              clientLoader.hydrate=true;
+                              export default function Component() {
+                                let data = useLoaderData();
+                                let revalidator = useRevalidator();
+                                return (
+                                  <>
+                                    <p id="child-data">{data.message}</p>
+                                    <button onClick={() => revalidator.revalidate()}>Revalidate</button>
+                                  </>
+                                );
+                              }
+                              export function HydrateFallback() {
+                                return <p>Loading...</p>
+                              }
+                            `,
             },
           })
         );
@@ -2039,26 +2039,26 @@ test.describe("single fetch", () => {
                   childClientLoaderHydrate: false,
                 }),
                 "app/routes/parent.child.tsx": js`
-                  import { ClientLoaderFunctionArgs, useRouteError } from "@remix-run/react";
-
-                  export function loader() {
-                    throw new Error("Broken!")
-                  }
-
-                  export async function clientLoader({ serverLoader }) {
-                    return await serverLoader();
-                  }
-                  clientLoader.hydrate = true;
-
-                  export default function Index() {
-                    return <h1>Should not see me</h1>;
-                  }
-
-                  export function ErrorBoundary() {
-                    let error = useRouteError();
-                    return <p id="child-error">{error.message}</p>;
-                  }
-                `,
+                                  import { ClientLoaderFunctionArgs, useRouteError } from "@react-router/react";
+                
+                                  export function loader() {
+                                    throw new Error("Broken!")
+                                  }
+                
+                                  export async function clientLoader({ serverLoader }) {
+                                    return await serverLoader();
+                                  }
+                                  clientLoader.hydrate = true;
+                
+                                  export default function Index() {
+                                    return <h1>Should not see me</h1>;
+                                  }
+                
+                                  export function ErrorBoundary() {
+                                    let error = useRouteError();
+                                    return <p id="child-error">{error.message}</p>;
+                                  }
+                                `,
               },
             },
             ServerMode.Development // Avoid error sanitization
@@ -2178,22 +2178,22 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { useLoaderData, useRouteError } from '@remix-run/react';
-                export async function clientLoader({ serverLoader }) {
-                  return await serverLoader();
-                }
-                export default function Component() {
-                  return <p>Child</p>;
-                }
-                export function HydrateFallback() {
-                  return <p>Loading...</p>;
-                }
-                export function ErrorBoundary() {
-                  let error = useRouteError();
-                  return <p id="child-error">{error.status} {error.data}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { useLoaderData, useRouteError } from '@react-router/react';
+                              export async function clientLoader({ serverLoader }) {
+                                return await serverLoader();
+                              }
+                              export default function Component() {
+                                return <p>Child</p>;
+                              }
+                              export function HydrateFallback() {
+                                return <p>Loading...</p>;
+                              }
+                              export function ErrorBoundary() {
+                                let error = useRouteError();
+                                return <p id="child-error">{error.status} {error.data}</p>;
+                              }
+                            `,
             },
           })
         );
@@ -2390,24 +2390,24 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { json } from '@remix-run/node';
-                import { Form, useRouteError } from '@remix-run/react';
-                export async function clientAction({ serverAction }) {
-                  return await serverAction();
-                }
-                export default function Component() {
-                  return (
-                    <Form method="post">
-                      <button type="submit">Submit</button>
-                    </Form>
-                  );
-                }
-                export function ErrorBoundary() {
-                  let error = useRouteError();
-                  return <p id="child-error">{error.status} {error.data}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { json } from '@react-router/node';
+                              import { Form, useRouteError } from '@react-router/react';
+                              export async function clientAction({ serverAction }) {
+                                return await serverAction();
+                              }
+                              export default function Component() {
+                                return (
+                                  <Form method="post">
+                                    <button type="submit">Submit</button>
+                                  </Form>
+                                );
+                              }
+                              export function ErrorBoundary() {
+                                let error = useRouteError();
+                                return <p id="child-error">{error.status} {error.data}</p>;
+                              }
+                            `,
             },
           })
         );
@@ -2607,24 +2607,24 @@ test.describe("single fetch", () => {
                 childClientLoaderHydrate: false,
               }),
               "app/routes/parent.child.tsx": js`
-                import * as React from 'react';
-                import { json } from '@remix-run/node';
-                import { Form, useRouteError } from '@remix-run/react';
-                export async function clientAction({ serverAction }) {
-                  return await serverAction();
-                }
-                export default function Component() {
-                  return (
-                    <Form method="post">
-                      <button type="submit">Submit</button>
-                    </Form>
-                  );
-                }
-                export function ErrorBoundary() {
-                  let error = useRouteError();
-                  return <p id="child-error">{error.status} {error.data}</p>;
-                }
-              `,
+                              import * as React from 'react';
+                              import { json } from '@react-router/node';
+                              import { Form, useRouteError } from '@react-router/react';
+                              export async function clientAction({ serverAction }) {
+                                return await serverAction();
+                              }
+                              export default function Component() {
+                                return (
+                                  <Form method="post">
+                                    <button type="submit">Submit</button>
+                                  </Form>
+                                );
+                              }
+                              export function ErrorBoundary() {
+                                let error = useRouteError();
+                                return <p id="child-error">{error.status} {error.data}</p>;
+                              }
+                            `,
             },
           })
         );

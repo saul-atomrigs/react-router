@@ -59,23 +59,23 @@ test.beforeAll(async () => {
     ////////////////////////////////////////////////////////////////////////////
     files: {
       "app/routes/_index.tsx": js`
-        import { json } from "@remix-run/node";
-        import { useLoaderData, Link } from "@remix-run/react";
-
-        export function loader() {
-          return json("pizza");
-        }
-
-        export default function Index() {
-          let data = useLoaderData();
-          return (
-            <div>
-              {data}
-              <Link to="/burgers">Other Route</Link>
-            </div>
-          )
-        }
-      `,
+              import { json } from "@react-router/node";
+              import { useLoaderData, Link } from "@react-router/react";
+      
+              export function loader() {
+                return json("pizza");
+              }
+      
+              export default function Index() {
+                let data = useLoaderData();
+                return (
+                  <div>
+                    {data}
+                    <Link to="/burgers">Other Route</Link>
+                  </div>
+                )
+              }
+            `,
 
       "app/routes/burgers.tsx": js`
         export default function Index() {

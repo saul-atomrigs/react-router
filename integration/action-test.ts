@@ -23,72 +23,72 @@ test.describe("actions", () => {
     fixture = await createFixture({
       files: {
         "app/routes/urlencoded.tsx": js`
-          import { Form, useActionData } from "@remix-run/react";
-
-          export let action = async ({ request }) => {
-            let formData = await request.formData();
-            return formData.get("${FIELD_NAME}");
-          };
-
-          export default function Actions() {
-            let data = useActionData()
-
-            return (
-              <Form method="post" id="form">
-                <p id="text">
-                  {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
-                </p>
-                <p>
-                  <input type="text" defaultValue="${SUBMITTED_VALUE}" name="${FIELD_NAME}" />
-                  <button type="submit" id="submit">Go</button>
-                </p>
-              </Form>
-            );
-          }
-        `,
+                  import { Form, useActionData } from "@react-router/react";
+        
+                  export let action = async ({ request }) => {
+                    let formData = await request.formData();
+                    return formData.get("${FIELD_NAME}");
+                  };
+        
+                  export default function Actions() {
+                    let data = useActionData()
+        
+                    return (
+                      <Form method="post" id="form">
+                        <p id="text">
+                          {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
+                        </p>
+                        <p>
+                          <input type="text" defaultValue="${SUBMITTED_VALUE}" name="${FIELD_NAME}" />
+                          <button type="submit" id="submit">Go</button>
+                        </p>
+                      </Form>
+                    );
+                  }
+                `,
 
         "app/routes/request-text.tsx": js`
-          import { Form, useActionData } from "@remix-run/react";
-
-          export let action = async ({ request }) => {
-            let text = await request.text();
-            return text;
-          };
-
-          export default function Actions() {
-            let data = useActionData()
-
-            return (
-              <Form method="post" id="form">
-                <p id="text">
-                  {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
-                </p>
-                <p>
-                  <input name="a" defaultValue="1" />
-                  <input name="b" defaultValue="2" />
-                  <button type="submit" id="submit">Go</button>
-                </p>
-              </Form>
-            );
-          }
-        `,
+                  import { Form, useActionData } from "@react-router/react";
+        
+                  export let action = async ({ request }) => {
+                    let text = await request.text();
+                    return text;
+                  };
+        
+                  export default function Actions() {
+                    let data = useActionData()
+        
+                    return (
+                      <Form method="post" id="form">
+                        <p id="text">
+                          {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
+                        </p>
+                        <p>
+                          <input name="a" defaultValue="1" />
+                          <input name="b" defaultValue="2" />
+                          <button type="submit" id="submit">Go</button>
+                        </p>
+                      </Form>
+                    );
+                  }
+                `,
 
         [`app/routes/${THROWS_REDIRECT}.jsx`]: js`
-          import { redirect } from "@remix-run/node";
-          import { Form } from "@remix-run/react";
-
-          export function action() {
-            throw redirect("/${REDIRECT_TARGET}")
-          }
-
-          export default function () {
-            return (
-              <Form method="post">
-                <button type="submit">Go</button>
-              </Form>
-            )
-          }
-        `,
+                  import { redirect } from "@react-router/node";
+                  import { Form } from "@react-router/react";
+        
+                  export function action() {
+                    throw redirect("/${REDIRECT_TARGET}")
+                  }
+        
+                  export default function () {
+                    return (
+                      <Form method="post">
+                        <button type="submit">Go</button>
+                      </Form>
+                    )
+                  }
+                `,
 
         [`app/routes/${REDIRECT_TARGET}.jsx`]: js`
           export default function () {
@@ -97,16 +97,16 @@ test.describe("actions", () => {
         `,
 
         "app/routes/no-action.tsx": js`
-          import { Form } from "@remix-run/react";
-
-          export default function Component() {
-            return (
-              <Form method="post">
-                <button type="submit">Submit without action</button>
-              </Form>
-            );
-          }
-        `,
+                  import { Form } from "@react-router/react";
+        
+                  export default function Component() {
+                    return (
+                      <Form method="post">
+                        <button type="submit">Submit without action</button>
+                      </Form>
+                    );
+                  }
+                `,
       },
     });
 
@@ -231,72 +231,72 @@ test.describe("single fetch", () => {
         singleFetch: true,
         files: {
           "app/routes/urlencoded.tsx": js`
-            import { Form, useActionData } from "@remix-run/react";
-
-            export let action = async ({ request }) => {
-              let formData = await request.formData();
-              return formData.get("${FIELD_NAME}");
-            };
-
-            export default function Actions() {
-              let data = useActionData()
-
-              return (
-                <Form method="post" id="form">
-                  <p id="text">
-                    {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
-                  </p>
-                  <p>
-                    <input type="text" defaultValue="${SUBMITTED_VALUE}" name="${FIELD_NAME}" />
-                    <button type="submit" id="submit">Go</button>
-                  </p>
-                </Form>
-              );
-            }
-          `,
+                      import { Form, useActionData } from "@react-router/react";
+          
+                      export let action = async ({ request }) => {
+                        let formData = await request.formData();
+                        return formData.get("${FIELD_NAME}");
+                      };
+          
+                      export default function Actions() {
+                        let data = useActionData()
+          
+                        return (
+                          <Form method="post" id="form">
+                            <p id="text">
+                              {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
+                            </p>
+                            <p>
+                              <input type="text" defaultValue="${SUBMITTED_VALUE}" name="${FIELD_NAME}" />
+                              <button type="submit" id="submit">Go</button>
+                            </p>
+                          </Form>
+                        );
+                      }
+                    `,
 
           "app/routes/request-text.tsx": js`
-            import { Form, useActionData } from "@remix-run/react";
-
-            export let action = async ({ request }) => {
-              let text = await request.text();
-              return text;
-            };
-
-            export default function Actions() {
-              let data = useActionData()
-
-              return (
-                <Form method="post" id="form">
-                  <p id="text">
-                    {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
-                  </p>
-                  <p>
-                    <input name="a" defaultValue="1" />
-                    <input name="b" defaultValue="2" />
-                    <button type="submit" id="submit">Go</button>
-                  </p>
-                </Form>
-              );
-            }
-          `,
+                      import { Form, useActionData } from "@react-router/react";
+          
+                      export let action = async ({ request }) => {
+                        let text = await request.text();
+                        return text;
+                      };
+          
+                      export default function Actions() {
+                        let data = useActionData()
+          
+                        return (
+                          <Form method="post" id="form">
+                            <p id="text">
+                              {data ? <span id="action-text">{data}</span> : "${WAITING_VALUE}"}
+                            </p>
+                            <p>
+                              <input name="a" defaultValue="1" />
+                              <input name="b" defaultValue="2" />
+                              <button type="submit" id="submit">Go</button>
+                            </p>
+                          </Form>
+                        );
+                      }
+                    `,
 
           [`app/routes/${THROWS_REDIRECT}.jsx`]: js`
-            import { redirect } from "@remix-run/node";
-            import { Form } from "@remix-run/react";
-
-            export function action() {
-              throw redirect("/${REDIRECT_TARGET}")
-            }
-
-            export default function () {
-              return (
-                <Form method="post">
-                  <button type="submit">Go</button>
-                </Form>
-              )
-            }
-          `,
+                      import { redirect } from "@react-router/node";
+                      import { Form } from "@react-router/react";
+          
+                      export function action() {
+                        throw redirect("/${REDIRECT_TARGET}")
+                      }
+          
+                      export default function () {
+                        return (
+                          <Form method="post">
+                            <button type="submit">Go</button>
+                          </Form>
+                        )
+                      }
+                    `,
 
           [`app/routes/${REDIRECT_TARGET}.jsx`]: js`
             export default function () {
@@ -305,16 +305,16 @@ test.describe("single fetch", () => {
           `,
 
           "app/routes/no-action.tsx": js`
-            import { Form } from "@remix-run/react";
-
-            export default function Component() {
-              return (
-                <Form method="post">
-                  <button type="submit">Submit without action</button>
-                </Form>
-              );
-            }
-          `,
+                      import { Form } from "@react-router/react";
+          
+                      export default function Component() {
+                        return (
+                          <Form method="post">
+                            <button type="submit">Submit without action</button>
+                          </Form>
+                        );
+                      }
+                    `,
         },
       });
 
